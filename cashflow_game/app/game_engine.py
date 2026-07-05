@@ -94,10 +94,10 @@ PROFESSIONS = {
 
 
 WORLD_STATES = [
-    {"name": "Expansion", "inflation": 0.005, "asset_price": 1.08, "income_risk": 0.02, "credit": 1.15, "description": "Credito accesible, empleos fuertes y activos caros."},
-    {"name": "Estable", "inflation": 0.003, "asset_price": 1.0, "income_risk": 0.04, "credit": 1.0, "description": "Mercados equilibrados y oportunidades razonables."},
-    {"name": "Recesion", "inflation": 0.001, "asset_price": 0.86, "income_risk": 0.11, "credit": 0.72, "description": "Activos baratos, ingresos fragiles y credito exigente."},
-    {"name": "Recuperacion", "inflation": 0.002, "asset_price": 0.94, "income_risk": 0.06, "credit": 0.92, "description": "El mercado mejora y aparecen oportunidades subvaloradas."},
+    {"name": "Expansion", "inflation": 0.003, "asset_price": 1.08, "income_risk": 0.02, "credit": 1.15, "description": "Credito accesible, empleos fuertes y activos caros."},
+    {"name": "Estable", "inflation": 0.002, "asset_price": 1.0, "income_risk": 0.04, "credit": 1.0, "description": "Mercados equilibrados y oportunidades razonables."},
+    {"name": "Recesion", "inflation": 0.0005, "asset_price": 0.86, "income_risk": 0.11, "credit": 0.72, "description": "Activos baratos, ingresos fragiles y credito exigente."},
+    {"name": "Recuperacion", "inflation": 0.001, "asset_price": 0.94, "income_risk": 0.06, "credit": 0.92, "description": "El mercado mejora y aparecen oportunidades subvaloradas."},
 ]
 
 
@@ -109,7 +109,7 @@ BASE_EVENTS = [
         "title": "Fondo indexado diversificado",
         "description": "El mercado ofrece una entrada razonable a un fondo amplio. Es liquido, aburrido y dificil de presumir.",
         "actions": {
-            "invest": {"label": "Invertir ${cash:,.0f}", "label_fmt": "Invertir ${cash:,.0f}", "cash": {"factor": -0.35, "min": -4500, "max": -500}, "asset": {"name": "Fondo indexado", "type": "Paper assets", "value": {"factor": 0.35, "min": 500, "max": 4500}, "income": 12, "risk": "market"}, "lesson": "Diversificacion", "interpretation": "Compraste tiempo y exposicion amplia, no emocion. El progreso lento suele ser el mas repetible."},
+            "invest": {"label": "Invertir ${cash:,.0f}", "label_fmt": "Invertir ${cash:,.0f}", "cash": {"factor": -0.35, "min": -4500, "max": -500}, "asset": {"name": "Fondo indexado", "type": "Paper assets", "value": {"factor": 0.35, "min": 500, "max": 4500}, "income": 24, "risk": "market"}, "lesson": "Diversificacion", "interpretation": "Compraste tiempo y exposicion amplia, no emocion. El progreso lento suele ser el mas repetible."},
             "wait": {"label": "Esperar y proteger caja", "stress": -1, "lesson": "Liquidez", "interpretation": "No invertir tambien es una posicion. La liquidez compra calma y opciones."},
             "speculate": {"label": "Buscar una accion caliente", "cash": {"factor": -0.22, "min": -3000, "max": -300}, "asset": {"name": "Accion especulativa", "type": "Paper assets", "value": {"factor": 0.16, "min": 200, "max": 2200}, "income": 0, "risk": "high"}, "stress": 5, "lesson": "Riesgo concentrado", "interpretation": "La historia era emocionante. El margen de seguridad era pequeno."},
         },
@@ -121,7 +121,7 @@ BASE_EVENTS = [
         "title": "Departamento pequeno con renta",
         "description": "Un vendedor necesita liquidez. La propiedad tiene flujo positivo, pero la entrada usa gran parte de tu caja.",
         "actions": {
-            "buy": {"label": "Comprar con ${cash:,.0f} de entrada", "label_fmt": "Comprar con ${cash:,.0f} de entrada", "cash": {"factor": -1.2, "min": -18000, "max": -2500}, "asset": {"name": "Departamento pequeno", "type": "Real estate", "value": {"factor": 10.5, "min": 35000, "max": 160000}, "income": 260, "risk": "vacancy"}, "debt": {"name": "Hipoteca departamento", "type": "Mortgage", "balance": {"factor": 9.5, "min": 30000, "max": 150000}, "payment": {"factor": 0.09, "min": 250, "max": 1800}, "rate": 0.07, "stress": 8}, "stress": 6, "lesson": "Apalancamiento", "interpretation": "El flujo mejora, pero tus obligaciones fijas tambien. La deuda no perdona meses malos."},
+            "buy": {"label": "Comprar con ${cash:,.0f} de entrada", "label_fmt": "Comprar con ${cash:,.0f} de entrada", "cash": {"factor": -1.2, "min": -18000, "max": -2500}, "asset": {"name": "Departamento pequeno", "type": "Real estate", "value": {"factor": 10.5, "min": 35000, "max": 160000}, "income": 338, "risk": "vacancy"}, "debt": {"name": "Hipoteca departamento", "type": "Mortgage", "balance": {"factor": 9.5, "min": 30000, "max": 150000}, "payment": {"factor": 0.09, "min": 250, "max": 1800}, "rate": 0.07, "stress": 8}, "stress": 6, "lesson": "Apalancamiento", "interpretation": "El flujo mejora, pero tus obligaciones fijas tambien. La deuda no perdona meses malos."},
             "negotiate": {"label": "Negociar y estudiar", "cash": {"factor": -0.05, "min": -800, "max": -80}, "education": 1, "stress": -2, "lesson": "Analisis", "interpretation": "Comprar mejor empieza antes de firmar. Aprender a analizar evita anos de pagos incomodos."},
             "skip": {"label": "Pasar por falta de reserva", "stress": -1, "lesson": "Margen de seguridad", "interpretation": "A veces una buena inversion es mala para tu momento financiero."},
         },
@@ -133,7 +133,7 @@ BASE_EVENTS = [
         "title": "Pequeno negocio digital",
         "description": "Puedes lanzar un producto simple. Requiere capital, energia y tolerancia a que nadie compre al principio.",
         "actions": {
-            "launch": {"label": "Invertir ${cash:,.0f} y lanzar", "label_fmt": "Invertir ${cash:,.0f} y lanzar", "cash": {"factor": -0.7, "min": -8000, "max": -800}, "asset": {"name": "Negocio digital", "type": "Small business", "value": {"factor": 1.0, "min": 1200, "max": 12000}, "income": 380, "risk": "execution"}, "stress": 10, "lesson": "Activos construidos", "interpretation": "Los negocios pueden crear flujo, pero te cobran en incertidumbre y energia.", "delayed": [{"delay": 12, "label": "Negocio en bache (-40%)", "source": "Pequeno negocio digital", "effect": {"asset_drop": "Negocio digital", "percent": 0.4}}]},
+            "launch": {"label": "Invertir ${cash:,.0f} y lanzar", "label_fmt": "Invertir ${cash:,.0f} y lanzar", "cash": {"factor": -0.7, "min": -8000, "max": -800}, "asset": {"name": "Negocio digital", "type": "Small business", "value": {"factor": 1.0, "min": 1200, "max": 12000}, "income": 494, "risk": "execution"}, "stress": 10, "lesson": "Activos construidos", "interpretation": "Los negocios pueden crear flujo, pero te cobran en incertidumbre y energia.", "delayed": [{"delay": 12, "label": "Negocio en bache (-40%)", "source": "Pequeno negocio digital", "effect": {"asset_drop": "Negocio digital", "percent": 0.4}}]},
             "validate": {"label": "Validar con ${cash:,.0f}", "label_fmt": "Validar con ${cash:,.0f}", "cash": {"factor": -0.12, "min": -1200, "max": -150}, "education": 1, "stress": 2, "lesson": "Validacion", "interpretation": "Pagar por informacion pequena antes de apostar fuerte puede salvar capital."},
             "ignore": {"label": "No emprender ahora", "stress": -3, "lesson": "Foco", "interpretation": "No toda oportunidad merece atencion. El foco tambien es un activo."},
         },
@@ -205,7 +205,7 @@ BASE_EVENTS = [
         "title": "Correccion del mercado",
         "description": "Los precios caen. Si tenes liquidez puede ser oportunidad; si tenes miedo puede ser trampa.",
         "actions": {
-            "buy": {"label": "Comprar barato por ${cash:,.0f}", "label_fmt": "Comprar barato por ${cash:,.0f}", "cash": {"factor": -0.22, "min": -3500, "max": -300}, "asset": {"name": "Compra en correccion", "type": "Paper assets", "value": {"factor": 0.25, "min": 300, "max": 4200}, "income": 10, "risk": "market"}, "lesson": "Crisis como oportunidad", "interpretation": "La misma caida que asusta a unos crea entrada para quien llega preparado."},
+            "buy": {"label": "Comprar barato por ${cash:,.0f}", "label_fmt": "Comprar barato por ${cash:,.0f}", "cash": {"factor": -0.22, "min": -3500, "max": -300}, "asset": {"name": "Compra en correccion", "type": "Paper assets", "value": {"factor": 0.25, "min": 300, "max": 4200}, "income": 20, "risk": "market"}, "lesson": "Crisis como oportunidad", "interpretation": "La misma caida que asusta a unos crea entrada para quien llega preparado."},
             "panic": {"label": "Vender por miedo", "sell_asset_percent": 0.2, "stress": 5, "lesson": "Panico", "interpretation": "Vender por miedo convierte volatilidad temporal en perdida permanente."},
             "hold": {"label": "No tocar nada", "stress": -1, "lesson": "Paciencia", "interpretation": "A veces la mejor decision es no reaccionar al ruido."},
         },
@@ -307,7 +307,7 @@ BASE_EVENTS = [
         "description": "El banco te ofrece credito facil justo cuando no tenes deudas. Puede darte velocidad o volver a ponerte una cadena.",
         "actions": {
             "reject": {"label": "Rechazar y mantenerte libre", "stress": -2, "credit_score": 3, "lesson": "Libertad de obligacion", "interpretation": "No usar credito disponible tambien es poder. Tu flujo queda sin nuevos duenos."},
-            "strategic": {"label": "Usar ${cash:,.0f} para invertir", "label_fmt": "Usar ${cash:,.0f} para invertir", "cash": {"factor": -0.2, "min": -8000, "max": -500}, "asset": {"name": "Posicion financiada", "type": "Paper assets", "value": {"factor": 0.25, "min": 600, "max": 10000}, "income": 8, "risk": "market"}, "debt": {"name": "Linea de inversion", "type": "Investment loan", "balance": {"factor": 0.2, "min": 500, "max": 8000}, "payment": 85, "rate": 0.16, "stress": 5}, "stress": 4, "lesson": "Deuda estrategica", "interpretation": "La deuda no es mala por definicion. Es peligrosa cuando no sabes exactamente que compra."},
+            "strategic": {"label": "Usar ${cash:,.0f} para invertir", "label_fmt": "Usar ${cash:,.0f} para invertir", "cash": {"factor": -0.2, "min": -8000, "max": -500}, "asset": {"name": "Posicion financiada", "type": "Paper assets", "value": {"factor": 0.25, "min": 600, "max": 10000}, "income": 16, "risk": "market"}, "debt": {"name": "Linea de inversion", "type": "Investment loan", "balance": {"factor": 0.2, "min": 500, "max": 8000}, "payment": 85, "rate": 0.16, "stress": 5}, "stress": 4, "lesson": "Deuda estrategica", "interpretation": "La deuda no es mala por definicion. Es peligrosa cuando no sabes exactamente que compra."},
             "consume": {"label": "Usarlo para mejorar estilo de vida", "cash": {"factor": 0.1, "min": 300, "max": 3000}, "debt": {"name": "Credito consumo", "type": "Credit card", "balance": {"factor": 0.2, "min": 500, "max": 4000}, "payment": 95, "rate": 0.34, "stress": 8}, "expenses": {"factor": 0.02, "min": 50, "max": 300}, "stress": 8, "lifestyle": 1, "lesson": "Regreso a la rueda", "interpretation": "La libertad de deuda puede perderse en una tarde. La cuota se queda anos."},
         },
     },
@@ -379,7 +379,7 @@ BASE_EVENTS = [
         "title": "Heredas un activo con problema",
         "description": "Un familiar fallece y te deja una propiedad con deuda oculta o un negocio en rojo.",
         "actions": {
-            "accept": {"label": "Aceptar y sanear", "cash": {"factor": -0.2, "min": -5000, "max": -800}, "asset": {"name": "Activo heredado", "type": "Real estate", "value": {"factor": 1.5, "min": 20000, "max": 120000}, "income": 180, "risk": "vacancy"}, "debt": {"name": "Deuda oculta heredada", "type": "Mortgage", "balance": {"factor": 0.8, "min": 10000, "max": 60000}, "payment": 520, "rate": 0.08, "stress": 7}, "stress": 8, "lesson": "Due diligence", "interpretation": "Heredar no es gratis. Asumir obligaciones sin revisar es una apuesta ciega."},
+            "accept": {"label": "Aceptar y sanear", "cash": {"factor": -0.2, "min": -5000, "max": -800}, "asset": {"name": "Activo heredado", "type": "Real estate", "value": {"factor": 1.5, "min": 20000, "max": 120000}, "income": 234, "risk": "vacancy"}, "debt": {"name": "Deuda oculta heredada", "type": "Mortgage", "balance": {"factor": 0.8, "min": 10000, "max": 60000}, "payment": 520, "rate": 0.08, "stress": 7}, "stress": 8, "lesson": "Due diligence", "interpretation": "Heredar no es gratis. Asumir obligaciones sin revisar es una apuesta ciega."},
             "reject": {"label": "Renunciar a la herencia", "stress": 6, "lesson": "Saber decir no", "interpretation": "Rechazar un activo toxico puede ser la decision mas lucrativa del año."},
             "sell_fast": {"label": "Aceptar y vender rapido", "cash": {"factor": 0.3, "min": 2000, "max": 30000}, "sell_asset_percent": 0.0, "stress": 10, "lesson": "Liquidez sobre valor", "interpretation": "Vender con descuento libera caja y evita gestion de un activo que no elegiste."},
         },
@@ -464,7 +464,7 @@ BASE_EVENTS = [
         "title": "Bonus semestral",
         "description": "Tu empresa reparte utilidades. Puedes quemarlo, invertirlo o atacar deuda.",
         "actions": {
-            "invest": {"label": "Invertir el bonus ${cash:,.0f}", "label_fmt": "Invertir el bonus ${cash:,.0f}", "cash": {"factor": -0.2, "min": -3000, "max": -300}, "asset": {"name": "Inversion bonus", "type": "Paper assets", "value": {"factor": 0.22, "min": 300, "max": 3500}, "income": 10, "risk": "market"}, "lesson": "Ingreso extraordinario", "interpretation": "El bonus no es salario. Es semilla. Invertirlo lo convierte en futuro."},
+            "invest": {"label": "Invertir el bonus ${cash:,.0f}", "label_fmt": "Invertir el bonus ${cash:,.0f}", "cash": {"factor": -0.2, "min": -3000, "max": -300}, "asset": {"name": "Inversion bonus", "type": "Paper assets", "value": {"factor": 0.22, "min": 300, "max": 3500}, "income": 20, "risk": "market"}, "lesson": "Ingreso extraordinario", "interpretation": "El bonus no es salario. Es semilla. Invertirlo lo convierte en futuro."},
             "pay_debt": {"label": "Atacar deuda con el bonus", "cash": {"factor": -0.2, "min": -3000, "max": -300}, "pay_debt": {"factor": 0.2, "min": 300, "max": 3000}, "stress": -4, "lesson": "Desapalancamiento", "interpretation": "Usar ingreso extraordinario para bajar deuda es el doble retorno: liberas flujo y reduces riesgo."},
             "spend": {"label": "Gastarlo en algo deseado", "cash": {"factor": 0.2, "min": 300, "max": 3000}, "stress": -6, "lifestyle": 1, "lesson": "Inflacion de estilo", "interpretation": "El bonus se fue. La satisfaccion tambien. Lo que queda es el habito de esperar el proximo."},
         },
@@ -477,7 +477,7 @@ BASE_EVENTS = [
         "description": "Cerraste un deal grande. La comision supera lo normal. La tentacion de subir estilo de vida acecha.",
         "actions": {
             "save": {"label": "Guardar el 80% en reserva", "cash": {"factor": 0.05, "min": 100, "max": 1000}, "stress": -3, "lesson": "Reserva estrategica", "interpretation": "Las comisiones grandes son picos, no promedio. Tratarlas como promedio es peligroso."},
-            "invest": {"label": "Invertir en activo", "cash": {"factor": -0.25, "min": -4000, "max": -500}, "asset": {"name": "Inversion comision", "type": "Paper assets", "value": {"factor": 0.28, "min": 500, "max": 5000}, "income": 12, "risk": "market"}, "lesson": "Pico a activo", "interpretation": "Convertir un pico en flujo recurrente es el movimiento del paciente."},
+            "invest": {"label": "Invertir en activo", "cash": {"factor": -0.25, "min": -4000, "max": -500}, "asset": {"name": "Inversion comision", "type": "Paper assets", "value": {"factor": 0.28, "min": 500, "max": 5000}, "income": 24, "risk": "market"}, "lesson": "Pico a activo", "interpretation": "Convertir un pico en flujo recurrente es el movimiento del paciente."},
             "upgrade": {"label": "Subir estilo de vida", "expenses": {"factor": 0.05, "min": 100, "max": 600}, "stress": -8, "lifestyle": 1, "lesson": "Trampa del pico", "interpretation": "La comision se fue. El gasto nuevo se quedo anos. El timing es el peor posible."},
         },
     },
@@ -622,7 +622,7 @@ BASE_EVENTS = [
         "actions": {
             "small": {"label": "Celebracion modesta", "cash": {"factor": -0.05, "min": -800, "max": -100}, "stress": -5, "lesson": "Proporcion", "interpretation": "Celebra el avance sin comprometer el proximo paso."},
             "big": {"label": "Fiesta grande", "cash": {"factor": -0.2, "min": -3000, "max": -500}, "stress": -8, "lifestyle": 1, "lesson": "Recompensa excesiva", "interpretation": "La recompensa excesiva por un logro chico genera expectativa de gasto futuro."},
-            "invest_celebrate": {"label": "Invertir el monto de la fiesta", "cash": {"factor": -0.03, "min": -500, "max": -50}, "asset": {"name": "Inversion celebracion", "type": "Paper assets", "value": {"factor": 0.05, "min": 50, "max": 600}, "income": 3, "risk": "market"}, "stress": -3, "lesson": "Doble victoria", "interpretation": "Celebra construyendo futuro. No es la fiesta mas divertida, pero el yo del futuro agradece."},
+            "invest_celebrate": {"label": "Invertir el monto de la fiesta", "cash": {"factor": -0.03, "min": -500, "max": -50}, "asset": {"name": "Inversion celebracion", "type": "Paper assets", "value": {"factor": 0.05, "min": 50, "max": 600}, "income": 6, "risk": "market"}, "stress": -3, "lesson": "Doble victoria", "interpretation": "Celebra construyendo futuro. No es la fiesta mas divertida, pero el yo del futuro agradece."},
         },
     },
     {  # --- Investment +12 ---
@@ -632,8 +632,8 @@ BASE_EVENTS = [
         "title": "Bonos corporativos con yield atractiva",
         "description": "Bonos de empresa solida pagan mas que el mercado. Es ingreso fijo, pero con riesgo de credito.",
         "actions": {
-            "buy": {"label": "Comprar bonos ${cash:,.0f}", "label_fmt": "Comprar bonos ${cash:,.0f}", "cash": {"factor": -0.3, "min": -6000, "max": -800}, "asset": {"name": "Bonos corporativos", "type": "Paper assets", "value": {"factor": 0.32, "min": 800, "max": 6500}, "income": 25, "risk": "market"}, "lesson": "Ingreso fijo", "interpretation": "Los bonos dan flujo predecible. El riesgo de credito no es cero, es menos visible."},
-            "mix": {"label": "Solo una porcion pequena", "cash": {"factor": -0.1, "min": -2000, "max": -300}, "asset": {"name": "Bonos parcial", "type": "Paper assets", "value": {"factor": 0.11, "min": 300, "max": 2200}, "income": 10, "risk": "market"}, "lesson": "Diversificacion", "interpretation": "No pongas todo en un emisor. El rendimiento extra no justifica riesgo concentrado."},
+            "buy": {"label": "Comprar bonos ${cash:,.0f}", "label_fmt": "Comprar bonos ${cash:,.0f}", "cash": {"factor": -0.3, "min": -6000, "max": -800}, "asset": {"name": "Bonos corporativos", "type": "Paper assets", "value": {"factor": 0.32, "min": 800, "max": 6500}, "income": 50, "risk": "market"}, "lesson": "Ingreso fijo", "interpretation": "Los bonos dan flujo predecible. El riesgo de credito no es cero, es menos visible."},
+            "mix": {"label": "Solo una porcion pequena", "cash": {"factor": -0.1, "min": -2000, "max": -300}, "asset": {"name": "Bonos parcial", "type": "Paper assets", "value": {"factor": 0.11, "min": 300, "max": 2200}, "income": 20, "risk": "market"}, "lesson": "Diversificacion", "interpretation": "No pongas todo en un emisor. El rendimiento extra no justifica riesgo concentrado."},
             "pass": {"label": "No comprar", "stress": -1, "lesson": "Simpleza", "interpretation": "No todo yield atractivo es oportunidad. A veces es trampa con buen marketing."},
         },
     },
@@ -644,8 +644,8 @@ BASE_EVENTS = [
         "title": "ETF sectorial en tendencia",
         "description": "Un sectorpecifico esta en racha. El ETF promete exposure sin elegir acciones individuales.",
         "actions": {
-            "buy": {"label": "Comprar ETF sectorial", "cash": {"factor": -0.2, "min": -4000, "max": -500}, "asset": {"name": "ETF sectorial", "type": "Paper assets", "value": {"factor": 0.22, "min": 500, "max": 4500}, "income": 8, "risk": "high"}, "stress": 3, "lesson": "Concentracion sectorial", "interpretation": "El ETF diversifica dentro del sector. Pero el sector mismo es una sola apuesta."},
-            "broad": {"label": "Comprar ETF amplio en su lugar", "cash": {"factor": -0.2, "min": -4000, "max": -500}, "asset": {"name": "ETF amplio", "type": "Paper assets", "value": {"factor": 0.22, "min": 500, "max": 4500}, "income": 12, "risk": "market"}, "lesson": "Diversificacion real", "interpretation": "El ETF amplio captura el mercado. Menos emocion, mas solidez."},
+            "buy": {"label": "Comprar ETF sectorial", "cash": {"factor": -0.2, "min": -4000, "max": -500}, "asset": {"name": "ETF sectorial", "type": "Paper assets", "value": {"factor": 0.22, "min": 500, "max": 4500}, "income": 16, "risk": "high"}, "stress": 3, "lesson": "Concentracion sectorial", "interpretation": "El ETF diversifica dentro del sector. Pero el sector mismo es una sola apuesta."},
+            "broad": {"label": "Comprar ETF amplio en su lugar", "cash": {"factor": -0.2, "min": -4000, "max": -500}, "asset": {"name": "ETF amplio", "type": "Paper assets", "value": {"factor": 0.22, "min": 500, "max": 4500}, "income": 24, "risk": "market"}, "lesson": "Diversificacion real", "interpretation": "El ETF amplio captura el mercado. Menos emocion, mas solidez."},
             "wait": {"label": "Esperar", "stress": -1, "lesson": "Trend chasing", "interpretation": "Seguir tendencias es comprar despues de que subio. El FOMO no es estrategia."},
         },
     },
@@ -668,8 +668,8 @@ BASE_EVENTS = [
         "title": "Franquicia con marca conocida",
         "description": "Puedes abrir una franquicia. La marca ayuda, pero el costo inicial y el royalty comen margen.",
         "actions": {
-            "buy": {"label": "Comprar franquicia ${cash:,.0f}", "label_fmt": "Comprar franquicia ${cash:,.0f}", "cash": {"factor": -0.4, "min": -15000, "max": -3000}, "asset": {"name": "Franquicia", "type": "Small business", "value": {"factor": 0.5, "min": 4000, "max": 20000}, "income": 320, "risk": "execution"}, "expenses": {"factor": 0.02, "min": 50, "max": 300}, "stress": 8, "lesson": "Negocio con plantilla", "interpretation": "La franquicia reduce riesgo de ejecucion pero limita upside. Es un trabajo disfrazado de activo."},
-            "partner": {"label": "Entrar con socio", "cash": {"factor": -0.15, "min": -6000, "max": -1000}, "asset": {"name": "Franquicia 50/50", "type": "Small business", "value": {"factor": 0.25, "min": 2000, "max": 10000}, "income": 160, "risk": "execution"}, "stress": 5, "education": 1, "lesson": "Socio", "interpretation": "Un socio divide costo y riesgo. Tambien divide control y ganancia."},
+            "buy": {"label": "Comprar franquicia ${cash:,.0f}", "label_fmt": "Comprar franquicia ${cash:,.0f}", "cash": {"factor": -0.4, "min": -15000, "max": -3000}, "asset": {"name": "Franquicia", "type": "Small business", "value": {"factor": 0.5, "min": 4000, "max": 20000}, "income": 416, "risk": "execution"}, "expenses": {"factor": 0.02, "min": 50, "max": 300}, "stress": 8, "lesson": "Negocio con plantilla", "interpretation": "La franquicia reduce riesgo de ejecucion pero limita upside. Es un trabajo disfrazado de activo."},
+            "partner": {"label": "Entrar con socio", "cash": {"factor": -0.15, "min": -6000, "max": -1000}, "asset": {"name": "Franquicia 50/50", "type": "Small business", "value": {"factor": 0.25, "min": 2000, "max": 10000}, "income": 208, "risk": "execution"}, "stress": 5, "education": 1, "lesson": "Socio", "interpretation": "Un socio divide costo y riesgo. Tambien divide control y ganancia."},
             "pass": {"label": "No comprar", "stress": -2, "lesson": "Independencia", "interpretation": "La franquicia no es libertad financiera. Es un trabajo con mas overhead."},
         },
     },
@@ -681,9 +681,9 @@ BASE_EVENTS = [
         "title": "Fondo privado con acceso restringido",
         "description": "Un fondo privado ofrece estrategias no disponibles al publico. Requiere ticket grande y conocimiento.",
         "actions": {
-            "commit": {"label": "Comprometer capital ${cash:,.0f}", "label_fmt": "Comprometer capital ${cash:,.0f}", "cash": {"factor": -0.5, "min": -20000, "max": -5000}, "asset": {"name": "Fondo privado", "type": "Paper assets", "value": {"factor": 0.55, "min": 5000, "max": 22000}, "income": 45, "risk": "high"}, "stress": 5, "lesson": "Iliquidez premium", "interpretation": "El fondo privado cobra por iliquidez. El retorno extra es real, pero el capital no se toca por años."},
+            "commit": {"label": "Comprometer capital ${cash:,.0f}", "label_fmt": "Comprometer capital ${cash:,.0f}", "cash": {"factor": -0.5, "min": -20000, "max": -5000}, "asset": {"name": "Fondo privado", "type": "Paper assets", "value": {"factor": 0.55, "min": 5000, "max": 22000}, "income": 90, "risk": "high"}, "stress": 5, "lesson": "Iliquidez premium", "interpretation": "El fondo privado cobra por iliquidez. El retorno extra es real, pero el capital no se toca por años."},
             "wait": {"label": "Esperar mejor momento", "stress": -1, "lesson": "Paciencia informada", "interpretation": "Con conocimiento, esperar tambien es una decision analitica, no miedo."},
-            "small_ticket": {"label": "Entrar con ticket minimo", "cash": {"factor": -0.2, "min": -8000, "max": -2000}, "asset": {"name": "Fondo privado small", "type": "Paper assets", "value": {"factor": 0.22, "min": 2000, "max": 9000}, "income": 20, "risk": "high"}, "stress": 3, "lesson": "Tamano de posicion", "interpretation": "Entrar con ticket minimo captura exposure sin comprometer liquidez total."},
+            "small_ticket": {"label": "Entrar con ticket minimo", "cash": {"factor": -0.2, "min": -8000, "max": -2000}, "asset": {"name": "Fondo privado small", "type": "Paper assets", "value": {"factor": 0.22, "min": 2000, "max": 9000}, "income": 40, "risk": "high"}, "stress": 3, "lesson": "Tamano de posicion", "interpretation": "Entrar con ticket minimo captura exposure sin comprometer liquidez total."},
         },
     },
     {
@@ -718,7 +718,7 @@ BASE_EVENTS = [
         "title": "Fondo de inversion verde",
         "description": "Un fondo enfocado en transicion energetica promete impacto y retorno. El green premium puede ser real o marketing.",
         "actions": {
-            "invest": {"label": "Invertir ${cash:,.0f}", "label_fmt": "Invertir ${cash:,.0f}", "cash": {"factor": -0.2, "min": -4000, "max": -500}, "asset": {"name": "Fondo verde", "type": "Paper assets", "value": {"factor": 0.22, "min": 500, "max": 4500}, "income": 9, "risk": "market"}, "stress": -2, "lesson": "Impacto + retorno", "interpretation": "El impacto real existe. El retorno depende de que el fondo sea solido, no solo verde."},
+            "invest": {"label": "Invertir ${cash:,.0f}", "label_fmt": "Invertir ${cash:,.0f}", "cash": {"factor": -0.2, "min": -4000, "max": -500}, "asset": {"name": "Fondo verde", "type": "Paper assets", "value": {"factor": 0.22, "min": 500, "max": 4500}, "income": 18, "risk": "market"}, "stress": -2, "lesson": "Impacto + retorno", "interpretation": "El impacto real existe. El retorno depende de que el fondo sea solido, no solo verde."},
             "verify": {"label": "Verificar y decidir despues", "cash": {"factor": -0.02, "min": -300, "max": -50}, "education": 1, "stress": -1, "lesson": "Greenwashing", "interpretation": "No todo verde es verde. Verificar es proteccion, no escepticismo."},
             "pass": {"label": "No invertir", "stress": 0, "lesson": "Filtro personal", "interpretation": "Podes creer en la causa y no invertir. No son lo mismo."},
         },
@@ -730,8 +730,8 @@ BASE_EVENTS = [
         "title": "REIT con yield mensual",
         "description": "Un REIT te da exposure inmobiliaria sin gestion directa. Es liquido, pero sensible a tasas.",
         "actions": {
-            "buy": {"label": "Comprar REIT ${cash:,.0f}", "label_fmt": "Comprar REIT ${cash:,.0f}", "cash": {"factor": -0.25, "min": -5000, "max": -600}, "asset": {"name": "REIT", "type": "Paper assets", "value": {"factor": 0.27, "min": 600, "max": 5500}, "income": 22, "risk": "market"}, "lesson": "Inmobiliario sin friccion", "interpretation": "El REIT da lo bueno del inmobiliario (flujo) sin lo malo (inquilinos, mantenimientos)."},
-            "direct": {"label": "Comprar propiedad directa en su lugar", "cash": {"factor": -0.4, "min": -8000, "max": -2000}, "asset": {"name": "Propiedad directa", "type": "Real estate", "value": {"factor": 1.0, "min": 20000, "max": 80000}, "income": 250, "risk": "vacancy"}, "debt": {"name": "Hipoteca REIT alt", "type": "Mortgage", "balance": {"factor": 0.6, "min": 12000, "max": 60000}, "payment": 580, "rate": 0.07, "stress": 7}, "stress": 6, "lesson": "Friccion vs control", "interpretation": "La propiedad directa da control y friccion. El REIT da simplicidad y menor upside."},
+            "buy": {"label": "Comprar REIT ${cash:,.0f}", "label_fmt": "Comprar REIT ${cash:,.0f}", "cash": {"factor": -0.25, "min": -5000, "max": -600}, "asset": {"name": "REIT", "type": "Paper assets", "value": {"factor": 0.27, "min": 600, "max": 5500}, "income": 44, "risk": "market"}, "lesson": "Inmobiliario sin friccion", "interpretation": "El REIT da lo bueno del inmobiliario (flujo) sin lo malo (inquilinos, mantenimientos)."},
+            "direct": {"label": "Comprar propiedad directa en su lugar", "cash": {"factor": -0.4, "min": -8000, "max": -2000}, "asset": {"name": "Propiedad directa", "type": "Real estate", "value": {"factor": 1.0, "min": 20000, "max": 80000}, "income": 325, "risk": "vacancy"}, "debt": {"name": "Hipoteca REIT alt", "type": "Mortgage", "balance": {"factor": 0.6, "min": 12000, "max": 60000}, "payment": 580, "rate": 0.07, "stress": 7}, "stress": 6, "lesson": "Friccion vs control", "interpretation": "La propiedad directa da control y friccion. El REIT da simplicidad y menor upside."},
             "pass": {"label": "No invertir ahora", "stress": -1, "lesson": "Paciencia", "interpretation": "Esperar mejor entrada no es miedo. Es timing."},
         },
     },
@@ -742,8 +742,8 @@ BASE_EVENTS = [
         "title": "Plataforma de peer lending",
         "description": "Prestas directamente a personas o pymes. Yield mas alto que bonos, riesgo de default mas alto.",
         "actions": {
-            "lend": {"label": "Prestar ${cash:,.0f}", "label_fmt": "Prestar ${cash:,.0f}", "cash": {"factor": -0.2, "min": -4000, "max": -500}, "asset": {"name": "Peer lending", "type": "Paper assets", "value": {"factor": 0.22, "min": 500, "max": 4500}, "income": 28, "risk": "high"}, "lesson": "Riesgo de credito directo", "interpretation": "El yield extra es real. El default tambien. Diversificar entre prestatarios es clave."},
-            "diversify": {"label": "Prestar en pequenas partes", "cash": {"factor": -0.1, "min": -2000, "max": -300}, "asset": {"name": "Peer lending diversificado", "type": "Paper assets", "value": {"factor": 0.11, "min": 300, "max": 2200}, "income": 14, "risk": "high"}, "lesson": "Diversificar default", "interpretation": "Repartir entre muchos prestatarios reduce el impacto de un solo default."},
+            "lend": {"label": "Prestar ${cash:,.0f}", "label_fmt": "Prestar ${cash:,.0f}", "cash": {"factor": -0.2, "min": -4000, "max": -500}, "asset": {"name": "Peer lending", "type": "Paper assets", "value": {"factor": 0.22, "min": 500, "max": 4500}, "income": 56, "risk": "high"}, "lesson": "Riesgo de credito directo", "interpretation": "El yield extra es real. El default tambien. Diversificar entre prestatarios es clave."},
+            "diversify": {"label": "Prestar en pequenas partes", "cash": {"factor": -0.1, "min": -2000, "max": -300}, "asset": {"name": "Peer lending diversificado", "type": "Paper assets", "value": {"factor": 0.11, "min": 300, "max": 2200}, "income": 28, "risk": "high"}, "lesson": "Diversificar default", "interpretation": "Repartir entre muchos prestatarios reduce el impacto de un solo default."},
             "pass": {"label": "No prestar", "stress": -1, "lesson": "Riesgo no transparente", "interpretation": "El riesgo de default en peer lending no es siempre visible. La opacidad es un costo."},
         },
     },
@@ -767,7 +767,7 @@ BASE_EVENTS = [
         "title": "Fondo de impacto social",
         "description": "Un fondo mide retorno financiero y impacto social. Tu educacion te permite leer debajo del marketing.",
         "actions": {
-            "invest": {"label": "Invertir ${cash:,.0f}", "label_fmt": "Invertir ${cash:,.0f}", "cash": {"factor": -0.25, "min": -6000, "max": -1000}, "asset": {"name": "Fondo impacto", "type": "Paper assets", "value": {"factor": 0.27, "min": 1000, "max": 6500}, "income": 16, "risk": "market"}, "stress": -3, "lesson": "Doble retorno", "interpretation": "El fondo de impacto real alinea interes financiero y social. El de marketing solo cobra fee."},
+            "invest": {"label": "Invertir ${cash:,.0f}", "label_fmt": "Invertir ${cash:,.0f}", "cash": {"factor": -0.25, "min": -6000, "max": -1000}, "asset": {"name": "Fondo impacto", "type": "Paper assets", "value": {"factor": 0.27, "min": 1000, "max": 6500}, "income": 32, "risk": "market"}, "stress": -3, "lesson": "Doble retorno", "interpretation": "El fondo de impacto real alinea interes financiero y social. El de marketing solo cobra fee."},
             "verify": {"label": "Verificar metricas de impacto", "cash": {"factor": -0.03, "min": -500, "max": -100}, "education": 1, "lesson": "Diligence", "interpretation": "Leer metricas reales separa fondo serio de greenwashing social."},
             "pass": {"label": "No invertir", "stress": 0, "lesson": "Foco", "interpretation": "El impacto es valido. No es obligatorio para toda tu cartera."},
         },
@@ -820,7 +820,7 @@ BASE_EVENTS = [
         "description": "El banco te aprueba una linea flexible. No la pediste, pero esta ahi. Es seguridad o tentacion?",
         "actions": {
             "keep_unused": {"label": "Menerla sin usar", "credit_score": 10, "stress": -3, "lesson": "Opcion sin costo", "interpretation": "Una linea sin usar mejora tu credit score y tu paz mental. No usar credito es un superpoder."},
-            "use_for_opportunity": {"label": "Usar para oportunidad", "cash": {"factor": -0.2, "min": -5000, "max": -500}, "asset": {"name": "Inversion con linea", "type": "Paper assets", "value": {"factor": 0.22, "min": 500, "max": 5500}, "income": 14, "risk": "market"}, "debt": {"name": "Linea usada", "type": "Investment loan", "balance": {"factor": 0.2, "min": 500, "max": 5000}, "payment": 80, "rate": 0.14, "stress": 5}, "lesson": "Deuda como palanca", "interpretation": "Usar linea para invertir es apalancamiento. Funciona hasta que no funciona."},
+            "use_for_opportunity": {"label": "Usar para oportunidad", "cash": {"factor": -0.2, "min": -5000, "max": -500}, "asset": {"name": "Inversion con linea", "type": "Paper assets", "value": {"factor": 0.22, "min": 500, "max": 5500}, "income": 28, "risk": "market"}, "debt": {"name": "Linea usada", "type": "Investment loan", "balance": {"factor": 0.2, "min": 500, "max": 5000}, "payment": 80, "rate": 0.14, "stress": 5}, "lesson": "Deuda como palanca", "interpretation": "Usar linea para invertir es apalancamiento. Funciona hasta que no funciona."},
             "close": {"label": "Cerrar la linea", "stress": 2, "credit_score": -5, "lesson": "Foco", "interpretation": "Cerrar credito no usado baja score. Tambien baja tentacion. Es un tradeoff valido."},
         },
     },
@@ -976,8 +976,8 @@ PROFESSION_EVENTS = [
         "title": "Side project con traccion",
         "description": "Una herramienta que usas en tu trabajo podria convertirse en producto. Requiere tiempo y capital.",
         "actions": {
-            "launch": {"label": "Invertir ${cash:,.0f} y lanzar", "label_fmt": "Invertir ${cash:,.0f} y lanzar", "cash": {"factor": -0.5, "min": -6000, "max": -500}, "asset": {"name": "SaaS personal", "type": "Small business", "value": {"factor": 0.8, "min": 1000, "max": 8000}, "income": 320, "risk": "execution"}, "stress": 12, "lesson": "Activos tecnicos", "interpretation": "Convertir codigo en producto es apalancar tu trabajo. Tambien te cobra en foco.", "delayed": [{"delay": 12, "label": "SaaS estanca (-30%)", "source": "Side project", "effect": {"asset_drop": "SaaS personal", "percent": 0.3}}]},
-            "mvp": {"label": "Validar con ${cash:,.0f}", "label_fmt": "Validar con ${cash:,.0f}", "cash": {"factor": -0.12, "min": -1500, "max": -150}, "education": 1, "asset": {"name": "SaaS personal", "type": "Small business", "value": {"factor": 0.2, "min": 200, "max": 2000}, "income": 80, "risk": "execution"}, "stress": 5, "lesson": "Validacion", "interpretation": "Antes de apostar fuerte, paga por evidencia de que alguien lo usaria."},
+            "launch": {"label": "Invertir ${cash:,.0f} y lanzar", "label_fmt": "Invertir ${cash:,.0f} y lanzar", "cash": {"factor": -0.5, "min": -6000, "max": -500}, "asset": {"name": "SaaS personal", "type": "Small business", "value": {"factor": 0.8, "min": 1000, "max": 8000}, "income": 416, "risk": "execution"}, "stress": 12, "lesson": "Activos tecnicos", "interpretation": "Convertir codigo en producto es apalancar tu trabajo. Tambien te cobra en foco.", "delayed": [{"delay": 12, "label": "SaaS estanca (-30%)", "source": "Side project", "effect": {"asset_drop": "SaaS personal", "percent": 0.3}}]},
+            "mvp": {"label": "Validar con ${cash:,.0f}", "label_fmt": "Validar con ${cash:,.0f}", "cash": {"factor": -0.12, "min": -1500, "max": -150}, "education": 1, "asset": {"name": "SaaS personal", "type": "Small business", "value": {"factor": 0.2, "min": 200, "max": 2000}, "income": 104, "risk": "execution"}, "stress": 5, "lesson": "Validacion", "interpretation": "Antes de apostar fuerte, paga por evidencia de que alguien lo usaria."},
             "focus": {"label": "No emprender ahora", "stress": -3, "lesson": "Foco", "interpretation": "No todo codigo util es un negocio. El foco en tu trabajo principal tambien compone."},
         },
     },
@@ -1015,8 +1015,8 @@ PROFESSION_EVENTS = [
         "title": "Grabar tu propio curso online",
         "description": "Podes transformar tu materia en un curso grabado. Ingreso pasivo, pero requiere produccion inicial.",
         "actions": {
-            "produce": {"label": "Producir curso ${cash:,.0f}", "label_fmt": "Producir curso ${cash:,.0f}", "cash": {"factor": -0.25, "min": -2500, "max": -300}, "asset": {"name": "Curso online propio", "type": "Small business", "value": {"factor": 0.4, "min": 500, "max": 5000}, "income": 180, "risk": "execution"}, "stress": 10, "education": 1, "lesson": "Escalabilidad del conocimiento", "interpretation": "Una vez grabado, tu conocimiento puede venderse mientras dormis. La produccion cuesta."},
-            "collab": {"label": "Colaborar ${cash:,.0f}", "label_fmt": "Colaborar ${cash:,.0f}", "cash": {"factor": -0.08, "min": -800, "max": -100}, "asset": {"name": "Curso colaborativo", "type": "Small business", "value": {"factor": 0.15, "min": 200, "max": 1500}, "income": 70, "risk": "execution"}, "stress": 5, "lesson": "Alianzas", "interpretation": "Dividir produccion reduce costo y riesgo. Tambien divides control e ingreso."},
+            "produce": {"label": "Producir curso ${cash:,.0f}", "label_fmt": "Producir curso ${cash:,.0f}", "cash": {"factor": -0.25, "min": -2500, "max": -300}, "asset": {"name": "Curso online propio", "type": "Small business", "value": {"factor": 0.4, "min": 500, "max": 5000}, "income": 234, "risk": "execution"}, "stress": 10, "education": 1, "lesson": "Escalabilidad del conocimiento", "interpretation": "Una vez grabado, tu conocimiento puede venderse mientras dormis. La produccion cuesta."},
+            "collab": {"label": "Colaborar ${cash:,.0f}", "label_fmt": "Colaborar ${cash:,.0f}", "cash": {"factor": -0.08, "min": -800, "max": -100}, "asset": {"name": "Curso colaborativo", "type": "Small business", "value": {"factor": 0.15, "min": 200, "max": 1500}, "income": 91, "risk": "execution"}, "stress": 5, "lesson": "Alianzas", "interpretation": "Dividir produccion reduce costo y riesgo. Tambien divides control e ingreso."},
             "no": {"label": "No grabar ahora", "stress": -2, "lesson": "Foco academico", "interpretation": "No todo docente debe ser creador de contenido. Tu impacto ya existe en el aula."},
         },
     },
@@ -1067,8 +1067,8 @@ PROFESSION_EVENTS = [
         "title": "Abrir consultorio privado",
         "description": "Un espacio para atender particular. Alto costo inicial, potencial de flujo propio.",
         "actions": {
-            "open": {"label": "Abrir consultorio ${cash:,.0f}", "label_fmt": "Abrir consultorio ${cash:,.0f}", "cash": {"factor": -1.0, "min": -15000, "max": -3000}, "asset": {"name": "Consultorio privado", "type": "Small business", "value": {"factor": 8, "min": 20000, "max": 120000}, "income": 500, "risk": "execution"}, "debt": {"name": "Credito consultorio", "type": "Personal loan", "balance": {"factor": 7, "min": 15000, "max": 100000}, "payment": {"factor": 0.07, "min": 250, "max": 2000}, "rate": 0.12, "stress": 10}, "stress": 10, "lesson": "Activo profesional", "interpretation": "Tu profesion se convierte en negocio. El upside es alto, la obligacion tambien."},
-            "share": {"label": "Consultorio compartido ${cash:,.0f}", "label_fmt": "Consultorio compartido ${cash:,.0f}", "cash": {"factor": -0.3, "min": -5000, "max": -800}, "asset": {"name": "Consultorio compartido", "type": "Small business", "value": {"factor": 2.5, "min": 5000, "max": 40000}, "income": 250, "risk": "execution"}, "stress": 6, "lesson": "Asociarse", "interpretation": "Compartir consultorio baja costo fijo y riesgo. Tambien divides horarios y pacientes."},
+            "open": {"label": "Abrir consultorio ${cash:,.0f}", "label_fmt": "Abrir consultorio ${cash:,.0f}", "cash": {"factor": -1.0, "min": -15000, "max": -3000}, "asset": {"name": "Consultorio privado", "type": "Small business", "value": {"factor": 8, "min": 20000, "max": 120000}, "income": 650, "risk": "execution"}, "debt": {"name": "Credito consultorio", "type": "Personal loan", "balance": {"factor": 7, "min": 15000, "max": 100000}, "payment": {"factor": 0.07, "min": 250, "max": 2000}, "rate": 0.12, "stress": 10}, "stress": 10, "lesson": "Activo profesional", "interpretation": "Tu profesion se convierte en negocio. El upside es alto, la obligacion tambien."},
+            "share": {"label": "Consultorio compartido ${cash:,.0f}", "label_fmt": "Consultorio compartido ${cash:,.0f}", "cash": {"factor": -0.3, "min": -5000, "max": -800}, "asset": {"name": "Consultorio compartido", "type": "Small business", "value": {"factor": 2.5, "min": 5000, "max": 40000}, "income": 325, "risk": "execution"}, "stress": 6, "lesson": "Asociarse", "interpretation": "Compartir consultorio baja costo fijo y riesgo. Tambien divides horarios y pacientes."},
             "wait": {"label": "Esperar", "stress": -2, "lesson": "Paciencia", "interpretation": "Abrir consultorio sin reserva es arriesgar tu estabilidad por un sueldo propio."},
         },
     },
@@ -1145,8 +1145,8 @@ PROFESSION_EVENTS = [
         "title": "Producto propio vs clientes",
         "description": "Podes destinar tiempo a construir un producto propio. Menos ingreso hoy, activo manana.",
         "actions": {
-            "build": {"label": "Construir producto propio ${cash:,.0f}", "label_fmt": "Construir producto propio ${cash:,.0f}", "cash": {"factor": -0.3, "min": -3000, "max": -400}, "salary": {"factor": -0.1, "min": -1000, "max": -100}, "asset": {"name": "Producto propio", "type": "Small business", "value": {"factor": 0.6, "min": 800, "max": 8000}, "income": 240, "risk": "execution"}, "stress": 10, "lesson": "Activos propios", "interpretation": "Dejar dinero de clientes para construir activo propio es el salto del freelancer al empresario."},
-            "balance": {"label": "Balance parcial ${cash:,.0f}", "label_fmt": "Balance parcial ${cash:,.0f}", "cash": {"factor": -0.1, "min": -1000, "max": -150}, "salary": {"factor": -0.04, "min": -400, "max": -40}, "asset": {"name": "Producto propio", "type": "Small business", "value": {"factor": 0.2, "min": 200, "max": 2000}, "income": 80, "risk": "execution"}, "stress": 5, "lesson": "Balance", "interpretation": "Avanzar lento es mejor que no avanzar. Conservas caja mientras construis."},
+            "build": {"label": "Construir producto propio ${cash:,.0f}", "label_fmt": "Construir producto propio ${cash:,.0f}", "cash": {"factor": -0.3, "min": -3000, "max": -400}, "salary": {"factor": -0.1, "min": -1000, "max": -100}, "asset": {"name": "Producto propio", "type": "Small business", "value": {"factor": 0.6, "min": 800, "max": 8000}, "income": 312, "risk": "execution"}, "stress": 10, "lesson": "Activos propios", "interpretation": "Dejar dinero de clientes para construir activo propio es el salto del freelancer al empresario."},
+            "balance": {"label": "Balance parcial ${cash:,.0f}", "label_fmt": "Balance parcial ${cash:,.0f}", "cash": {"factor": -0.1, "min": -1000, "max": -150}, "salary": {"factor": -0.04, "min": -400, "max": -40}, "asset": {"name": "Producto propio", "type": "Small business", "value": {"factor": 0.2, "min": 200, "max": 2000}, "income": 104, "risk": "execution"}, "stress": 5, "lesson": "Balance", "interpretation": "Avanzar lento es mejor que no avanzar. Conservas caja mientras construis."},
             "clients": {"label": "Seguir con clientes", "salary": {"factor": 0.08, "min": 100, "max": 800}, "stress": -2, "lesson": "Caja hoy", "interpretation": "Los clientes pagan las cuentas hoy. Sin activo propio, seguis dependiendo de tu tiempo."},
         },
     },
@@ -1163,6 +1163,25 @@ PROFESSION_EVENTS = [
             "wait": {"label": "Esperar", "stress": 12, "cash": {"factor": -0.05, "min": -500, "max": -50}, "lesson": "Incertidumbre", "interpretation": "Esperar puede funcionar una vez. Si se repite, tu flujo depende de la buena voluntad de otros."},
         },
     },
+]
+
+
+MINOR_EVENTS = [
+    {"id": "minor_portfolio_up", "title": "Tu portfolio subio este mes", "description": "El mercado accompanyo tus inversiones. Nada que decidir, solo observar.", "cash": {"factor": 0.02, "min": 50, "max": 800}, "lesson": "Paciencia", "interpretation": "El mercado recompensa a quien se queda cuando otros se asustan."},
+    {"id": "minor_portfolio_down", "title": "Tu portfolio bajo levemente", "description": "Una correccion menor te quita valor en pantalla. No es perdida hasta que vendes.", "stress": 2, "lesson": "Volatilidad", "interpretation": "La volatilidad no es riesgo. Es el precio de quedarse invertido."},
+    {"id": "minor_inflation_down", "title": "La inflacion cede este mes", "description": "Los precios se calmaron. Tu poder de compra respira.", "stress": -2, "lesson": "Ciclos", "interpretation": "La inflacion no es permanente. Los ciclos economicos tambien te ayudan."},
+    {"id": "minor_contact_referral", "title": "Un contacto te recomendo", "description": "Alguien menciona tu nombre para un proyecto futuro. No es concreto todavia.", "career_stability": 2, "lesson": "Network", "interpretation": "La reputacion compone silenciosamente. Cada interaccion es capital social."},
+    {"id": "minor_good_sleep", "title": "Descansaste bien este mes", "description": "Sin presiones urgentes, tu energia se recupero.", "stress": -3, "lesson": "Recuperacion", "interpretation": "La calma no es improductiva. Es el espacio donde se toman mejores decisiones."},
+    {"id": "minor_idea", "title": "Se te ocurrio una idea", "description": "Una idea para optimizar tus finanzas. Todavia no es momento de ejecutarla.", "education": 1, "lesson": "Claridad mental", "interpretation": "Las mejores ideas llegan cuando no estas apagando incendios."},
+    {"id": "minor_tax_refund", "title": "Devolucion de impuestos", "description": "El fisco te devuelve un exceso. Pequeno pero bienvenido.", "cash": {"factor": 0.03, "min": 100, "max": 1000}, "lesson": "Cumplimiento", "interpretation": "Estar al dia con impuestos a veces devuelve mas de lo que cuesta."},
+    {"id": "minor_side_tip", "title": "Un amigo te paso un dato", "description": "Te mencionaron una oportunidad. Por ahora es solo ruido.", "education": 1, "lesson": "Senales", "interpretation": "No todo dato es accion. Pero las senales se acumulan."},
+    {"id": "minor_market_news", "title": "Noticias del mercado", "description": "El mercado sube y baja. Tu plan no cambia por un titular.", "stress": -1, "lesson": "Ruido vs senal", "interpretation": "Seguir noticias diarias no es invertir. Es ansiedad con precio."},
+    {"id": "minor_small_bonus", "title": "Ingreso extraordinario menor", "description": "Un pago atrasado llego o vendiste algo sin usar.", "cash": {"factor": 0.04, "min": 50, "max": 600}, "lesson": "Margen", "interpretation": "Los ingresos pequenos tambien cuentan cuando se suman al fondo."},
+    {"id": "minor_health_check", "title": "Chequeo anual sin problemas", "description": "Tu salud acompana tu plan. Es un activo invisible.", "stress": -4, "lesson": "Salud", "interpretation": "La salud es el activo mas subestimado. Sin ella, el resto no funciona."},
+    {"id": "minor_subscriptions_audit", "title": "Auditoria de gastos silenciosos", "description": "Revisaste suscripciones y servicios que no usas. Pequeno ahorro.", "expenses": {"factor": -0.01, "min": -80, "max": -10}, "lesson": "Drip control", "interpretation": "Los gastos invisibles son los mas caros. Auditarlos es retorno garantizado."},
+    {"id": "minor_learning_week", "title": "Semana de aprendizaje", "description": "Leiste un articulo que conecto ideas sueltas.", "education": 1, "stress": -1, "lesson": "Curiosidad", "interpretation": "Aprender sin presion es el mejor tipo de aprendizaje."},
+    {"id": "minor_good_month", "title": "Un buen mes sin sobresaltos", "description": "Todo funciono como estaba planeado. A veces eso es lo mejor que puede pasar.", "stress": -2, "lesson": "Estabilidad", "interpretation": "La estabilidad no es aburrida. Es la base sobre la que se construyen riesgos mas grandes."},
+    {"id": "minor_renewal", "title": "Renovaste energias", "description": "Un fin de semana lejos de las pantallas te devolvio claridad.", "stress": -3, "career_stability": 1, "lesson": "Descanso activo", "interpretation": "El descanso no es lo opuesto al trabajo. Es parte del trabajo sostenible."},
 ]
 
 
@@ -1201,6 +1220,7 @@ def new_game(profession_id):
         "insolvent_months": 0,
         "lifestyle_inflation": 0,
         "quiet_months": 0,
+        "consecutive_quiet": 0,
         "events_seen": [],
         "schedule": [],
         "asset_events": [],
@@ -1217,8 +1237,12 @@ def start_month(state):
     apply_market_drift(state)
     maybe_salary_shock(state)
     if is_quiet_month(state):
-        event = quiet_month_event(state)
+        if random() < 0.25:
+            event = minor_event(state)
+        else:
+            event = quiet_month_event(state)
     else:
+        state["consecutive_quiet"] = 0
         event = pick_event(state)
     state["current_event"] = event
     return state
@@ -1264,8 +1288,10 @@ def pick_event(state):
 def is_quiet_month(state):
     if state["month"] <= 6:
         return False
+    if state.get("consecutive_quiet", 0) >= 2:
+        return False
     data = metrics(state)
-    if data["cashflow"] < 0 or data["runway"] < 3 or state["stress"] > 70 or data["insolvency_risk"] >= 40:
+    if data["cashflow"] < 200 or data["runway"] < 5 or state["stress"] > 65 or data["insolvency_risk"] >= 30:
         return False
     current = state.get("current_event") or {}
     if current.get("id") == "quiet_month":
@@ -1279,9 +1305,7 @@ def is_quiet_month(state):
 def quiet_month_event(state):
     data = metrics(state)
     months = 1
-    if data["runway"] >= 6 and data["cashflow"] >= 500 and state["stress"] <= 50:
-        months = 3
-    elif data["runway"] >= 4 and data["cashflow"] >= 200:
+    if data["runway"] >= 8 and data["cashflow"] >= 600 and state["stress"] <= 45:
         months = 2
     return {
         "id": "quiet_month",
@@ -1301,6 +1325,30 @@ def quiet_month_event(state):
     }
 
 
+def minor_event(state):
+    template = deepcopy(choice(MINOR_EVENTS))
+    event = {
+        "id": template["id"],
+        "category": "Quiet",
+        "phase": "survival",
+        "title": template["title"],
+        "description": template["description"],
+        "actions": {
+            "continue": {
+                "label": "Continuar",
+                "quiet": True,
+                "skip_months": 1,
+                "lesson": template.get("lesson", "Contexto"),
+                "interpretation": template.get("interpretation", "Un mes sin sobresaltos."),
+            },
+        },
+    }
+    for key in ("cash", "stress", "expenses", "education", "career_stability"):
+        if key in template:
+            event["actions"]["continue"][key] = template[key]
+    return prepare_event_for_state(event, state)
+
+
 def simulate_quiet_months(state, months):
     for _ in range(months):
         if state["status"] != "playing":
@@ -1310,8 +1358,9 @@ def simulate_quiet_months(state, months):
         apply_monthly_cashflow(state)
         apply_market_drift(state)
         maybe_salary_shock(state)
-        state["stress"] = max(5, state["stress"] - 3)
+        state["stress"] = max(5, state["stress"] - 2)
         state["quiet_months"] = state.get("quiet_months", 0) + 1
+        state["consecutive_quiet"] = state.get("consecutive_quiet", 0) + 1
         check_end_conditions(state)
 
 
@@ -1468,6 +1517,7 @@ def apply_action(state, action_id):
     check_end_conditions(state)
     if state["status"] == "playing":
         if action.get("quiet"):
+            state["consecutive_quiet"] = 0
             state["current_event"] = pick_event(state)
         else:
             advance_time(state, action.get("skip_months", 1))
@@ -1517,7 +1567,12 @@ def resolve_action_amounts(action, state):
 
 
 def apply_action_effects(state, action):
-    state["cash"] += amount(state, action.get("cash", 0))
+    net_worth = state["cash"] + asset_value(state) - debt_balance(state)
+    crisis_scale = 1.5 if net_worth > 50000 else 1.0
+    cash_delta = amount(state, action.get("cash", 0))
+    if cash_delta < 0 and crisis_scale > 1:
+        cash_delta = round(cash_delta * crisis_scale)
+    state["cash"] += cash_delta
     state["salary"] += amount(state, action.get("salary", 0))
     exp_delta = amount(state, action.get("expenses", 0))
     state["expenses"] += exp_delta
@@ -1527,6 +1582,8 @@ def apply_action_effects(state, action):
     stress_delta = action.get("stress", 0)
     if stress_delta > 0:
         stress_delta = round(stress_delta * 0.7)
+        if crisis_scale > 1:
+            stress_delta = round(stress_delta * crisis_scale)
     state["stress"] += stress_delta
     state["credit_score"] += action.get("credit_score", 0)
     state["career_stability"] += action.get("career_stability", 0)
@@ -1574,7 +1631,17 @@ def advance_time(state, months=1):
         process_schedule(state)
         if state["month"] % 12 == 1 and state["month"] > 1:
             state["age"] += 1
-            state["salary"] = round(state["salary"] * (1.02 + state["education"] * 0.005), 2)
+            state["salary"] = round(state["salary"] * (1.025 + state["education"] * 0.007), 2)
+            data = metrics(state)
+            state.setdefault("history", []).insert(0, {
+                "month": state["month"] - 1,
+                "age": display_age(state),
+                "title": f"Resumen año {(state['month'] - 1) // 12}",
+                "category": "Summary",
+                "action": f"Patrimonio ${data['net_worth']:,.0f} · Libertad {data['freedom_ratio']*100:.0f}%",
+                "feedback": None,
+            })
+            state["history"] = state["history"][:18]
 
 
 def process_schedule(state):

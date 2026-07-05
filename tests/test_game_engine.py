@@ -522,5 +522,83 @@ class StressBalanceTest(unittest.TestCase):
         self.assertEqual(PROFESSIONS["programador"]["stress"], 28)
 
 
+class BalanceV4Test(unittest.TestCase):
+    def test_paper_asset_income_doubled(self):
+        from app.game_engine import BASE_EVENTS
+        event = next(e for e in BASE_EVENTS if e["id"] == "index_fund")
+        self.assertEqual(event["actions"]["invest"]["asset"]["income"], 24)
+        event = next(e for e in BASE_EVENTS if e["id"] == "bonds")
+        self.assertEqual(event["actions"]["buy"]["asset"]["income"], 50)
+
+    def test_inflation_reduced(self):
+        from app.game_engine import WORLD_STATES
+        stable = next(w for w in WORLD_STATES if w["name"] == "Estable")
+        self.assertLess(stable["inflation"], 0.003)
+
+    def test_salary_growth_increased(self):
+        state = new_game("docente")
+        state["education"] = 2
+        state["salary"] = 2500
+        state["month"] = 12
+        advance_time(state, 1)
+        self.assertGreater(state["salary"], 2500 * 1.03)
+
+    def test_quiet_cooldown_after_two_consecutive(self):
+        state = new_game("docente")
+        state["month"] = 12
+        state["cash"] = 20000
+        state["salary"] = 3000
+        state["expenses"] = 1500
+        state["stress"] = 30
+        state["debts"] = []
+        self.assertTrue(is_quiet_month(state))
+        state["consecutive_quiet"] = 2
+        self.assertFalse(is_quiet_month(state))
+
+    def test_crisis_scaling_with_high_net_worth(self):
+        state = new_game("docente")
+        state["cash"] = 60000
+        state["salary"] = 0
+        state["expenses"] = 0
+        state["debts"] = []
+        state["current_event"] = {
+            "title": "Test",
+            "category": "Crisis",
+            "actions": {"hit": {"label": "Hit", "cash": -1000, "stress": 10, "lesson": "L", "interpretation": "I"}},
+        }
+        before_cash = state["cash"]
+        state = apply_action(state, "hit")
+        # -1000 * 1.5 (crisis) = -1500 cash
+        self.assertLess(state["cash"], before_cash - 1400)
+
+    def test_crisis_no_scaling_with_low_net_worth(self):
+        state = new_game("docente")
+        state["cash"] = 5000
+        state["debts"] = []
+        state["current_event"] = {
+            "title": "Test",
+            "category": "Crisis",
+            "actions": {"hit": {"label": "Hit", "cash": -1000, "stress": 10, "lesson": "L", "interpretation": "I"}},
+        }
+        before_cash = state["cash"]
+        state = apply_action(state, "hit")
+        # No scaling: -1000 cash (but quiet month decay may add cash)
+        self.assertGreaterEqual(state["cash"], before_cash - 1100)
+
+    def test_minor_events_exist(self):
+        from app.game_engine import MINOR_EVENTS
+        self.assertGreaterEqual(len(MINOR_EVENTS), 10)
+        for event in MINOR_EVENTS:
+            self.assertIn("title", event)
+            self.assertIn("description", event)
+
+    def test_annual_summary_added_to_history(self):
+        state = new_game("docente")
+        state["month"] = 11
+        state["history"] = []
+        advance_time(state, 2)
+        self.assertTrue(any("Resumen" in h["title"] for h in state["history"]))
+
+
 if __name__ == "__main__":
     unittest.main()
