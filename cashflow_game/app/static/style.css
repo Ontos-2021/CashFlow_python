@@ -243,7 +243,7 @@ p {
 }
 
 .dashboard-grid {
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(6, 1fr);
 }
 
 .report-grid {
@@ -365,6 +365,41 @@ p {
 }
 
 .feedback-box p {
+    margin-bottom: 0;
+}
+
+.feedback-box small {
+    color: var(--green);
+    display: block;
+    font-weight: 800;
+    margin-top: 12px;
+}
+
+.change-list {
+    display: grid;
+    gap: 6px;
+    list-style: none;
+    margin: 12px 0;
+    padding: 0;
+}
+
+.change-list li {
+    background: rgba(255, 255, 255, 0.055);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    color: #d8e5f6;
+    padding: 8px 10px;
+}
+
+.share-box {
+    background: rgba(245, 196, 81, 0.1);
+    border: 1px solid rgba(245, 196, 81, 0.24);
+    border-radius: 18px;
+    margin-top: 18px;
+    padding: 16px;
+}
+
+.share-box p {
     margin-bottom: 0;
 }
 

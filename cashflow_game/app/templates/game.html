@@ -3,9 +3,9 @@
 {% block content %}
 <section class="game-header card">
     <div>
-        <p class="eyebrow">Mes {{ state.month }} · {{ state.display_age }}</p>
+        <p class="eyebrow">Mes {{ state.month }} · {{ state.display_age }} · {{ state.phase|title }}</p>
         <h2>{{ state.profession }}</h2>
-        <p>{{ state.profession_summary }}</p>
+        <p>{{ state.profession_summary }} Perfil inicial: {{ state.risk_profile }}.</p>
     </div>
     <div class="market-state">
         <span>Economia</span>
@@ -36,6 +36,16 @@
         <strong>${{ "{:,.0f}".format(state.metrics.net_worth) }}</strong>
         <small>Activos + efectivo - deudas</small>
     </article>
+    <article class="card metric-card">
+        <span>Riesgo de insolvencia</span>
+        <strong class="{% if state.metrics.insolvency_risk >= 60 %}negative{% elif state.metrics.insolvency_risk <= 25 %}positive{% endif %}">{{ state.metrics.insolvency_risk }}%</strong>
+        <small>Runway, deuda, estres y flujo</small>
+    </article>
+    <article class="card metric-card">
+        <span>Preparacion</span>
+        <strong>{{ state.metrics.opportunity_readiness }}%</strong>
+        <small>Listo para oportunidades</small>
+    </article>
 </section>
 
 <section class="main-game-grid">
@@ -49,6 +59,9 @@
             <div><dt>Educacion financiera</dt><dd>{{ state.education }}/10</dd></div>
             <div><dt>Estres</dt><dd>{{ state.stress }}/100</dd></div>
             <div><dt>Score crediticio</dt><dd>{{ state.credit_score }}</dd></div>
+            <div><dt>Estabilidad laboral</dt><dd>{{ state.career_stability }}/100</dd></div>
+            <div><dt>Deuda / ingreso</dt><dd>{{ "{:.0f}".format(state.metrics.debt_to_income * 100) }}%</dd></div>
+            <div><dt>Ingreso por activos</dt><dd>{{ "{:.0f}".format(state.metrics.asset_income_ratio * 100) }}%</dd></div>
         </dl>
     </aside>
 
@@ -57,8 +70,16 @@
         <h2>{{ state.current_event.title }}</h2>
         <p>{{ state.current_event.description }}</p>
         <div class="feedback-box">
-            <strong>Ultima leccion</strong>
-            <p>{{ state.last_feedback }}</p>
+            <strong>{{ state.last_feedback.title }}</strong>
+            {% if state.last_feedback.changes %}
+            <ul class="change-list">
+                {% for change in state.last_feedback.changes %}
+                <li>{{ change }}</li>
+                {% endfor %}
+            </ul>
+            {% endif %}
+            <p>{{ state.last_feedback.interpretation }}</p>
+            <small>Principio: {{ state.last_feedback.lesson }}</small>
         </div>
         <div class="action-grid">
             {% for action_id, action in state.current_event.actions.items() %}

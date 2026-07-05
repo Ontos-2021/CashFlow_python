@@ -1,10 +1,10 @@
 # Cashflow Game
 
-Cashflow Game is evolving into a web-based financial life simulator: realistic in its financial model, professional in its interface, and gamified in its progression. The first milestone is a strong solo mode where players train financial intelligence by making monthly decisions around income, expenses, debt, assets, risk, liquidity, and financial freedom.
+Cashflow Game is a strategic financial life simulator where players try to escape the rat race by making monthly financial decisions under pressure. It is realistic in its financial model, professional in its interface, and gamified through consequences, progression, investor profiles, and shareable run stories.
 
-The current implementation is a Flask prototype focused on solo play. The long-term goal is to support multiplayer rooms, negotiation, shared markets, and cooperative or competitive financial scenarios.
+The current implementation is a Flask solo-mode prototype focused on 15-20 minute sessions. Players balance income, expenses, debt, assets, risk, stress, liquidity, and time while navigating realistic life events and imperfect opportunities.
 
-See `GAME_DESIGN.md` for the current product direction.
+See `GAME_DESIGN.md` for the current v2 product direction and `ROADMAP.md` for the implementation plan.
 
 ## Descripción General
 

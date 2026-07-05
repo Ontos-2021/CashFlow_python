@@ -4,8 +4,8 @@
 <section class="hero compact">
     <div>
         <p class="eyebrow">Reporte final</p>
-        <h2>{% if state.status == 'won' %}Libertad financiera conseguida{% elif state.status == 'lost' %}Insolvencia financiera{% else %}Simulacion completada{% endif %}</h2>
-        <p>{{ state.last_feedback }}</p>
+        <h2>{{ state.report.outcome }}</h2>
+        <p>{{ state.last_feedback.interpretation }}</p>
     </div>
     <form action="{{ url_for('reset') }}" method="post">
         <button class="button primary" type="submit">Nueva partida</button>
@@ -16,7 +16,7 @@
     <article class="card metric-card accent">
         <span>Perfil</span>
         <strong>{{ state.investor_profile }}</strong>
-        <small>{{ state.profession }} · {{ state.display_age }}</small>
+        <small>{{ state.profession }} · {{ state.display_age }} · {{ state.report.simulated_years }} anos simulados</small>
     </article>
     <article class="card metric-card">
         <span>Patrimonio neto</span>
@@ -33,23 +33,56 @@
         <strong>{{ state.metrics.runway }} meses</strong>
         <small>Objetivo recomendado: 6 meses</small>
     </article>
+    <article class="card metric-card">
+        <span>Estres</span>
+        <strong>{{ state.stress }}/100</strong>
+        <small>Score crediticio: {{ state.credit_score }}</small>
+    </article>
+    <article class="card metric-card">
+        <span>Gastos</span>
+        <strong>${{ "{:,.0f}".format(state.expenses) }}/mes</strong>
+        <small>Obligaciones: ${{ "{:,.0f}".format(state.metrics.monthly_obligations) }}</small>
+    </article>
 </section>
 
 <section class="two-column">
     <article class="card">
         <h3>Decisiones clave</h3>
         <div class="insight-list">
-            <p><strong>Mejor decision:</strong> {{ state.best_decision or 'Todavia no hubo una decision claramente transformadora.' }}</p>
-            <p><strong>Decision mas riesgosa:</strong> {{ state.worst_decision or 'No se detecto una decision critica.' }}</p>
-            <p><strong>Leccion:</strong> La libertad financiera no depende solo del ingreso, sino de construir flujo, controlar obligaciones y sostener liquidez.</p>
+            <p><strong>Mayor acierto:</strong> {{ state.report.biggest_win }}</p>
+            <p><strong>Mayor error:</strong> {{ state.report.biggest_mistake }}</p>
+            <p><strong>Momento peligroso:</strong> {{ state.report.dangerous_moment }}</p>
+            <p><strong>Mejor activo:</strong> {{ state.report.best_asset }}</p>
+            <p><strong>Peor pasivo:</strong> {{ state.report.worst_liability }}</p>
         </div>
+    </article>
+    <article class="card">
+        <h3>Postmortem</h3>
+        <p>{{ state.report.educational_summary }}</p>
+        <div class="share-box">
+            <strong>Resumen compartible</strong>
+            <p>{{ state.report.shareable_summary }}</p>
+        </div>
+    </article>
+</section>
+
+<section class="two-column">
+    <article class="card">
+        <h3>Metricas derivadas</h3>
+        <dl class="stat-list">
+            <div><dt>Deuda / ingreso</dt><dd>{{ "{:.0f}".format(state.metrics.debt_to_income * 100) }}%</dd></div>
+            <div><dt>Ingreso por activos</dt><dd>{{ "{:.0f}".format(state.metrics.asset_income_ratio * 100) }}%</dd></div>
+            <div><dt>Inflacion de estilo de vida</dt><dd>{{ "{:.0f}".format(state.metrics.lifestyle_inflation * 100) }}%</dd></div>
+            <div><dt>Riesgo de insolvencia</dt><dd>{{ state.metrics.insolvency_risk }}%</dd></div>
+            <div><dt>Preparacion para oportunidades</dt><dd>{{ state.metrics.opportunity_readiness }}%</dd></div>
+        </dl>
     </article>
     <article class="card">
         <h3>Historial reciente</h3>
         <div class="timeline">
             {% for item in state.history[:6] %}
             <div>
-                <span>Mes {{ item.month }}</span>
+                <span>Mes {{ item.month }} · {{ item.category }}</span>
                 <strong>{{ item.title }}</strong>
                 <p>{{ item.action }}</p>
             </div>

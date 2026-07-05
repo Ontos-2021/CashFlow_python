@@ -1,0 +1,57 @@
+# Cashflow Game - Roadmap
+
+## Current Focus
+
+Build a polished solo mode before multiplayer. The first playable experience should make players want one more run because they understand what they did wrong.
+
+## Phase 1 - Align Current MVP
+
+Status: implemented in prototype form.
+
+- Update design documentation to v2.
+- Keep solo mode as the only active mode.
+- Add partial outcomes beyond binary win/loss.
+- Improve the final report with postmortem and shareable summary.
+- Add derived metrics: debt-to-income, asset income ratio, lifestyle inflation, insolvency risk, and opportunity readiness.
+- Convert decision feedback into immediate result, interpretation, and lesson.
+
+## Phase 2 - Deepen Events
+
+Status: implemented as an expanded seed set, still below final target.
+
+- Add more tense decision events.
+- Include safe, tempting, and risky options.
+- Add crisis, income, expense, debt, investment, and knowledge events.
+- Add profession-relevant events and outcomes over time.
+- Move toward 60-100 decision events.
+
+## Phase 3 - Improve Monthly Simulation
+
+Status: partially implemented.
+
+- Add market state effects to event consequences.
+- Track delayed effects and future risks.
+- Add quiet-month fast-forward later.
+- Make world state affect job risk, asset prices, credit availability, and inflation more strongly.
+
+## Phase 4 - Viral Replayability
+
+Status: partially implemented.
+
+- Add richer investor profiles.
+- Add biggest win, biggest mistake, most dangerous moment, best asset, and worst liability.
+- Add compact shareable summary.
+- Improve postmortem language for loss and partial outcomes.
+
+## Phase 5 - Future Multiplayer
+
+Status: intentionally deferred.
+
+- Rooms.
+- Shared market events.
+- Turn synchronization.
+- Negotiation.
+- Player loans.
+- Partnerships.
+- Auctions.
+- Competitive and cooperative modes.

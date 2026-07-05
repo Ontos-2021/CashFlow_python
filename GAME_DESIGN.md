@@ -1,153 +1,284 @@
-# Cashflow Game - Game Design
+# Cashflow Game - Game Design v2
 
 ## Vision
 
-Cashflow Game is a professional, gamified financial simulator for young adults and adults who want to train financial intelligence through play. The first product goal is a strong solo mode that teaches real-world concepts through monthly decisions, financial statements, market events, debt, assets, cash flow, and long-term consequences.
+Cashflow Game is a strategic financial life simulator where players try to escape the rat race by making monthly financial decisions under pressure.
+
+The game teaches financial intelligence through consequence, not lectures. Players must balance income, expenses, debt, assets, risk, stress, liquidity, and time while navigating realistic life events and imperfect opportunities.
+
+The first product goal is a polished solo mode: a 15-20 minute session where the player experiences a complete financial life arc, from early career pressure to financial independence, insolvency, or a compromised middle path.
+
+## Design Thesis
+
+A good financial game is not about calculating the obvious best answer. It is about making uncomfortable tradeoffs with limited information:
+
+- Do I preserve cash or buy an asset?
+- Do I pay debt or invest?
+- Do I take a better job with more stress?
+- Do I use leverage during a recession?
+- Do I upgrade my lifestyle or increase my runway?
+- Do I take a risky opportunity before I feel ready?
+
+The player should feel that every month matters, but not every month needs a major decision.
+
+## Player Fantasy
+
+The player fantasy is:
+
+> I am building my way out of financial dependence while life keeps trying to pull me back.
+
+The emotional arc should move through scarcity, stability, opportunity, risk, momentum, and finally freedom or collapse.
 
 ## Experience Pillars
 
-- Realistic financial decisions with simplified early rules.
-- A professional dashboard feel, closer to fintech than arcade.
-- Every decision should teach a practical financial principle.
-- The player should feel tension between liquidity, growth, debt, risk, and time.
-- The game should generate shareable stories: age of financial freedom, best decision, worst decision, crises survived, and investor profile.
+### Practical Financial Strategy
 
-## Core Loop
+Every system should connect to a real-world principle: cash flow matters more than salary, liquidity prevents collapse, bad debt limits freedom, assets should change future options, lifestyle inflation is dangerous, leverage can accelerate or destroy progress, and risk is contextual.
 
-One turn represents one month.
+### Tense Monthly Decisions
 
-1. The player receives salary and passive income.
-2. The player pays living expenses and debt payments.
-3. A financial event or opportunity appears.
-4. The player chooses an action.
-5. The financial statement updates.
-6. The game explains the consequence and lesson.
-7. The month advances.
+The player should rarely have enough money to do everything. Good decisions involve sacrifice. Bad decisions can feel tempting.
 
-## Solo Mode MVP
+### Professional Dashboard Feel
 
-The solo prototype must support a complete 15-20 minute session.
+The interface should feel closer to a fintech dashboard than an arcade game. The player should constantly understand cash, safety, progress, risk, and distance to financial freedom.
 
-- Start a new game with a profession.
-- Display a live financial dashboard.
-- Advance monthly turns.
-- Present one decision per month.
-- Support opportunities, market events, expenses, debt decisions, education, and career events.
-- Track assets, debts, cash flow, net worth, emergency runway, and financial freedom ratio.
-- End when passive income covers expenses and the player has at least 6 months of emergency runway.
-- End as a loss if the player remains insolvent for several months.
-- Show a final educational report.
+### Consequences Over Lectures
+
+The game teaches through cause and effect: what changed, why it changed, what principle was experienced, and what risk or opportunity this creates next.
+
+### Shareable Financial Stories
+
+Every run should produce a memorable story: freedom age, collapse reason, biggest mistake, crisis survived, investor profile, and best asset.
+
+## Core Gameplay Loop
+
+One turn represents one month. Quiet months can advance quickly; meaningful events stop the simulation.
+
+1. Income arrives.
+2. Living expenses and debt payments are paid.
+3. Asset income and market changes are applied.
+4. Stress, runway, credit, and financial freedom ratio update.
+5. The game checks for events, opportunities, or risks.
+6. The player makes a meaningful decision when needed.
+7. The dashboard updates.
+8. The game explains the consequence.
+9. Time advances.
+
+## Decision Loop
+
+Every meaningful decision should include situation, options, tradeoff, immediate consequence, possible delayed effect, and lesson.
+
+## MVP Solo Mode
+
+The MVP must support a complete 15-20 minute solo session. The player starts as a young adult with profession, income, expenses, debts, personality bias, and starting financial knowledge. A session simulates roughly 10-25 years but only stops for meaningful decisions.
+
+### MVP Must Include
+
+- New game flow.
+- Profession selection.
+- Live financial dashboard.
+- Monthly simulation.
+- Meaningful decision events.
+- Assets and liabilities.
+- Debt payments and interest.
+- Market states.
+- Emergency runway.
+- Stress.
+- Credit score.
+- Financial education level.
+- Win, loss, and partial outcome states.
+- Final educational report.
+
+### MVP Should Avoid
+
+- Complex tax systems.
+- Too many asset subclasses.
+- Multiplayer.
+- Negotiation systems.
+- Real-time mechanics.
+- Overly detailed accounting.
+- Long tutorials.
+- Exact real-world market prediction.
+
+The MVP succeeds if a player can make interesting financial decisions for 15 minutes and want to try again.
+
+## Session Structure
+
+### Phase 1 - Survival
+
+Limited cash, limited options, and little room for mistakes. Focus: budgeting, emergency fund, consumer debt, career decisions, impulse spending, and basic investing.
+
+### Phase 2 - Growth
+
+The player begins to find opportunities. Focus: investing, education, business opportunities, real estate, market cycles, debt strategy, and lifestyle inflation.
+
+### Phase 3 - Freedom or Fragility
+
+The player approaches independence but larger risks appear. Focus: leverage, concentration risk, recessions, burnout, big opportunities, liquidity, and passive income stability.
 
 ## Player Variables
+
+### Core Financial Variables
 
 - Cash.
 - Monthly salary.
 - Passive income.
 - Monthly living expenses.
 - Monthly debt payments.
+- Monthly cash flow.
+- Net worth.
 - Assets.
 - Debts.
-- Net worth.
-- Monthly cash flow.
-- Age.
-- Current month.
-- Financial freedom ratio.
 - Emergency runway.
-- Financial education level.
+- Financial freedom ratio.
+
+### Personal Variables
+
+- Age.
 - Stress level.
+- Financial education level.
+- Career stability.
 - Credit score.
+- Risk tolerance profile.
+
+### Derived Metrics
+
+- Total obligations.
+- Debt-to-income ratio.
+- Asset income ratio.
+- Lifestyle inflation level.
+- Insolvency risk.
+- Opportunity readiness.
 
 ## World Variables
 
-- Market cycle.
-- Inflation.
-- Interest rate environment.
-- Unemployment risk.
+The MVP uses four market states: expansion, stable, recession, and recovery. Each state affects job security, asset prices, interest rates, investment opportunities, business risk, credit availability, and inflation pressure.
 
-The MVP uses simplified world states: expansion, stable, recession, and recovery.
+The player should learn that the same decision can be good or bad depending on timing.
 
 ## Event Categories
 
-- Investment opportunity.
-- Market movement.
-- Life expense.
-- Doodad or impulse spending.
-- Education.
-- Career change.
-- Debt and credit.
-- Crisis.
+- Income events: raise, job offer, layoff risk, freelance contract, burnout warning.
+- Expense events: medical bill, family support, rent increase, car repair, lifestyle temptation.
+- Investment opportunities: index fund dip, rental property, small business, startup, equipment, education.
+- Debt events: credit card offer, refinance, variable rate increase, collection warning, loan approval.
+- Crisis events: recession, job loss, tenant stops paying, business downturn, emergency expense, market crash.
+- Knowledge events: course, mentor advice, mistake analysis, tax/accounting insight, investment research.
+
+## Event Design Rules
+
+Every event should have a clear situation, two to four options, at least one tempting bad option, at least one safe but slow option, at least one higher-upside risky option, immediate consequences, possible delayed consequences, and a short lesson.
+
+Good events should not have an obvious correct answer.
 
 ## Assets
 
-MVP asset types:
+The MVP uses four asset types:
 
-- Real estate.
-- Paper assets.
-- Small business.
-- Education asset.
-
-Each asset can affect cash, passive income, net worth, stress, and financial education.
+- Paper assets: liquid, low maintenance, market-sensitive.
+- Real estate: expensive, leveraged, cash-flow oriented, maintenance and vacancy risk.
+- Small business: high upside, unstable, active involvement and stress.
+- Education asset: improves salary growth, opportunities, event interpretation, and mistake avoidance.
 
 ## Debts
 
-MVP debt types:
+Debt is not universally bad. The game distinguishes destructive debt and strategic debt.
 
-- Credit card.
-- Student loan.
-- Auto loan.
-- Mortgage or investment loan.
-- Personal loan.
+Debt types: credit card, student loan, auto loan, mortgage, investment loan, and personal loan.
 
-Each debt has balance, monthly payment, and interest rate.
+Each debt has balance, monthly payment, interest rate, minimum payment, term, stress impact, and credit score impact.
+
+The game should teach that high-interest debt destroys cash flow, low-interest debt can be manageable, leverage amplifies outcomes, obligations reduce flexibility, and refinancing can help while creating new risks.
 
 ## Professions
 
-Initial professions:
+- Administrative employee: budgeting, incremental growth, emergency fund discipline.
+- Programmer: opportunity cost, lifestyle inflation, skill investment.
+- Teacher: long-term planning, conservative investing, expense discipline.
+- Young doctor: debt management, income timing, avoiding lifestyle inflation.
+- Salesperson: runway, risk management, commission volatility.
+- Creative freelancer: irregular cash flow, business building, stress management, emergency planning.
 
-- Administrative employee.
-- Programmer.
-- Teacher.
-- Young doctor.
-- Salesperson.
-- Creative freelancer.
-
-Each profession teaches a different tradeoff between income, expenses, stability, debt, and growth.
-
-## Win Condition
+## Win Conditions
 
 The player wins when:
 
 ```text
-passive_income >= monthly_expenses + monthly_debt_payments
-cash >= 6 * (monthly_expenses + monthly_debt_payments)
+passive_income >= monthly_living_expenses + monthly_debt_payments
+cash >= 6 * (monthly_living_expenses + monthly_debt_payments)
 ```
 
-This prevents fragile wins where the player has passive income but no liquidity.
+This prevents fragile wins where passive income exists but liquidity is weak.
+
+## Loss Conditions
+
+The player loses if they remain insolvent for several months and cannot recover.
+
+```text
+cash < 0 for 3 consecutive months
+and available_credit <= 0
+and monthly_cash_flow < 0
+```
+
+The loss should feel like a financial postmortem, explaining what caused collapse, which risks were ignored, and what to try differently next run.
+
+## Partial Outcomes
+
+Not every session needs total win or loss. Possible endings include financially free, stable but not free, high net worth with low liquidity, high income with high stress, debt trapped, overleveraged collapse, slow conservative success, business success, and burnout retirement.
+
+## Feedback System
+
+After each decision, the game should show three layers:
+
+- Immediate result: what changed now.
+- Interpretation: what it means.
+- Lesson: what principle was demonstrated.
+
+Example lesson: liquidity protects opportunity.
 
 ## Final Report
 
-The end screen should show:
+The final report should show result, final age, simulated years, net worth, passive income, expenses, freedom ratio, runway, stress, credit score, biggest win, biggest mistake, most dangerous moment, best asset, worst liability, investor profile, educational summary, and shareable summary.
 
-- Result.
-- Age and simulated years.
-- Net worth.
-- Passive income.
-- Freedom ratio.
-- Emergency runway.
-- Best decision.
-- Worst decision.
-- Investor profile.
-- Short educational summary.
+## Investor Profiles
+
+Possible profiles: Conservative Builder, Aggressive Leverager, Cash Flow Strategist, High-Income Spender, Debt Survivor, Opportunity Hunter, Overextended Optimist, Patient Investor, Burnout Achiever, and Balanced Capitalist.
+
+## Educational Tone
+
+Avoid school-lesson language. Teach with consequences, irony, and clarity.
+
+Bad: You should not take consumer debt because it is financially irresponsible.
+
+Better: The new car felt good for three months. The payment lasted five years.
+
+## MVP Content Target
+
+- 6 professions.
+- 4 market states.
+- 4 asset types.
+- 6 debt types.
+- 60-100 decision events.
+- 10 crisis events.
+- 10 opportunity events per profession or profession-modified events.
+- 8-12 final investor profiles.
+- 1 complete final report.
+
+## Design Risks
+
+- Spreadsheet feel: solve with feedback, choices, emotional events, progress, and short lessons.
+- Obvious optimal strategy: solve with uncertainty, cycles, profession differences, and temptations.
+- Too educational: pressure first, teach after the decision.
+- Morally simplistic: context should matter.
+- Too many variables: show key metrics by default and hide advanced details.
 
 ## Future Multiplayer
 
-After solo mode is solid, multiplayer can add:
+Multiplayer should only be added after solo mode is fun and replayable. Possible features: rooms, shared events, synchronized turns, negotiation, player loans, partnerships, auctions, limited opportunities, financial freedom races, and cooperative family/business mode.
 
-- Game rooms.
-- Shared market events.
-- Turn synchronization.
-- Negotiation.
-- Player loans.
-- Partnerships.
-- Auctions.
-- Shared limited opportunities.
+## Product North Star
+
+The MVP succeeds if players say:
+
+> I want to play one more run because now I understand what I did wrong.
