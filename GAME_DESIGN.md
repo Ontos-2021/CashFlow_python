@@ -277,6 +277,60 @@ Better: The new car felt good for three months. The payment lasted five years.
 
 Multiplayer should only be added after solo mode is fun and replayable. Possible features: rooms, shared events, synchronized turns, negotiation, player loans, partnerships, auctions, limited opportunities, financial freedom races, and cooperative family/business mode.
 
+## Visual Design System
+
+The interface is closer to a fintech dashboard than an arcade game. The visual system is shared by the three screens (selection, cockpit, report) and is expressed in `static/style.css`.
+
+### Palette and Semantics
+
+- Green: positive state, freedom, safety, debt-free.
+- Red: insolvency, burnout, critical state.
+- Gold: caution, opportunity, temptation.
+- Blue: neutral context, world state.
+
+Color is semantic, not decorative. A green number always means something good happened to the player's finances.
+
+### Typography and Spacing
+
+A single type scale (`--fs-display`, `--fs-h1`, `--fs-h2`, `--fs-kpi`, `--fs-body`, `--fs-small`, `--fs-micro`) and a spacing scale (`--space-1` to `--space-8`) are the only rhythmic anchors. KPI values use `--fs-kpi` (1.35rem) so the cockpit is readable at a glance.
+
+### Components
+
+- `kpi-card`: dashboard metric with label, value, trend, optional edge color block.
+- `progress-bar` / `progress-bar.hero`: visual ratios (freedom, stress, risk). The hero variant is the dominant freedom ratio bar.
+- `phase-ribbon`: emotional arc indicator across Survival - Growth - Freedom.
+- `chip`: semantic pill replacing badges, event categories, alerts, tags.
+- `command-tile`: action button with left edge color signaling safe / caution / risky.
+- `toast`: inline alert chip used in the console.
+- `ticker`: thin horizontal history feed.
+- `surface`: generic pane background.
+
+### Cockpit Layout
+
+The `/game` screen is a four-zone fullscreen cockpit:
+
+1. Header: brand, identity, phase ribbon, world pill.
+2. KPI strip: Cash, Flow, Freedom (with mini hero bar), Runway, Stress, Risk.
+3. Workspace (three columns):
+   - Condition: financial state, freedom hero bar, stress bar, risk bar, monthly flow, personal metrics, earned chips.
+   - Scenario (focal): event category, title, description, opportunity readiness, command tiles, post-decision feedback.
+   - Wealth: net worth, passive income, assets list (with asset/income ratio chip), debts list (with debt/income ratio chip).
+4. Console: alert toasts and history ticker.
+
+Advanced metrics are distributed contextually, not stacked in a single list: opportunity readiness near the decision, debt/income near debts, asset/income near assets, lifestyle inflation near expenses, insolvency risk near runway.
+
+### Focal Rule
+
+The scenario panel is the only elevated surface (`--elev-2`). All other panels are flat context. The eye should find the decision first.
+
+### Post-Decision Feedback
+
+Feedback appears only after the first decision (when the title is no longer `Bienvenido`). It shows three layers in distinct blocks: changes, interpretation, and a lesson chip. Badges unlocked by the decision appear as chips below.
+
+### Responsive
+
+On desktop the cockpit targets 100vh without scroll. On tablets and mobile the layout stacks: KPI strip becomes sticky, the scenario panel remains focal, condition and wealth fall below. Scroll is natural on mobile.
+
 ## Product North Star
 
 The MVP succeeds if players say:

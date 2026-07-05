@@ -4,6 +4,20 @@
 
 Build a polished solo mode before multiplayer. The first playable experience should make players want one more run because they understand what they did wrong.
 
+## Phase 0 - Cockpit Visual System
+
+Status: implemented.
+
+- Establish shared design tokens (palette, type scale, spacing, radii, elevation).
+- Replace spreadsheet-style state list with focal three-column cockpit.
+- Add phase ribbon (Survival - Growth - Freedom) and freedom hero bar.
+- Distribute advanced metrics contextually next to what they explain.
+- Redesign action buttons as command tiles with semantic edge color.
+- Add post-decision feedback block (changes, interpretation, lesson chip).
+- Add alert toasts and history ticker in the console.
+- Reflight index and report screens on the same design system.
+- Maintain 100vh no-scroll desktop target with mobile-responsive fallback.
+
 ## Phase 1 - Align Current MVP
 
 Status: implemented in prototype form.

@@ -1,6 +1,9 @@
 {% extends 'base.html' %}
 
 {% block content %}
+{% set fs = state.metrics.financial_state %}
+{% set fs_kind = {'Safe': 'good', 'Debt Free Builder': 'good', 'Critical': 'danger', 'Burnout Risk': 'danger', 'Overleveraged': 'danger', 'Tense': 'warning'}.get(fs, 'neutral') %}
+
 <section class="hero compact">
     <div>
         <p class="eyebrow">Reporte final</p>
@@ -8,7 +11,7 @@
         <p>{{ state.last_feedback.interpretation }}</p>
         <div class="badge-row">
             {% for badge in state.status_badges %}
-            <span class="status-badge {{ badge.kind }}">{{ badge.label }}</span>
+            <span class="chip {{ badge.kind }}">{{ badge.label }}</span>
             {% endfor %}
         </div>
     </div>
@@ -17,13 +20,27 @@
     </form>
 </section>
 
-<section class="dashboard-grid report-grid">
-    <article class="card metric-card accent">
-        <span>Perfil</span>
-        <strong>{{ state.investor_profile }}</strong>
-        <small>{{ state.profession }} · {{ state.display_age }} · {{ state.report.simulated_years }} anos simulados</small>
+<section class="hero" style="margin-top: 28px;">
+    <article class="card">
+        <span class="eyebrow">Progreso de libertad</span>
+        <strong style="font-size: 2.4rem; letter-spacing: -0.04em; display:block; margin-bottom: 16px;">{{ "{:.0f}".format(state.metrics.freedom_ratio * 100) }}%</strong>
+        <div class="progress-bar hero">
+            <i style="width: {{ [state.metrics.freedom_ratio * 100, 100] | min }}%"></i>
+            <span class="marker" style="left: 100%"></span>
+        </div>
+        <p style="margin-top: 14px; margin-bottom: 0;">
+            Ingreso pasivo ${{ "{:,.0f}".format(state.metrics.passive_income) }}/mes vs obligaciones ${{ "{:,.0f}".format(state.metrics.monthly_obligations) }}/mes.
+        </p>
     </article>
-    <article class="card metric-card">
+    <article class="card">
+        <span class="eyebrow">Perfil de inversor</span>
+        <strong style="font-size: 1.8rem; letter-spacing: -0.03em; display:block; margin-bottom: 8px;">{{ state.investor_profile }}</strong>
+        <p style="margin-bottom: 0;">{{ state.profession }} · {{ state.display_age }} · {{ state.report.simulated_years }} anos simulados.</p>
+    </article>
+</section>
+
+<section class="dashboard-grid report-grid" style="margin-top: 24px;">
+    <article class="card metric-card accent">
         <span>Patrimonio neto</span>
         <strong>${{ "{:,.0f}".format(state.metrics.net_worth) }}</strong>
         <small>Activos menos deudas</small>
@@ -42,11 +59,6 @@
         <span>Estres</span>
         <strong>{{ state.stress }}/100</strong>
         <small>Score crediticio: {{ state.credit_score }}</small>
-    </article>
-    <article class="card metric-card">
-        <span>Gastos</span>
-        <strong>${{ "{:,.0f}".format(state.expenses) }}/mes</strong>
-        <small>Obligaciones: ${{ "{:,.0f}".format(state.metrics.monthly_obligations) }}</small>
     </article>
 </section>
 
