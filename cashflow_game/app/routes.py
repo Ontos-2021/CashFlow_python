@@ -1,6 +1,33 @@
+from uuid import uuid4
+
 from flask import current_app, redirect, render_template, request, session, url_for
 
 from .game_engine import apply_action, cut_expenses, enrich_state, new_game, profession_choices, sell_one_asset
+
+
+GAME_STORE = {}
+
+
+def get_game_state():
+    legacy_state = session.pop('game_state', None)
+    if legacy_state:
+        game_id = session.get('game_id') or uuid4().hex
+        session['game_id'] = game_id
+        GAME_STORE[game_id] = legacy_state
+        session.modified = True
+        return legacy_state
+
+    game_id = session.get('game_id')
+    if not game_id:
+        return None
+    return GAME_STORE.get(game_id)
+
+
+def save_game_state(state):
+    game_id = session.get('game_id') or uuid4().hex
+    session['game_id'] = game_id
+    GAME_STORE[game_id] = state
+    session.modified = True
 
 @current_app.route('/')
 def index():
@@ -13,13 +40,12 @@ def new_game_route():
     valid_professions = {profession['id'] for profession in profession_choices()}
     if profession_id not in valid_professions:
         profession_id = 'administrativo'
-    session['game_state'] = new_game(profession_id)
-    session.modified = True
+    save_game_state(new_game(profession_id))
     return redirect(url_for('game'))
 
 @current_app.route('/game')
 def game():
-    state = session.get('game_state')
+    state = get_game_state()
     if not state:
         return redirect(url_for('index'))
     if state.get('status') != 'playing':
@@ -29,19 +55,19 @@ def game():
 
 @current_app.route('/action/<action_id>', methods=['POST'])
 def action(action_id):
-    state = session.get('game_state')
+    state = get_game_state()
     if not state:
         return redirect(url_for('index'))
-    session['game_state'] = apply_action(state, action_id)
-    session.modified = True
-    if session['game_state'].get('status') == 'playing':
+    state = apply_action(state, action_id)
+    save_game_state(state)
+    if state.get('status') == 'playing':
         return redirect(url_for('game'))
     return redirect(url_for('report'))
 
 
 @current_app.route('/sell-asset', methods=['POST'])
 def sell_asset_route():
-    state = session.get('game_state')
+    state = get_game_state()
     if not state or state.get('status') != 'playing':
         return redirect(url_for('index'))
     if state.get('action_used_this_month', {}).get('sell'):
@@ -59,14 +85,13 @@ def sell_asset_route():
             'title': 'Activo vendido',
             'message': f'Vendiste {int(percent * 100)}% de {result["name"]} por ${result["proceeds"]:,.0f}.',
         }
-        session['game_state'] = enrich_state(state)
-        session.modified = True
+        save_game_state(enrich_state(state))
     return redirect(url_for('game'))
 
 
 @current_app.route('/cut-expenses', methods=['POST'])
 def cut_expenses_route():
-    state = session.get('game_state')
+    state = get_game_state()
     if not state or state.get('status') != 'playing':
         return redirect(url_for('index'))
     if state.get('action_used_this_month', {}).get('cut_expenses'):
@@ -78,14 +103,13 @@ def cut_expenses_route():
             'title': 'Gastos recortados',
             'message': f'Recortaste ${result["reduction"]:,.0f} de gastos mensuales. Stress +12.',
         }
-        session['game_state'] = enrich_state(state)
-        session.modified = True
+        save_game_state(enrich_state(state))
     return redirect(url_for('game'))
 
 
 @current_app.route('/report')
 def report():
-    state = session.get('game_state')
+    state = get_game_state()
     if not state:
         return redirect(url_for('index'))
     return render_template('report.html', state=state)
@@ -93,5 +117,8 @@ def report():
 
 @current_app.route('/reset', methods=['POST'])
 def reset():
+    game_id = session.pop('game_id', None)
+    if game_id:
+        GAME_STORE.pop(game_id, None)
     session.pop('game_state', None)
     return redirect(url_for('index'))

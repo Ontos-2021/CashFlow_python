@@ -409,7 +409,7 @@ Feedback appears only after the first decision (when the title is no longer `Bie
 
 ### Responsive
 
-On desktop the cockpit targets 100vh without scroll. On tablets and mobile the layout stacks: KPI strip becomes sticky, the scenario panel remains focal, condition and wealth fall below. Scroll is natural on mobile.
+On desktop the cockpit targets 100vh without scroll. On tablets and mobile the layout stacks: the KPI strip scrolls with the page, the scenario panel remains focal, condition and wealth fall below. Scroll is natural on mobile.
 
 ## Product North Star
 

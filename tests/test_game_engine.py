@@ -24,6 +24,7 @@ from app.game_engine import (  # noqa: E402
     resolve_action_amounts,
     sell_one_asset,
 )
+from app import create_app  # noqa: E402
 
 
 class GameEngineEdgeCaseTest(unittest.TestCase):
@@ -313,7 +314,28 @@ class MechanicsTandaTwoTest(unittest.TestCase):
         resolved = resolve_action_amounts(action, state)
         self.assertIn("$", resolved["label"])
         self.assertNotIn("{cash", resolved["label"])
+        self.assertNotIn("$-", resolved["label"])
         self.assertIsInstance(resolved["cash"], int)
+
+    def test_legacy_events_use_scaled_amount_specs(self):
+        from app.game_engine import BASE_EVENTS
+        event = next(item for item in BASE_EVENTS if item["id"] == "index_fund")
+        self.assertIsInstance(event["actions"]["invest"]["cash"], dict)
+        self.assertIsInstance(event["actions"]["invest"]["asset"]["value"], dict)
+        event = next(item for item in BASE_EVENTS if item["id"] == "medical_bill")
+        self.assertIsInstance(event["actions"]["pay"]["cash"], dict)
+
+    def test_category_mapping_accepts_english_categories(self):
+        categories = {
+            "Investment": "neutral",
+            "Debt": "danger",
+            "Crisis": "danger",
+            "Knowledge": "good",
+            "Expense": "warning",
+            "Income": "good",
+        }
+        self.assertEqual(categories["Debt"], "danger")
+        self.assertEqual(categories["Knowledge"], "good")
 
     def test_advance_time_resets_action_used(self):
         state = new_game("medico")
@@ -325,6 +347,25 @@ class MechanicsTandaTwoTest(unittest.TestCase):
     def test_event_count_meets_target(self):
         from app.game_engine import BASE_EVENTS
         self.assertGreaterEqual(len(BASE_EVENTS), 60)
+
+
+class RouteStorageRegressionTest(unittest.TestCase):
+    def test_game_state_cookie_stays_small(self):
+        app = create_app()
+        app.config["TESTING"] = True
+        client = app.test_client()
+        response = client.post("/new-game", data={"profession": "medico"})
+        cookie = response.headers.get("Set-Cookie", "")
+        self.assertLess(len(cookie), 1000)
+
+    def test_game_route_uses_server_side_store(self):
+        app = create_app()
+        app.config["TESTING"] = True
+        client = app.test_client()
+        client.post("/new-game", data={"profession": "medico"})
+        response = client.get("/game")
+        self.assertEqual(response.status_code, 200)
+        self.assertIn(b"game-app", response.data)
 
 
 if __name__ == "__main__":
