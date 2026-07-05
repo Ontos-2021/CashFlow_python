@@ -8,16 +8,21 @@ ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 sys.path.insert(0, os.path.join(ROOT, "cashflow_game"))
 
 from app.game_engine import (  # noqa: E402
+    amount,
     apply_action,
     apply_market_drift,
     apply_monthly_cashflow,
+    advance_time,
     check_end_conditions,
+    cut_expenses,
     enrich_state,
     new_game,
     pay_down_debt,
     pick_event,
     prepare_event_for_state,
     process_schedule,
+    resolve_action_amounts,
+    sell_one_asset,
 )
 
 
@@ -181,7 +186,7 @@ class MechanicsTandaOneTest(unittest.TestCase):
 
         for world_name in ["Recesion", "Recuperacion"]:
             seen = False
-            for _ in range(80):
+            for _ in range(200):
                 state = make_freedom_state(world_name)
                 event = pick_event(state)
                 if event["id"] == "job_loss":
@@ -208,6 +213,118 @@ class MechanicsTandaOneTest(unittest.TestCase):
         state = apply_action(state, "loan")
         debt = next(d for d in state["debts"] if d["name"] == "Prestamo test")
         self.assertGreater(debt["rate"], 0.2)
+
+
+class MechanicsTandaTwoTest(unittest.TestCase):
+    def test_amount_literal_returns_literal(self):
+        state = new_game("docente")
+        self.assertEqual(amount(state, 1500), 1500)
+        self.assertEqual(amount(state, -700), -700)
+
+    def test_amount_scaled_by_salary(self):
+        state = new_game("medico")
+        state["salary"] = 7200
+        val = amount(state, {"factor": 0.4, "min": 500, "max": 5000, "rng": False})
+        self.assertEqual(val, 2880)
+
+    def test_amount_negative_factor_clamps(self):
+        state = new_game("medico")
+        state["salary"] = 7200
+        val = amount(state, {"factor": -0.3, "min": -5000, "max": -200, "rng": False})
+        self.assertEqual(val, -2160)
+        self.assertGreaterEqual(val, -5000)
+        self.assertLessEqual(val, -200)
+
+    def test_amount_rng_within_range(self):
+        state = new_game("medico")
+        state["salary"] = 5000
+        for _ in range(20):
+            val = amount(state, {"factor": 0.4, "min": 100, "max": 5000})
+            self.assertGreaterEqual(val, 100)
+            self.assertLessEqual(val, 5000)
+
+    def test_sell_one_asset_liquidity_differs_by_type(self):
+        state = new_game("docente")
+        state["assets"] = [
+            {"name": "Fondo", "type": "Paper assets", "value": 10000, "income": 80, "risk": "market"},
+            {"name": "Depto", "type": "Real estate", "value": 10000, "income": 80, "risk": "vacancy"},
+            {"name": "Negocio", "type": "Small business", "value": 10000, "income": 80, "risk": "execution"},
+        ]
+        r1 = sell_one_asset(state, 0, 0.5)
+        r2 = sell_one_asset(state, 1, 0.5)
+        r3 = sell_one_asset(state, 2, 0.5)
+        self.assertGreater(r1["proceeds"], r2["proceeds"])
+        self.assertGreater(r2["proceeds"], r3["proceeds"])
+
+    def test_sell_one_asset_education_not_sellable(self):
+        state = new_game("docente")
+        state["assets"] = [{"name": "Curso", "type": "Education", "value": 1000, "income": 0, "risk": ""}]
+        result = sell_one_asset(state, 0, 0.5)
+        self.assertIsNone(result)
+
+    def test_cut_expenses_reduces_and_raises_stress(self):
+        state = new_game("medico")
+        state["expenses"] = 6000
+        state["starting_expenses"] = 4700
+        state["stress"] = 40
+        result = cut_expenses(state)
+        self.assertIsNotNone(result)
+        self.assertLess(state["expenses"], 6000)
+        self.assertEqual(state["stress"], 52)
+
+    def test_cut_expenses_blocked_without_creep(self):
+        state = new_game("docente")
+        state["starting_expenses"] = state["expenses"]
+        result = cut_expenses(state)
+        self.assertIsNone(result)
+
+    def test_requires_education_gates_actions(self):
+        state = new_game("docente")
+        state["education"] = 2
+        event = {
+            "id": "test_ed",
+            "actions": {
+                "basic": {"label": "Basico", "lesson": "L", "interpretation": "I"},
+                "advanced": {"label": "Avanzado", "requires_education": 5, "lesson": "L", "interpretation": "I"},
+            },
+        }
+        prepared = prepare_event_for_state(event, state)
+        self.assertIn("basic", prepared["actions"])
+        self.assertNotIn("advanced", prepared["actions"])
+        state["education"] = 6
+        event2 = {
+            "id": "test_ed",
+            "actions": {
+                "basic": {"label": "Basico", "lesson": "L", "interpretation": "I"},
+                "advanced": {"label": "Avanzado", "requires_education": 5, "lesson": "L", "interpretation": "I"},
+            },
+        }
+        prepared2 = prepare_event_for_state(event2, state)
+        self.assertIn("advanced", prepared2["actions"])
+
+    def test_resolve_action_amounts_formats_label(self):
+        state = new_game("medico")
+        state["salary"] = 7200
+        action = {
+            "label": "Placeholder",
+            "label_fmt": "Invertir ${cash:,.0f}",
+            "cash": {"factor": -0.2, "min": -5000, "max": -500, "rng": False},
+        }
+        resolved = resolve_action_amounts(action, state)
+        self.assertIn("$", resolved["label"])
+        self.assertNotIn("{cash", resolved["label"])
+        self.assertIsInstance(resolved["cash"], int)
+
+    def test_advance_time_resets_action_used(self):
+        state = new_game("medico")
+        state["action_used_this_month"] = {"sell": True, "cut_expenses": True}
+        advance_time(state, 1)
+        self.assertFalse(state["action_used_this_month"]["sell"])
+        self.assertFalse(state["action_used_this_month"]["cut_expenses"])
+
+    def test_event_count_meets_target(self):
+        from app.game_engine import BASE_EVENTS
+        self.assertGreaterEqual(len(BASE_EVENTS), 60)
 
 
 if __name__ == "__main__":

@@ -899,6 +899,87 @@ p {
     font-size: 0.72rem;
 }
 
+/* Discretionary actions */
+.holding {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+}
+
+.holding-info {
+    flex: 1 1 auto;
+    min-width: 0;
+}
+
+.holding-info strong,
+.holding-info span {
+    display: block;
+}
+
+.holding-actions {
+    display: flex;
+    gap: 4px;
+    flex-shrink: 0;
+}
+
+.sell-button {
+    background: rgba(255, 107, 107, 0.12);
+    border: 1px solid rgba(255, 107, 107, 0.25);
+    border-radius: var(--r-sm);
+    color: #ffaaa8;
+    cursor: pointer;
+    font-size: 0.66rem;
+    font-weight: 800;
+    padding: 4px 8px;
+    transition: var(--ease);
+    white-space: nowrap;
+}
+
+.sell-button:hover {
+    background: rgba(255, 107, 107, 0.2);
+    transform: translateY(-1px);
+}
+
+.cut-button {
+    background: var(--gold-soft);
+    border: 1px solid var(--gold-line);
+    border-radius: var(--r-sm);
+    color: #f8d981;
+    cursor: pointer;
+    font-size: 0.74rem;
+    font-weight: 800;
+    padding: 7px 12px;
+    transition: var(--ease);
+    width: 100%;
+}
+
+.cut-button:hover {
+    background: rgba(245, 196, 81, 0.22);
+    transform: translateY(-1px);
+}
+
+.discretionary-feedback {
+    background: var(--blue-soft);
+    border: 1px solid var(--blue-line);
+    border-left: 3px solid var(--blue);
+    border-radius: var(--r-sm);
+    margin-bottom: var(--space-3);
+    padding: 8px 12px;
+}
+
+.discretionary-feedback strong {
+    display: block;
+    font-size: 0.82rem;
+    font-weight: 800;
+    margin-bottom: 2px;
+}
+
+.discretionary-feedback span {
+    color: var(--text-dim);
+    font-size: 0.76rem;
+}
+
 /* ---- Scenario panel (center, focal) ---- */
 
 .scenario {

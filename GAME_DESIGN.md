@@ -279,7 +279,7 @@ Multiplayer should only be added after solo mode is fun and replayable. Possible
 
 ## Mechanics
 
-Beyond the core loop, the simulation implements three systemic mechanics that make decisions carry future weight.
+Beyond the core loop, the simulation implements systemic mechanics that make decisions carry future weight and variety.
 
 ### Delayed Effects (Schedule)
 
@@ -305,15 +305,57 @@ Assets with a `risk` field produce income variability each month:
 - `high`: 4% chance per month of 70% income.
 - `very high`: no normal income; shutdown risk is scheduled via the schedule system.
 
-Education reduces these probabilities by `education * 1%`. Events are tracked in `state.asset_events` and surface in `dangerous_moment` and the report.
+Education reduces these probabilities by `education * 1.5%`. Events are tracked in `state.asset_events` and surface in `dangerous_moment` and the report.
 
 ### World State Gating and Drift
 
 Events can declare `requires_world` to only appear in matching market states. Currently gated:
 - `job_loss`: only in Recesion or Recuperacion.
 - `debt_free_temptation`: only in Expansion or Estable.
+- `country_crisis`: only in Recesion.
+- `balance_transfer`: only in Expansion or Estable.
+- `mortgage_refi_opportunity`: only in Recuperacion or Expansion.
 
 Market drift now applies to Paper assets, Real estate, and Small business (more volatile). New debts inherit a rate adjustment based on credit availability: cheaper in Expansion, expensive in Recesion. Salary shocks are tracked in `asset_events` for the report.
+
+### Dynamic Amount Scaling
+
+Event amounts are no longer fixed literals. Actions can declare amount specs that scale with the player's salary:
+
+- Literal: `cash: -1500` (backward compatible).
+- Scaled: `cash: {"factor": 0.4, "min": 500, "max": 5000}` → resolves to `salary * factor` with optional rng variation (50-150% range).
+- Negative factors produce negative amounts with appropriate clamping.
+
+This means a doctor sees larger opportunities and costs than a freelancer, keeping the game proportional across professions. The `resolve_action_amounts` function resolves specs at event preparation time, so the player sees the actual number in the button label.
+
+### Education Impact
+
+Education is no longer a marginal stat. It affects:
+- Salary growth: `education * 0.5%` per year (up from 0.2%).
+- Opportunity readiness: `education * 6` points (up from 4).
+- Asset risk reduction: `education * 1.5%` (up from 1%).
+- **Action gating**: events can declare `requires_education: 3` or `requires_education: 5` to unlock premium actions. A player with low education simply does not see those options. This materializes "buying better information" as tangible new choices.
+
+### Discretionary Actions
+
+The player can take two actions per month that do not advance time:
+
+- **Sell asset**: from the Wealth panel, each asset holding (except Education) shows a "Vender 50%" button. Paper assets also show "Vender todo". Liquidity differs by type: Paper 85%, Real estate 70%, Small business 60%. Limited to one sale per month.
+- **Cut expenses**: from the Condition panel, a "Rebajar gastos" button appears when expenses exceed the starting baseline by more than 5%. Reduces expenses by 8% and increases stress by 12. Limited to one use per month.
+
+Both actions generate a discretionary feedback notification and do not consume the monthly event. The `action_used_this_month` tracker resets each month in `advance_time`.
+
+### Event Variety
+
+The game includes 67 decision events across all categories:
+- Crisis: 13 (robbery, divorce, country crisis, audit, accident, inheritance, lawsuit, disaster, identity theft, health scare, etc.)
+- Income: 10 (competitor offer, freelance gig, bonus, commission, royalties, renegotiation, second job, equity grant, etc.)
+- Expense: 11 (moving, wedding, baby, trip, pet, subscriptions, therapy, celebration, etc.)
+- Investment: 16 (bonds, ETF, land, franchise, private fund, startup diligence, art, green, REIT, peer lending, crypto, impact, etc.)
+- Debt: 8 (consolidation, balance transfer, family loan, line of credit, mortgage refi, etc.)
+- Knowledge: 8 (mentor, book, masterclass, tax analysis, research paper, community, certification, etc.)
+
+Each event has 2-4 options following the safe-slow / tempting-bad / risky-higher pattern. Some options are gated by education level.
 
 ## Visual Design System
 

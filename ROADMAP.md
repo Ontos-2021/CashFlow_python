@@ -31,13 +31,15 @@ Status: implemented in prototype form.
 
 ## Phase 2 - Deepen Events
 
-Status: implemented as an expanded seed set, still below final target.
+Status: largely implemented.
 
-- Add more tense decision events.
-- Include safe, tempting, and risky options.
-- Add crisis, income, expense, debt, investment, and knowledge events.
-- Add profession-relevant events and outcomes over time.
-- Move toward 60-100 decision events.
+- 67 decision events across all categories (target was 60-100).
+- Each event includes safe, tempting, and risky options.
+- Crisis, income, expense, debt, investment, and knowledge events covered.
+- Profession-relevant events still pending (Tanda 3).
+- Dynamic amount scaling: events scale costs/rewards by player salary with rng variation.
+- Education gating: premium actions unlock at education >= 3 and >= 5.
+- Discretionary actions: sell assets and cut expenses from the UI without advancing time.
 
 ## Phase 3 - Improve Monthly Simulation
 

@@ -127,6 +127,14 @@
                 <div class="metric-mini"><span class="label">Pago deudas</span><span class="val negative">${{ "{:,.0f}".format(state.metrics.debt_payments) }}</span></div>
                 <div class="metric-mini"><span class="label">Inflacion estilo</span><span class="val {% if state.metrics.lifestyle_inflation > 0.25 %}negative{% elif state.metrics.lifestyle_inflation > 0.1 %}{% else %}positive{% endif %}">{{ "{:.0f}".format(state.metrics.lifestyle_inflation * 100) }}%</span></div>
 
+                {% if state.expenses > state.starting_expenses * 1.05 and not state.action_used_this_month.cut_expenses %}
+                <form action="{{ url_for('cut_expenses_route') }}" method="post" style="margin-top:8px;">
+                    <button class="cut-button" type="submit">Rebajar gastos · -8% · Stress +12</button>
+                </form>
+                {% elif state.action_used_this_month.cut_expenses %}
+                <p class="muted" style="font-size:0.72rem; margin-top:6px;">Ya recortaste gastos este mes.</p>
+                {% endif %}
+
                 <h4 class="section-title">Personal</h4>
                 <div class="metric-mini"><span class="label">Credito</span><span class="val">{{ state.credit_score }}</span></div>
                 <div class="metric-mini"><span class="label">Educacion</span><span class="val">{{ state.education }}/10</span></div>
@@ -165,6 +173,12 @@
             </div>
 
             <div class="scenario-body">
+                {% if state.last_discretionary_feedback %}
+                <div class="discretionary-feedback">
+                    <strong>{{ state.last_discretionary_feedback.title }}</strong>
+                    <span>{{ state.last_discretionary_feedback.message }}</span>
+                </div>
+                {% endif %}
                 <h1 class="scenario-title">{{ state.current_event.title }}</h1>
                 <p class="scenario-desc">{{ state.current_event.description }}</p>
 
@@ -257,12 +271,33 @@
                 {% if state.assets %}
                 <div class="holding-list">
                     {% for asset in state.assets %}
-                    <div class="holding">
-                        <strong>{{ asset.name }}</strong>
-                        <span>${{ "{:,.0f}".format(asset.value) }} · + ${{ "{:,.0f}".format(asset.income) }}/mes</span>
+                    <div class="holding {% if asset.type == 'Education' %}no-sell{% endif %}">
+                        <div class="holding-info">
+                            <strong>{{ asset.name }}</strong>
+                            <span>${{ "{:,.0f}".format(asset.value) }} · + ${{ "{:,.0f}".format(asset.income) }}/mes</span>
+                        </div>
+                        {% if asset.type != 'Education' and not state.action_used_this_month.sell %}
+                        <div class="holding-actions">
+                            <form action="{{ url_for('sell_asset_route') }}" method="post" style="display:inline">
+                                <input type="hidden" name="asset_index" value="{{ loop.index0 }}">
+                                <input type="hidden" name="percent" value="0.5">
+                                <button class="sell-button" type="submit">Vender 50%</button>
+                            </form>
+                            {% if asset.type == 'Paper assets' %}
+                            <form action="{{ url_for('sell_asset_route') }}" method="post" style="display:inline">
+                                <input type="hidden" name="asset_index" value="{{ loop.index0 }}">
+                                <input type="hidden" name="percent" value="1.0">
+                                <button class="sell-button" type="submit">Vender todo</button>
+                            </form>
+                            {% endif %}
+                        </div>
+                        {% endif %}
                     </div>
                     {% endfor %}
                 </div>
+                {% if state.action_used_this_month.sell %}
+                <p class="muted" style="font-size:0.72rem; margin-top:6px;">Ya vendiste un activo este mes.</p>
+                {% endif %}
                 {% else %}
                 <p class="empty-note">Todavia dependes 100% del ingreso activo.</p>
                 {% endif %}
