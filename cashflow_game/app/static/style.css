@@ -584,142 +584,146 @@ p {
 }
 
 /* Game cockpit */
-.game-screen {
+.game-app {
     display: grid;
     gap: 8px;
-    grid-template-rows: 76px 68px minmax(0, 1fr) 54px;
-    height: calc(100vh - 104px);
-    min-height: 560px;
-}
-
-.game-screen .card {
-    border-radius: 16px;
-    padding: 10px 12px;
-}
-
-.game-command {
-    align-items: center;
-    display: grid;
-    gap: 12px;
-    grid-template-columns: minmax(0, 1fr) minmax(320px, 0.8fr);
+    grid-template-rows: 52px 30px minmax(0, 1fr) 44px;
+    height: 100vh;
     overflow: hidden;
 }
 
-.command-main h2,
-.command-main p,
-.event-panel h1,
-.event-description {
-    margin-bottom: 0;
+.game-topbar,
+.status-strip,
+.game-panel,
+.game-console {
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.055), rgba(255, 255, 255, 0.025));
+    border: 1px solid var(--line);
+    border-radius: 14px;
 }
 
-.command-main .eyebrow {
-    font-size: 0.68rem;
-    margin-bottom: 3px;
+.game-topbar {
+    align-items: center;
+    display: grid;
+    gap: 10px;
+    grid-template-columns: 42px 220px 220px minmax(420px, 1fr) 72px;
+    padding: 7px 10px;
 }
 
-.command-main h2 {
-    font-size: clamp(1.25rem, 2.2vw, 1.9rem);
-    line-height: 1;
+.game-brand {
+    align-items: center;
+    background: linear-gradient(135deg, var(--green), var(--blue));
+    border-radius: 10px;
+    color: #061120;
+    display: flex;
+    font-weight: 900;
+    height: 34px;
+    justify-content: center;
+    width: 34px;
 }
 
-.command-main p {
-    font-size: 0.85rem;
-    line-height: 1.25;
-    max-width: 900px;
+.game-context,
+.world-pill {
+    min-width: 0;
+}
+
+.game-context strong,
+.game-context span,
+.world-pill span,
+.world-pill small {
+    display: block;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
 }
 
-.command-side {
-    align-items: center;
-    display: grid;
-    gap: 8px;
-    grid-template-columns: 170px minmax(0, 1fr);
+.game-context strong {
+    font-size: 0.95rem;
 }
 
-.compact-market {
-    min-width: 0;
-    padding: 9px 10px;
-}
-
-.compact-market strong {
-    font-size: 1rem;
-    margin: 2px 0;
-}
-
-.compact-market small {
-    display: block;
-    font-size: 0.72rem;
-    line-height: 1.15;
-    max-height: 1.8em;
-    overflow: hidden;
-}
-
-.command-badges {
-    margin-top: 0;
-}
-
-.kpi-strip {
-    display: grid;
-    gap: 8px;
-    grid-template-columns: repeat(6, 1fr);
-    overflow: hidden;
-}
-
-.kpi-strip article {
-    background: rgba(255, 255, 255, 0.045);
-    border: 1px solid var(--line);
-    border-radius: 16px;
-    min-width: 0;
-    padding: 8px 10px;
-}
-
-.kpi-strip span,
-.kpi-strip small {
+.game-context span,
+.world-pill small {
     color: var(--muted);
-    display: block;
     font-size: 0.72rem;
-    font-weight: 800;
+}
+
+.world-pill {
+    background: rgba(108, 168, 255, 0.09);
+    border: 1px solid rgba(108, 168, 255, 0.22);
+    border-radius: 12px;
+    padding: 6px 9px;
+}
+
+.world-pill span {
+    font-size: 0.78rem;
+    font-weight: 900;
     letter-spacing: 0.08em;
     text-transform: uppercase;
 }
 
-.kpi-strip strong {
-    display: block;
-    font-size: clamp(0.95rem, 1.25vw, 1.25rem);
-    letter-spacing: -0.04em;
-    margin: 2px 0;
+.top-kpis {
+    display: grid;
+    gap: 6px;
+    grid-template-columns: repeat(6, 1fr);
+    min-width: 0;
 }
 
-.micro-progress {
-    background: rgba(255, 255, 255, 0.11);
-    border-radius: 999px;
-    height: 6px;
-    margin-top: 7px;
+.top-kpis article {
+    background: rgba(255, 255, 255, 0.045);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    min-width: 0;
+    padding: 5px 7px;
+}
+
+.top-kpis span,
+.top-kpis strong {
+    display: block;
     overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
-.micro-progress i {
-    background: linear-gradient(90deg, var(--green), var(--gold));
-    display: block;
-    height: 100%;
+.top-kpis span {
+    color: var(--muted);
+    font-size: 0.62rem;
+    font-weight: 900;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
 }
 
-.micro-progress.stress i {
-    background: linear-gradient(90deg, var(--green), var(--gold), var(--red));
+.top-kpis strong {
+    font-size: 0.95rem;
+    letter-spacing: -0.03em;
 }
 
-.cockpit-grid {
+.game-nav {
+    text-align: right;
+}
+
+.game-nav a {
+    color: var(--muted);
+    font-size: 0.82rem;
+}
+
+.status-strip {
+    align-items: center;
+    display: flex;
+    gap: 7px;
+    overflow: hidden;
+    padding: 4px 8px;
+}
+
+.game-workspace {
     display: grid;
     gap: 8px;
-    grid-template-columns: minmax(220px, 0.66fr) minmax(380px, 1.56fr) minmax(250px, 0.78fr);
+    grid-template-columns: minmax(220px, 0.7fr) minmax(430px, 1.65fr) minmax(260px, 0.85fr);
     min-height: 0;
 }
 
-.cockpit-panel {
+.game-panel {
     min-height: 0;
     overflow: auto;
+    padding: 10px 12px;
 }
 
 .panel-title,
@@ -728,6 +732,10 @@ p {
     display: flex;
     justify-content: space-between;
     gap: 10px;
+    margin-bottom: 8px;
+}
+
+.panel-title.slim {
     margin-bottom: 8px;
 }
 
@@ -747,29 +755,64 @@ p {
     font-weight: 800;
 }
 
-.compact-list {
+.cockpit-stats {
     gap: 5px;
 }
 
-.compact-list div {
+.cockpit-stats div {
     padding-bottom: 5px;
 }
 
-.compact-list dt,
-.compact-list dd {
+.cockpit-stats dt,
+.cockpit-stats dd {
     font-size: 0.8rem;
 }
 
-.event-panel {
+.mini-bars {
+    display: grid;
+    gap: 9px;
+    margin-top: 12px;
+}
+
+.mini-bars label span {
+    color: var(--muted);
+    display: block;
+    font-size: 0.68rem;
+    font-weight: 900;
+    letter-spacing: 0.08em;
+    margin-bottom: 4px;
+    text-transform: uppercase;
+}
+
+.mini-bars i {
+    background: rgba(255, 255, 255, 0.11);
+    border-radius: 999px;
+    display: block;
+    height: 6px;
+    overflow: hidden;
+}
+
+.mini-bars b {
+    background: linear-gradient(90deg, var(--green), var(--gold));
+    display: block;
+    height: 100%;
+}
+
+.mini-bars .stress b {
+    background: linear-gradient(90deg, var(--green), var(--gold), var(--red));
+}
+
+.focused-event {
     display: grid;
     gap: 8px;
     grid-template-rows: auto auto auto minmax(0, auto) auto;
 }
 
-.event-panel h1 {
-    font-size: clamp(1.7rem, 3.2vw, 3rem);
+.focused-event h1 {
+    font-size: clamp(1.75rem, 3vw, 2.85rem);
     letter-spacing: -0.07em;
     line-height: 0.95;
+    margin-bottom: 0;
 }
 
 .event-description {
@@ -777,51 +820,56 @@ p {
     line-height: 1.35;
 }
 
-.compact-feedback {
+.focused-feedback {
     display: grid;
     gap: 8px;
     grid-template-columns: minmax(0, 1.2fr) minmax(180px, 0.8fr);
     padding: 10px;
 }
 
-.compact-feedback p {
+.focused-feedback p {
     font-size: 0.82rem;
     line-height: 1.28;
     margin: 4px 0 0;
 }
 
-.compact-feedback small {
+.focused-feedback small {
     font-size: 0.76rem;
     margin-top: 5px;
 }
 
-.compact-changes {
+.focused-changes {
     align-content: start;
     margin: 0;
 }
 
-.compact-changes li {
+.focused-changes li {
     font-size: 0.76rem;
     padding: 5px 7px;
 }
 
-.compact-risk-list {
+.focused-risk-list {
     grid-column: 1 / -1;
     margin-top: 0;
 }
 
-.compact-actions {
+.focused-actions {
     grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
     gap: 8px;
 }
 
-.compact-actions .button {
+.focused-actions .button {
     min-height: 48px;
     padding: 9px 11px;
 }
 
-.compact-actions .button strong {
+.focused-actions .button strong {
     font-size: 0.88rem;
+}
+
+.portfolio-scroll {
+    display: grid;
+    gap: 10px;
 }
 
 .compact-section + .compact-section {
@@ -849,11 +897,13 @@ p {
     font-size: 0.78rem;
 }
 
-.bottom-console {
+.game-console {
+    align-items: stretch;
     display: grid;
     gap: 8px;
     grid-template-columns: minmax(0, 1.2fr) minmax(300px, 0.8fr);
     overflow: hidden;
+    padding: 6px 8px;
 }
 
 .console-alerts,
@@ -916,23 +966,17 @@ p {
 }
 
 @media (min-width: 1100px) {
-    body:has(.game-screen) {
+    body:has(.game-app) {
         overflow: hidden;
     }
 
-    body:has(.game-screen) .topbar {
-        padding: 8px clamp(18px, 4vw, 54px);
+    body:has(.game-app) .topbar {
+        display: none;
     }
 
-    body:has(.game-screen) .brand-mark {
-        border-radius: 10px;
-        height: 34px;
-        width: 34px;
-    }
-
-    body:has(.game-screen) .page-shell {
+    body:has(.game-app) .page-shell {
         max-width: none;
-        padding: 8px clamp(12px, 3vw, 38px) 8px;
+        padding: 6px;
     }
 }
 
@@ -958,6 +1002,35 @@ p {
 }
 
 @media (max-width: 1050px) {
+    .game-app {
+        height: auto;
+        min-height: 100vh;
+        overflow: visible;
+    }
+
+    .game-topbar {
+        grid-template-columns: 38px 1fr;
+    }
+
+    .world-pill,
+    .top-kpis,
+    .game-nav {
+        grid-column: 1 / -1;
+    }
+
+    .top-kpis {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    .game-workspace,
+    .game-console {
+        grid-template-columns: 1fr;
+    }
+
+    .game-panel {
+        overflow: visible;
+    }
+
     .game-screen {
         min-height: auto;
     }
@@ -1012,6 +1085,32 @@ p {
     .market-state {
         min-width: 0;
         width: 100%;
+    }
+
+    .game-topbar {
+        gap: 8px;
+        padding: 8px;
+    }
+
+    .top-kpis {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .status-strip {
+        flex-wrap: wrap;
+        height: auto;
+    }
+
+    .focused-feedback {
+        grid-template-columns: 1fr;
+    }
+
+    .focused-event h1 {
+        font-size: 2.2rem;
+    }
+
+    .focused-actions {
+        grid-template-columns: 1fr;
     }
 
     .game-screen .card {
