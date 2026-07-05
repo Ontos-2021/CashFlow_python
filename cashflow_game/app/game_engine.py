@@ -1267,7 +1267,8 @@ def is_quiet_month(state):
     data = metrics(state)
     if data["cashflow"] < 0 or data["runway"] < 3 or state["stress"] > 70 or data["insolvency_risk"] >= 40:
         return False
-    if state.get("current_event", {}).get("id") == "quiet_month":
+    current = state.get("current_event") or {}
+    if current.get("id") == "quiet_month":
         return False
     for item in state.get("schedule", []):
         if item["due_month"] <= state["month"] + 1:
@@ -1424,7 +1425,10 @@ def maybe_salary_shock(state):
 
 
 def apply_action(state, action_id):
-    if state.get("status") != "playing" or not state.get("current_event"):
+    if state.get("status") != "playing":
+        return enrich_state(state)
+    if not state.get("current_event"):
+        start_month(state)
         return enrich_state(state)
 
     event = state["current_event"]
@@ -1464,6 +1468,8 @@ def apply_action(state, action_id):
             check_end_conditions(state)
             if state["status"] == "playing":
                 start_month(state)
+    if state["status"] == "playing" and not state.get("current_event"):
+        start_month(state)
     return enrich_state(state)
 
 
