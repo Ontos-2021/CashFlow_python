@@ -117,7 +117,7 @@ BASE_EVENTS = [
     {
         "id": "small_apartment",
         "category": "Investment",
-        "phase": "growth",
+        "phase": "survival",
         "title": "Departamento pequeno con renta",
         "description": "Un vendedor necesita liquidez. La propiedad tiene flujo positivo, pero la entrada usa gran parte de tu caja.",
         "actions": {
@@ -129,7 +129,7 @@ BASE_EVENTS = [
     {
         "id": "side_business",
         "category": "Investment",
-        "phase": "growth",
+        "phase": "survival",
         "title": "Pequeno negocio digital",
         "description": "Puedes lanzar un producto simple. Requiere capital, energia y tolerancia a que nadie compre al principio.",
         "actions": {
@@ -628,7 +628,7 @@ BASE_EVENTS = [
     {  # --- Investment +12 ---
         "id": "bonds",
         "category": "Investment",
-        "phase": "growth",
+        "phase": "survival",
         "title": "Bonos corporativos con yield atractiva",
         "description": "Bonos de empresa solida pagan mas que el mercado. Es ingreso fijo, pero con riesgo de credito.",
         "actions": {
@@ -1310,6 +1310,7 @@ def simulate_quiet_months(state, months):
         apply_monthly_cashflow(state)
         apply_market_drift(state)
         maybe_salary_shock(state)
+        state["stress"] = max(5, state["stress"] - 3)
         state["quiet_months"] = state.get("quiet_months", 0) + 1
         check_end_conditions(state)
 
@@ -1354,7 +1355,7 @@ def action_risk_tags(state, action):
 
 def session_phase(state):
     ratio = metrics(state)["freedom_ratio"] if state.get("assets") or state.get("debts") else 0
-    if state["month"] <= 48 or ratio < 0.25:
+    if state["month"] <= 24 or ratio < 0.15:
         return "survival"
     if ratio < 0.75:
         return "growth"
@@ -1883,7 +1884,7 @@ def display_age(state):
 
 
 def normalize_state(state):
-    state["stress"] = max(0, min(100, round(state["stress"])))
+    state["stress"] = max(5, min(100, round(state["stress"])))
     state["education"] = max(0, min(10, state["education"]))
     state["credit_score"] = max(300, min(850, round(state["credit_score"])))
     state["career_stability"] = max(0, min(100, round(state["career_stability"])))
