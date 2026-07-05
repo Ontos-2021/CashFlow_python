@@ -583,6 +583,316 @@ p {
     margin-bottom: 0;
 }
 
+/* Game cockpit */
+.game-screen {
+    display: grid;
+    gap: 12px;
+    grid-template-rows: auto auto minmax(0, 1fr) auto;
+    min-height: calc(100vh - 132px);
+}
+
+.game-screen .card {
+    border-radius: 20px;
+    padding: 16px;
+}
+
+.game-command {
+    align-items: center;
+    display: grid;
+    gap: 18px;
+    grid-template-columns: minmax(0, 1fr) minmax(320px, 0.8fr);
+}
+
+.command-main h2,
+.command-main p,
+.event-panel h1,
+.event-description {
+    margin-bottom: 0;
+}
+
+.command-main .eyebrow {
+    margin-bottom: 7px;
+}
+
+.command-side {
+    align-items: center;
+    display: grid;
+    gap: 10px;
+    grid-template-columns: 220px minmax(0, 1fr);
+}
+
+.compact-market {
+    min-width: 0;
+    padding: 12px;
+}
+
+.compact-market strong {
+    font-size: 1.2rem;
+}
+
+.compact-market small {
+    display: block;
+    line-height: 1.25;
+}
+
+.command-badges {
+    margin-top: 0;
+}
+
+.kpi-strip {
+    display: grid;
+    gap: 10px;
+    grid-template-columns: repeat(6, 1fr);
+}
+
+.kpi-strip article {
+    background: rgba(255, 255, 255, 0.045);
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    min-width: 0;
+    padding: 10px 12px;
+}
+
+.kpi-strip span,
+.kpi-strip small {
+    color: var(--muted);
+    display: block;
+    font-size: 0.72rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.kpi-strip strong {
+    display: block;
+    font-size: clamp(1.05rem, 1.5vw, 1.45rem);
+    letter-spacing: -0.04em;
+    margin: 2px 0;
+}
+
+.micro-progress {
+    background: rgba(255, 255, 255, 0.11);
+    border-radius: 999px;
+    height: 6px;
+    margin-top: 7px;
+    overflow: hidden;
+}
+
+.micro-progress i {
+    background: linear-gradient(90deg, var(--green), var(--gold));
+    display: block;
+    height: 100%;
+}
+
+.micro-progress.stress i {
+    background: linear-gradient(90deg, var(--green), var(--gold), var(--red));
+}
+
+.cockpit-grid {
+    display: grid;
+    gap: 12px;
+    grid-template-columns: minmax(230px, 0.72fr) minmax(380px, 1.5fr) minmax(260px, 0.85fr);
+    min-height: 0;
+}
+
+.cockpit-panel {
+    min-height: 0;
+    overflow: auto;
+}
+
+.panel-title,
+.event-topline {
+    align-items: center;
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    margin-bottom: 12px;
+}
+
+.panel-title h3,
+.panel-title h4 {
+    margin-bottom: 0;
+}
+
+.panel-title span,
+.event-topline span {
+    color: var(--muted);
+    font-size: 0.78rem;
+    font-weight: 800;
+}
+
+.compact-list {
+    gap: 8px;
+}
+
+.compact-list div {
+    padding-bottom: 7px;
+}
+
+.compact-list dt,
+.compact-list dd {
+    font-size: 0.92rem;
+}
+
+.event-panel {
+    display: grid;
+    gap: 12px;
+    grid-template-rows: auto auto auto minmax(0, auto) auto;
+}
+
+.event-panel h1 {
+    font-size: clamp(2rem, 4vw, 4rem);
+    letter-spacing: -0.07em;
+    line-height: 0.95;
+}
+
+.event-description {
+    font-size: 1rem;
+    line-height: 1.5;
+}
+
+.compact-feedback {
+    display: grid;
+    gap: 10px;
+    grid-template-columns: minmax(0, 1.2fr) minmax(180px, 0.8fr);
+    padding: 14px;
+}
+
+.compact-feedback p {
+    line-height: 1.45;
+    margin: 6px 0 0;
+}
+
+.compact-feedback small {
+    margin-top: 8px;
+}
+
+.compact-changes {
+    align-content: start;
+    margin: 0;
+}
+
+.compact-changes li {
+    font-size: 0.86rem;
+    padding: 7px 9px;
+}
+
+.compact-risk-list {
+    grid-column: 1 / -1;
+    margin-top: 0;
+}
+
+.compact-actions {
+    grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+}
+
+.compact-actions .button {
+    min-height: 64px;
+    padding: 12px 14px;
+}
+
+.compact-section + .compact-section {
+    margin-top: 14px;
+    padding-top: 14px;
+}
+
+.compact-section h4 {
+    margin-bottom: 8px;
+}
+
+.holding-list {
+    display: grid;
+    gap: 8px;
+}
+
+.compact-holding {
+    margin-top: 0;
+    padding: 10px;
+}
+
+.compact-holding strong,
+.compact-holding span,
+.compact-note {
+    font-size: 0.9rem;
+}
+
+.bottom-console {
+    display: grid;
+    gap: 12px;
+    grid-template-columns: minmax(0, 1.2fr) minmax(300px, 0.8fr);
+}
+
+.console-alerts,
+.console-history {
+    display: flex;
+    gap: 8px;
+    min-width: 0;
+    overflow: hidden;
+}
+
+.console-alert {
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    min-width: 0;
+    padding: 10px 12px;
+}
+
+.console-alert strong,
+.console-alert span,
+.console-history strong,
+.console-history span {
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.console-alert strong,
+.console-history strong {
+    font-size: 0.82rem;
+}
+
+.console-alert span,
+.console-history span {
+    color: var(--muted);
+    font-size: 0.82rem;
+}
+
+.console-alert.good {
+    background: rgba(57, 217, 138, 0.08);
+    border-color: rgba(57, 217, 138, 0.24);
+}
+
+.console-alert.warning {
+    background: rgba(245, 196, 81, 0.08);
+    border-color: rgba(245, 196, 81, 0.24);
+}
+
+.console-alert.danger {
+    background: rgba(255, 107, 107, 0.08);
+    border-color: rgba(255, 107, 107, 0.24);
+}
+
+.console-history {
+    align-items: center;
+    background: rgba(255, 255, 255, 0.035);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    padding: 10px 12px;
+}
+
+@media (min-width: 1100px) {
+    body:has(.game-screen) {
+        overflow: hidden;
+    }
+
+    body:has(.game-screen) .page-shell {
+        max-width: none;
+        padding-bottom: 14px;
+        padding-top: 14px;
+    }
+}
+
 @media (max-width: 1050px) {
     .hero,
     .main-game-grid,
@@ -601,6 +911,38 @@ p {
 
     .timeline.horizontal {
         grid-template-columns: 1fr 1fr;
+    }
+}
+
+@media (max-width: 1050px) {
+    .game-screen {
+        min-height: auto;
+    }
+
+    .game-command,
+    .command-side,
+    .cockpit-grid,
+    .bottom-console {
+        grid-template-columns: 1fr;
+    }
+
+    .kpi-strip {
+        grid-template-columns: repeat(3, 1fr);
+        position: sticky;
+        top: 0;
+        z-index: 10;
+    }
+
+    .compact-feedback {
+        grid-template-columns: 1fr;
+    }
+
+    .cockpit-panel {
+        overflow: visible;
+    }
+
+    .portfolio-panel {
+        order: 3;
     }
 }
 
@@ -627,5 +969,32 @@ p {
     .market-state {
         min-width: 0;
         width: 100%;
+    }
+
+    .game-screen .card {
+        border-radius: 18px;
+        padding: 14px;
+    }
+
+    .kpi-strip {
+        gap: 8px;
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .kpi-strip article {
+        padding: 9px;
+    }
+
+    .event-panel h1 {
+        font-size: 2.35rem;
+    }
+
+    .compact-actions {
+        grid-template-columns: 1fr;
+    }
+
+    .console-alerts,
+    .console-history {
+        flex-direction: column;
     }
 }

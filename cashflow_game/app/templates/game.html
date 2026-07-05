@@ -1,179 +1,196 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<section class="game-header card">
-    <div>
-        <p class="eyebrow">Mes {{ state.month }} · {{ state.display_age }} · {{ state.phase|title }}</p>
-        <h2>{{ state.profession }}</h2>
-        <p>{{ state.profession_summary }} Perfil inicial: {{ state.risk_profile }}.</p>
-        <div class="badge-row">
-            {% for badge in state.status_badges %}
-            <span class="status-badge {{ badge.kind }}">{{ badge.label }}</span>
-            {% endfor %}
+<section class="game-screen">
+    <header class="game-command card">
+        <div class="command-main">
+            <p class="eyebrow">Mes {{ state.month }} · {{ state.display_age }} · {{ state.phase|title }}</p>
+            <h2>{{ state.profession }}</h2>
+            <p>{{ state.profession_summary }}</p>
         </div>
-    </div>
-    <div class="market-state">
-        <span>Economia</span>
-        <strong>{{ state.world.name }}</strong>
-        <small>{{ state.world.description }}</small>
-    </div>
-</section>
-
-{% if state.alerts %}
-<section class="alert-grid">
-    {% for alert in state.alerts %}
-    <article class="alert-card {{ alert.kind }}">
-        <strong>{{ alert.title }}</strong>
-        <p>{{ alert.message }}</p>
-    </article>
-    {% endfor %}
-</section>
-{% endif %}
-
-<section class="dashboard-grid">
-    <article class="card metric-card accent">
-        <span>Libertad financiera</span>
-        <strong>{{ "{:.0f}".format(state.metrics.freedom_ratio * 100) }}%</strong>
-        <div class="progress"><i style="width: {{ [state.metrics.freedom_ratio * 100, 100]|min }}%"></i></div>
-        <small>Objetivo: 100% + 6 meses de reserva</small>
-    </article>
-    <article class="card metric-card">
-        <span>Efectivo</span>
-        <strong>${{ "{:,.0f}".format(state.cash) }}</strong>
-        <small>{{ state.metrics.runway }} meses de reserva</small>
-    </article>
-    <article class="card metric-card">
-        <span>Flujo mensual</span>
-        <strong class="{% if state.metrics.cashflow >= 0 %}positive{% else %}negative{% endif %}">${{ "{:,.0f}".format(state.metrics.cashflow) }}</strong>
-        <small>Ingreso total menos obligaciones</small>
-    </article>
-    <article class="card metric-card">
-        <span>Patrimonio neto</span>
-        <strong>${{ "{:,.0f}".format(state.metrics.net_worth) }}</strong>
-        <small>Activos + efectivo - deudas</small>
-    </article>
-    <article class="card metric-card">
-        <span>Riesgo de insolvencia</span>
-        <strong class="{% if state.metrics.insolvency_risk >= 60 %}negative{% elif state.metrics.insolvency_risk <= 25 %}positive{% endif %}">{{ state.metrics.insolvency_risk }}%</strong>
-        <small>Runway, deuda, estres y flujo</small>
-    </article>
-    <article class="card metric-card">
-        <span>Preparacion</span>
-        <strong>{{ state.metrics.opportunity_readiness }}%</strong>
-        <small>Listo para oportunidades</small>
-    </article>
-</section>
-
-<section class="main-game-grid">
-    <aside class="card side-panel">
-        <h3>Estado</h3>
-        <dl class="stat-list">
-            <div><dt>Salario</dt><dd>${{ "{:,.0f}".format(state.salary) }}/mes</dd></div>
-            <div><dt>Ingreso pasivo</dt><dd>${{ "{:,.0f}".format(state.metrics.passive_income) }}/mes</dd></div>
-            <div><dt>Gastos</dt><dd>${{ "{:,.0f}".format(state.expenses) }}/mes</dd></div>
-            <div><dt>Pago de deudas</dt><dd>${{ "{:,.0f}".format(state.metrics.debt_payments) }}/mes</dd></div>
-            <div><dt>Educacion financiera</dt><dd>{{ state.education }}/10</dd></div>
-            <div><dt>Estres</dt><dd>{{ state.stress }}/100</dd></div>
-            <div><dt>Score crediticio</dt><dd>{{ state.credit_score }}</dd></div>
-            <div><dt>Estabilidad laboral</dt><dd>{{ state.career_stability }}/100</dd></div>
-            <div><dt>Deuda / ingreso</dt><dd>{{ "{:.0f}".format(state.metrics.debt_to_income * 100) }}%</dd></div>
-            <div><dt>Ingreso por activos</dt><dd>{{ "{:.0f}".format(state.metrics.asset_income_ratio * 100) }}%</dd></div>
-            <div><dt>Estado financiero</dt><dd>{{ state.metrics.financial_state }}</dd></div>
-        </dl>
-    </aside>
-
-    <article class="card event-card">
-        <div class="event-category">{{ state.current_event.category }}</div>
-        <h2>{{ state.current_event.title }}</h2>
-        <p>{{ state.current_event.description }}</p>
-        <div class="feedback-box">
-            <strong>{{ state.last_feedback.title }}</strong>
-            {% if state.last_feedback.changes %}
-            <ul class="change-list">
-                {% for change in state.last_feedback.changes %}
-                <li>{{ change }}</li>
-                {% endfor %}
-            </ul>
-            {% endif %}
-            <p>{{ state.last_feedback.interpretation }}</p>
-            <small>Principio: {{ state.last_feedback.lesson }}</small>
-            {% if state.last_feedback.badges %}
-            <div class="badge-row compact">
-                {% for badge in state.last_feedback.badges %}
-                <span class="status-badge good">Desbloqueado: {{ badge }}</span>
+        <div class="command-side">
+            <div class="market-state compact-market">
+                <span>Economia</span>
+                <strong>{{ state.world.name }}</strong>
+                <small>{{ state.world.description }}</small>
+            </div>
+            <div class="badge-row command-badges">
+                {% for badge in state.status_badges %}
+                <span class="status-badge {{ badge.kind }}">{{ badge.label }}</span>
                 {% endfor %}
             </div>
-            {% endif %}
-            {% if state.last_feedback.alerts %}
-            <ul class="risk-list">
-                {% for alert in state.last_feedback.alerts %}
-                <li>{{ alert }}</li>
-                {% endfor %}
-            </ul>
-            {% endif %}
         </div>
-        <div class="action-grid">
-            {% for action_id, action in state.current_event.actions.items() %}
-            <form action="{{ url_for('action', action_id=action_id) }}" method="post">
-                <button class="button action-button" type="submit">
-                    <strong>{{ action.label }}</strong>
-                    {% if action.risk_tags %}
-                    <span class="action-risks">
-                        {% for tag in action.risk_tags %}
-                        <em>{{ tag }}</em>
-                        {% endfor %}
-                    </span>
+    </header>
+
+    <section class="kpi-strip card">
+        <article>
+            <span>Cash</span>
+            <strong>${{ "{:,.0f}".format(state.cash) }}</strong>
+            <small>{{ state.metrics.runway }} meses</small>
+        </article>
+        <article>
+            <span>Flow</span>
+            <strong class="{% if state.metrics.cashflow >= 0 %}positive{% else %}negative{% endif %}">${{ "{:,.0f}".format(state.metrics.cashflow) }}</strong>
+            <small>mensual</small>
+        </article>
+        <article>
+            <span>Freedom</span>
+            <strong>{{ "{:.0f}".format(state.metrics.freedom_ratio * 100) }}%</strong>
+            <div class="micro-progress"><i style="width: {{ [state.metrics.freedom_ratio * 100, 100]|min }}%"></i></div>
+        </article>
+        <article>
+            <span>Stress</span>
+            <strong class="{% if state.stress >= 85 %}negative{% elif state.stress <= 45 %}positive{% endif %}">{{ state.stress }}/100</strong>
+            <div class="micro-progress stress"><i style="width: {{ state.stress }}%"></i></div>
+        </article>
+        <article>
+            <span>Risk</span>
+            <strong class="{% if state.metrics.insolvency_risk >= 60 %}negative{% elif state.metrics.insolvency_risk <= 25 %}positive{% endif %}">{{ state.metrics.insolvency_risk }}%</strong>
+            <small>{{ state.metrics.financial_state }}</small>
+        </article>
+        <article>
+            <span>Ready</span>
+            <strong>{{ state.metrics.opportunity_readiness }}%</strong>
+            <small>oportunidades</small>
+        </article>
+    </section>
+
+    <section class="cockpit-grid">
+        <aside class="card cockpit-panel state-panel">
+            <div class="panel-title">
+                <h3>Estado</h3>
+                <span>{{ state.risk_profile }}</span>
+            </div>
+            <dl class="stat-list compact-list">
+                <div><dt>Salario</dt><dd>${{ "{:,.0f}".format(state.salary) }}/mes</dd></div>
+                <div><dt>Pasivo</dt><dd>${{ "{:,.0f}".format(state.metrics.passive_income) }}/mes</dd></div>
+                <div><dt>Gastos</dt><dd>${{ "{:,.0f}".format(state.expenses) }}/mes</dd></div>
+                <div><dt>Deudas</dt><dd>${{ "{:,.0f}".format(state.metrics.debt_payments) }}/mes</dd></div>
+                <div><dt>Educacion</dt><dd>{{ state.education }}/10</dd></div>
+                <div><dt>Credito</dt><dd>{{ state.credit_score }}</dd></div>
+                <div><dt>Estabilidad</dt><dd>{{ state.career_stability }}/100</dd></div>
+                <div><dt>Deuda/ingreso</dt><dd>{{ "{:.0f}".format(state.metrics.debt_to_income * 100) }}%</dd></div>
+                <div><dt>Activo/ingreso</dt><dd>{{ "{:.0f}".format(state.metrics.asset_income_ratio * 100) }}%</dd></div>
+            </dl>
+        </aside>
+
+        <main class="card cockpit-panel event-panel">
+            <div class="event-topline">
+                <div class="event-category">{{ state.current_event.category }}</div>
+                <span>{{ state.metrics.financial_state }}</span>
+            </div>
+            <h1>{{ state.current_event.title }}</h1>
+            <p class="event-description">{{ state.current_event.description }}</p>
+
+            <section class="feedback-box compact-feedback">
+                <div>
+                    <strong>{{ state.last_feedback.title }}</strong>
+                    <p>{{ state.last_feedback.interpretation }}</p>
+                    <small>Principio: {{ state.last_feedback.lesson }}</small>
+                </div>
+                {% if state.last_feedback.changes %}
+                <ul class="change-list compact-changes">
+                    {% for change in state.last_feedback.changes[:4] %}
+                    <li>{{ change }}</li>
+                    {% endfor %}
+                </ul>
+                {% endif %}
+                {% if state.last_feedback.badges %}
+                <div class="badge-row compact">
+                    {% for badge in state.last_feedback.badges %}
+                    <span class="status-badge good">Desbloqueado: {{ badge }}</span>
+                    {% endfor %}
+                </div>
+                {% endif %}
+                {% if state.last_feedback.alerts %}
+                <ul class="risk-list compact-risk-list">
+                    {% for alert in state.last_feedback.alerts[:2] %}
+                    <li>{{ alert }}</li>
+                    {% endfor %}
+                </ul>
+                {% endif %}
+            </section>
+
+            <div class="action-grid compact-actions">
+                {% for action_id, action in state.current_event.actions.items() %}
+                <form action="{{ url_for('action', action_id=action_id) }}" method="post">
+                    <button class="button action-button" type="submit">
+                        <strong>{{ action.label }}</strong>
+                        {% if action.risk_tags %}
+                        <span class="action-risks">
+                            {% for tag in action.risk_tags %}
+                            <em>{{ tag }}</em>
+                            {% endfor %}
+                        </span>
+                        {% endif %}
+                    </button>
+                </form>
+                {% endfor %}
+            </div>
+        </main>
+
+        <aside class="card cockpit-panel portfolio-panel">
+            <div class="panel-title">
+                <h3>Portafolio</h3>
+                <span>${{ "{:,.0f}".format(state.metrics.net_worth) }} neto</span>
+            </div>
+            <div class="mini-section compact-section">
+                <h4>Activos</h4>
+                <div class="holding-list">
+                    {% if state.assets %}
+                    {% for asset in state.assets[:5] %}
+                    <div class="holding compact-holding">
+                        <strong>{{ asset.name }}</strong>
+                        <span>${{ "{:,.0f}".format(asset.value) }} · +${{ "{:,.0f}".format(asset.income) }}/mes</span>
+                    </div>
+                    {% endfor %}
+                    {% if state.assets|length > 5 %}<p class="muted compact-note">+{{ state.assets|length - 5 }} activos mas</p>{% endif %}
+                    {% else %}
+                    <p class="muted">Todavia dependes 100% del ingreso activo.</p>
                     {% endif %}
-                </button>
-            </form>
-            {% endfor %}
-        </div>
-    </article>
-
-    <aside class="card side-panel">
-        <h3>Portafolio</h3>
-        <div class="mini-section">
-            <h4>Activos</h4>
-            {% if state.assets %}
-            {% for asset in state.assets %}
-            <div class="holding">
-                <strong>{{ asset.name }}</strong>
-                <span>${{ "{:,.0f}".format(asset.value) }} · +${{ "{:,.0f}".format(asset.income) }}/mes</span>
+                </div>
             </div>
-            {% endfor %}
-            {% else %}
-            <p class="muted">Todavia no tienes activos productivos.</p>
-            {% endif %}
-        </div>
-        <div class="mini-section">
-            <h4>Deudas</h4>
-            {% if state.debts %}
-            {% for debt in state.debts %}
-            <div class="holding debt">
-                <strong>{{ debt.name }}</strong>
-                <span>${{ "{:,.0f}".format(debt.balance) }} · ${{ "{:,.0f}".format(debt.payment) }}/mes</span>
+            <div class="mini-section compact-section">
+                <h4>Deudas</h4>
+                <div class="holding-list">
+                    {% if state.debts %}
+                    {% for debt in state.debts[:5] %}
+                    <div class="holding debt compact-holding">
+                        <strong>{{ debt.name }}</strong>
+                        <span>${{ "{:,.0f}".format(debt.balance) }} · ${{ "{:,.0f}".format(debt.payment) }}/mes</span>
+                    </div>
+                    {% endfor %}
+                    {% if state.debts|length > 5 %}<p class="muted compact-note">+{{ state.debts|length - 5 }} deudas mas</p>{% endif %}
+                    {% else %}
+                    <p class="muted">Sin deudas activas. Tu flujo no tiene acreedores.</p>
+                    {% endif %}
+                </div>
             </div>
-            {% endfor %}
-            {% else %}
-            <p class="muted">Sin deudas activas.</p>
-            {% endif %}
-        </div>
-    </aside>
-</section>
+        </aside>
+    </section>
 
-<section class="card history-card">
-    <h3>Historial de decisiones</h3>
-    <div class="timeline horizontal">
-        {% for item in state.history[:5] %}
-        <div>
-            <span>Mes {{ item.month }}</span>
-            <strong>{{ item.title }}</strong>
-            <p>{{ item.action }}</p>
-        </div>
-        {% else %}
-        <p class="muted">Tu historial aparecera despues de la primera decision.</p>
-        {% endfor %}
-    </div>
+    <footer class="bottom-console card">
+        <section class="console-alerts">
+            {% for alert in state.alerts[:3] %}
+            <article class="console-alert {{ alert.kind }}">
+                <strong>{{ alert.title }}</strong>
+                <span>{{ alert.message }}</span>
+            </article>
+            {% else %}
+            <article class="console-alert good">
+                <strong>Sin alertas criticas</strong>
+                <span>Tu tablero esta estable. Busca oportunidades sin romper tu margen.</span>
+            </article>
+            {% endfor %}
+        </section>
+        <section class="console-history">
+            <strong>Historial</strong>
+            {% for item in state.history[:3] %}
+            <span>Mes {{ item.month }}: {{ item.title }} · {{ item.action }}</span>
+            {% else %}
+            <span>Tu historial aparecera despues de la primera decision.</span>
+            {% endfor %}
+        </section>
+    </footer>
 </section>
 {% endblock %}
-
