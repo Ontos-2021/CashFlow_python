@@ -586,21 +586,23 @@ p {
 /* Game cockpit */
 .game-screen {
     display: grid;
-    gap: 12px;
-    grid-template-rows: auto auto minmax(0, 1fr) auto;
-    min-height: calc(100vh - 132px);
+    gap: 8px;
+    grid-template-rows: 76px 68px minmax(0, 1fr) 54px;
+    height: calc(100vh - 104px);
+    min-height: 560px;
 }
 
 .game-screen .card {
-    border-radius: 20px;
-    padding: 16px;
+    border-radius: 16px;
+    padding: 10px 12px;
 }
 
 .game-command {
     align-items: center;
     display: grid;
-    gap: 18px;
+    gap: 12px;
     grid-template-columns: minmax(0, 1fr) minmax(320px, 0.8fr);
+    overflow: hidden;
 }
 
 .command-main h2,
@@ -611,28 +613,47 @@ p {
 }
 
 .command-main .eyebrow {
-    margin-bottom: 7px;
+    font-size: 0.68rem;
+    margin-bottom: 3px;
+}
+
+.command-main h2 {
+    font-size: clamp(1.25rem, 2.2vw, 1.9rem);
+    line-height: 1;
+}
+
+.command-main p {
+    font-size: 0.85rem;
+    line-height: 1.25;
+    max-width: 900px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 .command-side {
     align-items: center;
     display: grid;
-    gap: 10px;
-    grid-template-columns: 220px minmax(0, 1fr);
+    gap: 8px;
+    grid-template-columns: 170px minmax(0, 1fr);
 }
 
 .compact-market {
     min-width: 0;
-    padding: 12px;
+    padding: 9px 10px;
 }
 
 .compact-market strong {
-    font-size: 1.2rem;
+    font-size: 1rem;
+    margin: 2px 0;
 }
 
 .compact-market small {
     display: block;
-    line-height: 1.25;
+    font-size: 0.72rem;
+    line-height: 1.15;
+    max-height: 1.8em;
+    overflow: hidden;
 }
 
 .command-badges {
@@ -641,8 +662,9 @@ p {
 
 .kpi-strip {
     display: grid;
-    gap: 10px;
+    gap: 8px;
     grid-template-columns: repeat(6, 1fr);
+    overflow: hidden;
 }
 
 .kpi-strip article {
@@ -650,7 +672,7 @@ p {
     border: 1px solid var(--line);
     border-radius: 16px;
     min-width: 0;
-    padding: 10px 12px;
+    padding: 8px 10px;
 }
 
 .kpi-strip span,
@@ -665,7 +687,7 @@ p {
 
 .kpi-strip strong {
     display: block;
-    font-size: clamp(1.05rem, 1.5vw, 1.45rem);
+    font-size: clamp(0.95rem, 1.25vw, 1.25rem);
     letter-spacing: -0.04em;
     margin: 2px 0;
 }
@@ -690,8 +712,8 @@ p {
 
 .cockpit-grid {
     display: grid;
-    gap: 12px;
-    grid-template-columns: minmax(230px, 0.72fr) minmax(380px, 1.5fr) minmax(260px, 0.85fr);
+    gap: 8px;
+    grid-template-columns: minmax(220px, 0.66fr) minmax(380px, 1.56fr) minmax(250px, 0.78fr);
     min-height: 0;
 }
 
@@ -706,7 +728,11 @@ p {
     display: flex;
     justify-content: space-between;
     gap: 10px;
-    margin-bottom: 12px;
+    margin-bottom: 8px;
+}
+
+.panel-title h3 {
+    font-size: 1.05rem;
 }
 
 .panel-title h3,
@@ -722,49 +748,51 @@ p {
 }
 
 .compact-list {
-    gap: 8px;
+    gap: 5px;
 }
 
 .compact-list div {
-    padding-bottom: 7px;
+    padding-bottom: 5px;
 }
 
 .compact-list dt,
 .compact-list dd {
-    font-size: 0.92rem;
+    font-size: 0.8rem;
 }
 
 .event-panel {
     display: grid;
-    gap: 12px;
+    gap: 8px;
     grid-template-rows: auto auto auto minmax(0, auto) auto;
 }
 
 .event-panel h1 {
-    font-size: clamp(2rem, 4vw, 4rem);
+    font-size: clamp(1.7rem, 3.2vw, 3rem);
     letter-spacing: -0.07em;
     line-height: 0.95;
 }
 
 .event-description {
-    font-size: 1rem;
-    line-height: 1.5;
+    font-size: 0.92rem;
+    line-height: 1.35;
 }
 
 .compact-feedback {
     display: grid;
-    gap: 10px;
+    gap: 8px;
     grid-template-columns: minmax(0, 1.2fr) minmax(180px, 0.8fr);
-    padding: 14px;
+    padding: 10px;
 }
 
 .compact-feedback p {
-    line-height: 1.45;
-    margin: 6px 0 0;
+    font-size: 0.82rem;
+    line-height: 1.28;
+    margin: 4px 0 0;
 }
 
 .compact-feedback small {
-    margin-top: 8px;
+    font-size: 0.76rem;
+    margin-top: 5px;
 }
 
 .compact-changes {
@@ -773,8 +801,8 @@ p {
 }
 
 .compact-changes li {
-    font-size: 0.86rem;
-    padding: 7px 9px;
+    font-size: 0.76rem;
+    padding: 5px 7px;
 }
 
 .compact-risk-list {
@@ -784,16 +812,21 @@ p {
 
 .compact-actions {
     grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+    gap: 8px;
 }
 
 .compact-actions .button {
-    min-height: 64px;
-    padding: 12px 14px;
+    min-height: 48px;
+    padding: 9px 11px;
+}
+
+.compact-actions .button strong {
+    font-size: 0.88rem;
 }
 
 .compact-section + .compact-section {
-    margin-top: 14px;
-    padding-top: 14px;
+    margin-top: 10px;
+    padding-top: 10px;
 }
 
 .compact-section h4 {
@@ -807,19 +840,20 @@ p {
 
 .compact-holding {
     margin-top: 0;
-    padding: 10px;
+    padding: 8px;
 }
 
 .compact-holding strong,
 .compact-holding span,
 .compact-note {
-    font-size: 0.9rem;
+    font-size: 0.78rem;
 }
 
 .bottom-console {
     display: grid;
-    gap: 12px;
+    gap: 8px;
     grid-template-columns: minmax(0, 1.2fr) minmax(300px, 0.8fr);
+    overflow: hidden;
 }
 
 .console-alerts,
@@ -834,7 +868,7 @@ p {
     border: 1px solid var(--line);
     border-radius: 14px;
     min-width: 0;
-    padding: 10px 12px;
+    padding: 7px 9px;
 }
 
 .console-alert strong,
@@ -849,13 +883,13 @@ p {
 
 .console-alert strong,
 .console-history strong {
-    font-size: 0.82rem;
+    font-size: 0.74rem;
 }
 
 .console-alert span,
 .console-history span {
     color: var(--muted);
-    font-size: 0.82rem;
+    font-size: 0.72rem;
 }
 
 .console-alert.good {
@@ -878,7 +912,7 @@ p {
     background: rgba(255, 255, 255, 0.035);
     border: 1px solid var(--line);
     border-radius: 14px;
-    padding: 10px 12px;
+    padding: 7px 9px;
 }
 
 @media (min-width: 1100px) {
@@ -886,10 +920,19 @@ p {
         overflow: hidden;
     }
 
+    body:has(.game-screen) .topbar {
+        padding: 8px clamp(18px, 4vw, 54px);
+    }
+
+    body:has(.game-screen) .brand-mark {
+        border-radius: 10px;
+        height: 34px;
+        width: 34px;
+    }
+
     body:has(.game-screen) .page-shell {
         max-width: none;
-        padding-bottom: 14px;
-        padding-top: 14px;
+        padding: 8px clamp(12px, 3vw, 38px) 8px;
     }
 }
 
