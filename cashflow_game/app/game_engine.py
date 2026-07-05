@@ -27,7 +27,7 @@ PROFESSIONS = {
         "salary": 4200,
         "expenses": 2600,
         "education": 2,
-        "stress": 35,
+        "stress": 28,
         "credit_score": 710,
         "debts": [{"name": "Prestamo estudiantil", "type": "Student loan", "balance": 12000, "payment": 260, "rate": 0.09, "stress": 4}],
     },
@@ -55,7 +55,7 @@ PROFESSIONS = {
         "salary": 7200,
         "expenses": 4700,
         "education": 2,
-        "stress": 48,
+        "stress": 32,
         "credit_score": 700,
         "debts": [
             {"name": "Prestamo estudiantil", "type": "Student loan", "balance": 85000, "payment": 980, "rate": 0.08, "stress": 8},
@@ -72,7 +72,7 @@ PROFESSIONS = {
         "salary": 3300,
         "expenses": 2300,
         "education": 1,
-        "stress": 40,
+        "stress": 28,
         "credit_score": 640,
         "debts": [{"name": "Tarjeta de credito", "type": "Credit card", "balance": 5200, "payment": 210, "rate": 0.34, "stress": 10}],
     },
@@ -86,7 +86,7 @@ PROFESSIONS = {
         "salary": 2800,
         "expenses": 1850,
         "education": 1,
-        "stress": 44,
+        "stress": 30,
         "credit_score": 620,
         "debts": [{"name": "Equipo financiado", "type": "Personal loan", "balance": 3600, "payment": 160, "rate": 0.18, "stress": 5}],
     },
@@ -1237,7 +1237,7 @@ def event_fits_state(event, state, phase):
     required_profession = event.get("requires_profession")
     if required_profession and required_profession != state.get("profession_id"):
         return False
-    if event["id"] == "burnout" and state["stress"] >= 78:
+    if event["id"] == "burnout" and state["stress"] >= 85:
         return True
     if event.get("phase") in {phase, "survival"} or phase == "freedom":
         return True
@@ -1364,15 +1364,20 @@ def session_phase(state):
 def apply_monthly_cashflow(state):
     income = state["salary"] + risky_passive_income(state)
     outflow = state["expenses"] + debt_payments(state)
-    state["cash"] += income - outflow
+    net = income - outflow
+    state["cash"] += net
     state["expenses"] = round(state["expenses"] * (1 + state["world"]["inflation"]), 2)
     accrue_debt_interest(state)
     if state["cash"] < 0:
         state["insolvent_months"] += 1
-        state["stress"] += 8
+        state["stress"] += 4
         state["dangerous_moment"] = "Caja negativa durante varios meses"
     else:
         state["insolvent_months"] = 0
+        if net > 0 and state["cash"] > 0:
+            state["stress"] -= 2
+            if state["stress"] > 60:
+                state["stress"] -= 1
 
 
 def risky_passive_income(state):
@@ -1419,7 +1424,7 @@ def maybe_salary_shock(state):
     if random() < risk:
         loss = round(state["salary"] * 0.18, 2)
         state["salary"] -= loss
-        state["stress"] += 12
+        state["stress"] += 6
         state["dangerous_moment"] = "Recorte de ingresos durante " + state["world"]["name"]
         asset_events_append(state, "salary_shock", "Recorte de ingresos (-$" + str(int(loss)) + ")")
 
@@ -1518,7 +1523,10 @@ def apply_action_effects(state, action):
     if exp_delta > 0:
         state.setdefault("expense_creep_log", []).append({"kind": "creep", "amount": exp_delta, "month": state["month"]})
     state["education"] += action.get("education", 0)
-    state["stress"] += action.get("stress", 0)
+    stress_delta = action.get("stress", 0)
+    if stress_delta > 0:
+        stress_delta = round(stress_delta * 0.7)
+    state["stress"] += stress_delta
     state["credit_score"] += action.get("credit_score", 0)
     state["career_stability"] += action.get("career_stability", 0)
     state["lifestyle_inflation"] += action.get("lifestyle", 0)
@@ -1972,7 +1980,7 @@ def check_end_conditions(state):
         state["status"] = "lost"
         state["outcome"] = "Debt trapped"
         state["last_feedback"] = feedback("Insolvencia", "La caja negativa se mantuvo demasiado tiempo y tus pagos mensuales siguieron corriendo.", "La fragilidad mata antes que la falta de ambicion.")
-    elif state["stress"] >= 96:
+    elif state["stress"] >= 99:
         state["status"] = "ended"
         state["outcome"] = "Burnout retirement"
         state["last_feedback"] = feedback("Burnout financiero", "El plan producia dinero, pero destruyo la capacidad de sostenerlo.", "Una estrategia que no cuida energia no es sostenible.")

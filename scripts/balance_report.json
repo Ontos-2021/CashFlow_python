@@ -1,0 +1,506 @@
+{
+  "by_cell": {
+    "administrativo_random": {
+      "count": 50,
+      "outcomes": {
+        "Burnout retirement": 50
+      },
+      "statuses": {
+        "ended": 50
+      },
+      "median_month": 44.0,
+      "min_month": 14,
+      "max_month": 129,
+      "median_age": 29.0,
+      "median_freedom_ratio": 0.002,
+      "median_net_worth": 27623.0,
+      "median_runway": 14.1,
+      "median_stress": 99.5,
+      "median_quiet_months": 15.5,
+      "profiles": {
+        "Burnout Achiever": 14,
+        "Conservative Builder": 35,
+        "Balanced Capitalist": 1
+      },
+      "event_freq": {
+        "rent_increase": 36,
+        "index_fund": 35,
+        "financial_course": 33,
+        "car_accident": 33,
+        "salary_renegotiation": 33,
+        "medical_bill": 32,
+        "robbery": 32,
+        "family_loan": 31,
+        "book_community": 30,
+        "pet_cost": 30
+      }
+    },
+    "administrativo_safe": {
+      "count": 50,
+      "outcomes": {
+        "Burnout retirement": 50
+      },
+      "statuses": {
+        "ended": 50
+      },
+      "median_month": 29.5,
+      "min_month": 8,
+      "max_month": 158,
+      "median_age": 28.0,
+      "median_freedom_ratio": 0.009,
+      "median_net_worth": 27179.0,
+      "median_runway": 14.8,
+      "median_stress": 98.5,
+      "median_quiet_months": 7.5,
+      "profiles": {
+        "Burnout Achiever": 11,
+        "Conservative Builder": 39
+      },
+      "event_freq": {
+        "robbery": 40,
+        "medical_bill": 37,
+        "admin_process_automation": 36,
+        "second_job": 34,
+        "rent_increase": 33,
+        "salary_renegotiation": 32,
+        "online_community": 32,
+        "freelance_gig": 31,
+        "moving_expense": 29,
+        "admin_overtime_request": 29
+      }
+    },
+    "programador_random": {
+      "count": 50,
+      "outcomes": {
+        "Burnout retirement": 50
+      },
+      "statuses": {
+        "ended": 50
+      },
+      "median_month": 36.5,
+      "min_month": 8,
+      "max_month": 101,
+      "median_age": 27.5,
+      "median_freedom_ratio": 0.001,
+      "median_net_worth": 46319.0,
+      "median_runway": 16.1,
+      "median_stress": 99.0,
+      "median_quiet_months": 16.0,
+      "profiles": {
+        "Burnout Achiever": 6,
+        "Conservative Builder": 40,
+        "Debt Survivor": 3,
+        "High-Income Spender": 1
+      },
+      "event_freq": {
+        "second_job": 38,
+        "rent_increase": 36,
+        "medical_bill": 35,
+        "car_accident": 35,
+        "financial_course": 33,
+        "online_community": 31,
+        "salary_renegotiation": 30,
+        "dev_cloud_cert": 29,
+        "robbery": 29,
+        "index_fund": 29
+      }
+    },
+    "programador_safe": {
+      "count": 50,
+      "outcomes": {
+        "Burnout retirement": 50
+      },
+      "statuses": {
+        "ended": 50
+      },
+      "median_month": 26.0,
+      "min_month": 9,
+      "max_month": 74,
+      "median_age": 27.0,
+      "median_freedom_ratio": 0.004,
+      "median_net_worth": 32756.0,
+      "median_runway": 12.8,
+      "median_stress": 100.0,
+      "median_quiet_months": 6.0,
+      "profiles": {
+        "Burnout Achiever": 9,
+        "Conservative Builder": 39,
+        "Debt Survivor": 2
+      },
+      "event_freq": {
+        "medical_bill": 39,
+        "consolidation": 38,
+        "family_loan": 36,
+        "car_accident": 34,
+        "freelance_gig": 34,
+        "second_job": 33,
+        "salary_renegotiation": 33,
+        "robbery": 33,
+        "rent_increase": 33,
+        "financial_course": 31
+      }
+    },
+    "docente_random": {
+      "count": 50,
+      "outcomes": {
+        "Burnout retirement": 50
+      },
+      "statuses": {
+        "ended": 50
+      },
+      "median_month": 43.0,
+      "min_month": 17,
+      "max_month": 113,
+      "median_age": 31.0,
+      "median_freedom_ratio": 0.001,
+      "median_net_worth": 43273.0,
+      "median_runway": 21.4,
+      "median_stress": 99.5,
+      "median_quiet_months": 18.5,
+      "profiles": {
+        "Burnout Achiever": 8,
+        "Conservative Builder": 40,
+        "Debt Survivor": 1,
+        "Balanced Capitalist": 1
+      },
+      "event_freq": {
+        "car_accident": 44,
+        "robbery": 40,
+        "freelance_gig": 39,
+        "teacher_budget_cut": 37,
+        "medical_bill": 33,
+        "index_fund": 30,
+        "salary_renegotiation": 30,
+        "second_job": 30,
+        "financial_course": 29,
+        "pet_cost": 28
+      }
+    },
+    "docente_safe": {
+      "count": 50,
+      "outcomes": {
+        "Burnout retirement": 50
+      },
+      "statuses": {
+        "ended": 50
+      },
+      "median_month": 28.0,
+      "min_month": 8,
+      "max_month": 157,
+      "median_age": 30.0,
+      "median_freedom_ratio": 0.009,
+      "median_net_worth": 26992.0,
+      "median_runway": 15.1,
+      "median_stress": 98.5,
+      "median_quiet_months": 8.0,
+      "profiles": {
+        "Conservative Builder": 38,
+        "Burnout Achiever": 12
+      },
+      "event_freq": {
+        "robbery": 44,
+        "book_community": 39,
+        "freelance_gig": 35,
+        "medical_bill": 35,
+        "rent_increase": 35,
+        "teacher_budget_cut": 35,
+        "salary_renegotiation": 34,
+        "moving_expense": 32,
+        "teacher_grant": 31,
+        "family_loan": 29
+      }
+    },
+    "medico_random": {
+      "count": 50,
+      "outcomes": {
+        "Burnout retirement": 50
+      },
+      "statuses": {
+        "ended": 50
+      },
+      "median_month": 20.5,
+      "min_month": 3,
+      "max_month": 58,
+      "median_age": 31.0,
+      "median_freedom_ratio": 0.0,
+      "median_net_worth": -61445.0,
+      "median_runway": 4.9,
+      "median_stress": 99.0,
+      "median_quiet_months": 0.0,
+      "profiles": {
+        "Burnout Achiever": 30,
+        "High-Income Spender": 6,
+        "Conservative Builder": 12,
+        "Overextended Optimist": 1,
+        "Debt Survivor": 1
+      },
+      "event_freq": {
+        "financial_course": 42,
+        "rent_increase": 38,
+        "salary_renegotiation": 33,
+        "raise": 29,
+        "celebration": 29,
+        "pet_cost": 29,
+        "robbery": 29,
+        "family_loan": 29,
+        "medical_bill": 28,
+        "second_job": 27
+      }
+    },
+    "medico_safe": {
+      "count": 50,
+      "outcomes": {
+        "Burnout retirement": 50
+      },
+      "statuses": {
+        "ended": 50
+      },
+      "median_month": 14.5,
+      "min_month": 4,
+      "max_month": 108,
+      "median_age": 31.0,
+      "median_freedom_ratio": 0.001,
+      "median_net_worth": -69480.0,
+      "median_runway": 3.8,
+      "median_stress": 99.0,
+      "median_quiet_months": 0.0,
+      "profiles": {
+        "Conservative Builder": 5,
+        "Burnout Achiever": 39,
+        "Debt Survivor": 5,
+        "Overextended Optimist": 1
+      },
+      "event_freq": {
+        "robbery": 36,
+        "credit_card_attack": 34,
+        "medical_bill": 34,
+        "rent_increase": 31,
+        "doctor_extra_shifts": 29,
+        "car_accident": 29,
+        "raise": 29,
+        "consolidation": 28,
+        "moving_expense": 28,
+        "online_community": 28
+      }
+    },
+    "vendedor_random": {
+      "count": 50,
+      "outcomes": {
+        "Burnout retirement": 50
+      },
+      "statuses": {
+        "ended": 50
+      },
+      "median_month": 25.5,
+      "min_month": 8,
+      "max_month": 52,
+      "median_age": 29.0,
+      "median_freedom_ratio": 0.001,
+      "median_net_worth": 12697.0,
+      "median_runway": 6.0,
+      "median_stress": 99.0,
+      "median_quiet_months": 5.5,
+      "profiles": {
+        "Burnout Achiever": 27,
+        "Conservative Builder": 18,
+        "Overextended Optimist": 3,
+        "Debt Survivor": 2
+      },
+      "event_freq": {
+        "medical_bill": 41,
+        "salary_renegotiation": 38,
+        "second_job": 37,
+        "raise": 34,
+        "book_community": 32,
+        "index_fund": 32,
+        "car_accident": 31,
+        "online_community": 31,
+        "financial_course": 30,
+        "sales_slow_season": 28
+      }
+    },
+    "vendedor_safe": {
+      "count": 50,
+      "outcomes": {
+        "Burnout retirement": 50
+      },
+      "statuses": {
+        "ended": 50
+      },
+      "median_month": 16.0,
+      "min_month": 8,
+      "max_month": 66,
+      "median_age": 28.0,
+      "median_freedom_ratio": 0.005,
+      "median_net_worth": 11041.0,
+      "median_runway": 6.5,
+      "median_stress": 100.0,
+      "median_quiet_months": 1.0,
+      "profiles": {
+        "Conservative Builder": 14,
+        "Burnout Achiever": 30,
+        "Debt Survivor": 4,
+        "Overextended Optimist": 2
+      },
+      "event_freq": {
+        "credit_card_attack": 42,
+        "sales_slow_season": 39,
+        "index_fund": 38,
+        "robbery": 35,
+        "medical_bill": 33,
+        "rent_increase": 32,
+        "book_community": 30,
+        "second_job": 30,
+        "moving_expense": 30,
+        "freelance_gig": 29
+      }
+    },
+    "freelancer_random": {
+      "count": 50,
+      "outcomes": {
+        "Burnout retirement": 50
+      },
+      "statuses": {
+        "ended": 50
+      },
+      "median_month": 21.0,
+      "min_month": 6,
+      "max_month": 77,
+      "median_age": 25.0,
+      "median_freedom_ratio": 0.0,
+      "median_net_worth": 14925.0,
+      "median_runway": 6.5,
+      "median_stress": 98.0,
+      "median_quiet_months": 3.0,
+      "profiles": {
+        "Conservative Builder": 22,
+        "Burnout Achiever": 23,
+        "Debt Survivor": 4,
+        "Overextended Optimist": 1
+      },
+      "event_freq": {
+        "book_community": 33,
+        "salary_renegotiation": 33,
+        "car_accident": 32,
+        "rent_increase": 32,
+        "moving_expense": 30,
+        "family_loan": 29,
+        "index_fund": 28,
+        "medical_bill": 28,
+        "freelance_gig": 28,
+        "pet_cost": 28
+      }
+    },
+    "freelancer_safe": {
+      "count": 50,
+      "outcomes": {
+        "Burnout retirement": 50
+      },
+      "statuses": {
+        "ended": 50
+      },
+      "median_month": 19.0,
+      "min_month": 8,
+      "max_month": 86,
+      "median_age": 25.0,
+      "median_freedom_ratio": 0.007,
+      "median_net_worth": 14178.0,
+      "median_runway": 6.7,
+      "median_stress": 100.0,
+      "median_quiet_months": 1.0,
+      "profiles": {
+        "Balanced Capitalist": 3,
+        "Conservative Builder": 19,
+        "Burnout Achiever": 22,
+        "Debt Survivor": 6
+      },
+      "event_freq": {
+        "robbery": 38,
+        "freelance_unpaid_invoice": 35,
+        "index_fund": 33,
+        "freelance_gig": 32,
+        "medical_bill": 32,
+        "celebration": 31,
+        "rent_increase": 30,
+        "consolidation": 29,
+        "book_community": 29,
+        "moving_expense": 28
+      }
+    }
+  },
+  "global": {
+    "total_runs": 600,
+    "outcomes": {
+      "Burnout retirement": 600
+    },
+    "profiles": {
+      "Burnout Achiever": 231,
+      "Conservative Builder": 321,
+      "Balanced Capitalist": 5,
+      "Debt Survivor": 28,
+      "High-Income Spender": 7,
+      "Overextended Optimist": 8
+    },
+    "median_quiet_months": 5.0,
+    "never_seen_events": [
+      "admin_networking",
+      "art_collectible",
+      "baby_arrival",
+      "bad_inheritance",
+      "big_commission",
+      "bonds",
+      "certification",
+      "competitor_offer",
+      "country_crisis",
+      "crypto",
+      "debt_free_temptation",
+      "dev_remote_offer",
+      "dev_side_project",
+      "divorce_settlement",
+      "doctor_malpractice_scare",
+      "doctor_private_clinic",
+      "dream_trip",
+      "equity_grant",
+      "family_support",
+      "franchise",
+      "freelance_own_product",
+      "green_investment",
+      "health_scare",
+      "identity_theft",
+      "impact_fund",
+      "job_loss",
+      "land_plot",
+      "lawsuit",
+      "lifestyle_car",
+      "line_of_credit",
+      "market_drop",
+      "masterclass",
+      "mentor",
+      "mortgage_refi_opportunity",
+      "natural_disaster",
+      "peer_lending",
+      "private_fund",
+      "refinance",
+      "reit",
+      "research_paper",
+      "royalties",
+      "sales_image_upgrade",
+      "sales_network_event",
+      "sector_etf",
+      "semi_annual_bonus",
+      "side_business",
+      "small_apartment",
+      "startup_diligence",
+      "startup_friend",
+      "subscription_creep",
+      "tax_analysis",
+      "tax_audit",
+      "teacher_online_course",
+      "tenant_problem",
+      "therapy",
+      "wedding"
+    ],
+    "event_count": 85,
+    "seen_event_count": 29
+  }
+}

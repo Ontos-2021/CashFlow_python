@@ -447,5 +447,80 @@ class QuietMonthTest(unittest.TestCase):
         self.assertEqual(state["status"], "playing")
 
 
+class StressBalanceTest(unittest.TestCase):
+    def test_positive_cashflow_reduces_stress(self):
+        state = new_game("docente")
+        state["salary"] = 3000
+        state["expenses"] = 1500
+        state["debts"] = []
+        state["cash"] = 5000
+        state["stress"] = 50
+        apply_monthly_cashflow(state)
+        self.assertLess(state["stress"], 50)
+
+    def test_high_stress_decays_extra(self):
+        state = new_game("docente")
+        state["salary"] = 3000
+        state["expenses"] = 1500
+        state["debts"] = []
+        state["cash"] = 5000
+        state["stress"] = 70
+        apply_monthly_cashflow(state)
+        self.assertLessEqual(state["stress"], 67)
+
+    def test_insolvency_stress_reduced(self):
+        state = new_game("docente")
+        state["salary"] = 100
+        state["expenses"] = 2000
+        state["debts"] = []
+        state["cash"] = 0
+        state["stress"] = 30
+        apply_monthly_cashflow(state)
+        self.assertEqual(state["stress"], 34)
+
+    def test_burnout_threshold_raised_to_99(self):
+        state = new_game("programador")
+        state["stress"] = 96
+        check_end_conditions(state)
+        self.assertNotEqual(state["status"], "ended")
+        state["stress"] = 99
+        check_end_conditions(state)
+        self.assertEqual(state["status"], "ended")
+        self.assertEqual(state["outcome"], "Burnout retirement")
+
+    def test_action_stress_dampened_30_percent(self):
+        state = new_game("medico")
+        state["stress"] = 40
+        state["current_event"] = {
+            "title": "Test",
+            "category": "Crisis",
+            "actions": {"act": {"label": "Stress +20", "stress": 20, "lesson": "L", "interpretation": "I"}},
+        }
+        before = state["stress"]
+        state = apply_action(state, "act")
+        self.assertLessEqual(state["stress"], before + 14)
+
+    def test_stress_relief_not_dampened(self):
+        state = new_game("docente")
+        state["salary"] = 0
+        state["expenses"] = 0
+        state["debts"] = []
+        state["stress"] = 60
+        state["current_event"] = {
+            "title": "Test",
+            "category": "Income",
+            "actions": {"rest": {"label": "Rest", "stress": -15, "lesson": "L", "interpretation": "I"}},
+        }
+        state = apply_action(state, "rest")
+        self.assertLessEqual(state["stress"], 45)
+
+    def test_profession_initial_stress_lowered(self):
+        from app.game_engine import PROFESSIONS
+        self.assertEqual(PROFESSIONS["medico"]["stress"], 32)
+        self.assertEqual(PROFESSIONS["freelancer"]["stress"], 30)
+        self.assertEqual(PROFESSIONS["vendedor"]["stress"], 28)
+        self.assertEqual(PROFESSIONS["programador"]["stress"], 28)
+
+
 if __name__ == "__main__":
     unittest.main()
