@@ -1,5 +1,11 @@
 # Cashflow Game
 
+Cashflow Game is evolving into a web-based financial life simulator: realistic in its financial model, professional in its interface, and gamified in its progression. The first milestone is a strong solo mode where players train financial intelligence by making monthly decisions around income, expenses, debt, assets, risk, liquidity, and financial freedom.
+
+The current implementation is a Flask prototype focused on solo play. The long-term goal is to support multiplayer rooms, negotiation, shared markets, and cooperative or competitive financial scenarios.
+
+See `GAME_DESIGN.md` for the current product direction.
+
 ## Descripción General
 
 El **Cashflow Game** es una simulación educativa basada en el popular juego de mesa creado por Robert Kiyosaki. El objetivo del juego es enseñar conceptos de finanzas personales, inversiones y gestión del dinero de una manera divertida e interactiva. Los jugadores deben manejar sus finanzas, adquirir activos y reducir pasivos para salir de la "Carrera de la Rata" y alcanzar la "Pista Rápida", donde pueden buscar la independencia financiera.

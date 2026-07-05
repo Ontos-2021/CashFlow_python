@@ -1,22 +1,23 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cashflow Game</title>
+    <title>Cashflow Simulator</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-    <header>
-        <h1>Cashflow Game</h1>
-        <nav>
-            <ul>
-                <li><a href="{{ url_for('index') }}">Home</a></li>
-                <li><a href="{{ url_for('game') }}">Game</a></li>
-            </ul>
+    <header class="topbar">
+        <a class="brand" href="{{ url_for('index') }}">
+            <span class="brand-mark">CF</span>
+            <span>Cashflow Simulator</span>
+        </a>
+        <nav class="nav-actions">
+            <a href="{{ url_for('index') }}">Inicio</a>
+            <a href="{{ url_for('game') }}">Partida</a>
         </nav>
     </header>
-    <main>
+    <main class="page-shell">
         {% block content %}{% endblock %}
     </main>
 </body>

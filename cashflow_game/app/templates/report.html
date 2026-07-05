@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<section class="hero compact">
+    <div>
+        <p class="eyebrow">Reporte final</p>
+        <h2>{% if state.status == 'won' %}Libertad financiera conseguida{% elif state.status == 'lost' %}Insolvencia financiera{% else %}Simulacion completada{% endif %}</h2>
+        <p>{{ state.last_feedback }}</p>
+    </div>
+    <form action="{{ url_for('reset') }}" method="post">
+        <button class="button primary" type="submit">Nueva partida</button>
+    </form>
+</section>
+
+<section class="dashboard-grid report-grid">
+    <article class="card metric-card accent">
+        <span>Perfil</span>
+        <strong>{{ state.investor_profile }}</strong>
+        <small>{{ state.profession }} · {{ state.display_age }}</small>
+    </article>
+    <article class="card metric-card">
+        <span>Patrimonio neto</span>
+        <strong>${{ "{:,.0f}".format(state.metrics.net_worth) }}</strong>
+        <small>Activos menos deudas</small>
+    </article>
+    <article class="card metric-card">
+        <span>Ingreso pasivo</span>
+        <strong>${{ "{:,.0f}".format(state.metrics.passive_income) }}/mes</strong>
+        <small>{{ "{:.0f}".format(state.metrics.freedom_ratio * 100) }}% de libertad</small>
+    </article>
+    <article class="card metric-card">
+        <span>Reserva</span>
+        <strong>{{ state.metrics.runway }} meses</strong>
+        <small>Objetivo recomendado: 6 meses</small>
+    </article>
+</section>
+
+<section class="two-column">
+    <article class="card">
+        <h3>Decisiones clave</h3>
+        <div class="insight-list">
+            <p><strong>Mejor decision:</strong> {{ state.best_decision or 'Todavia no hubo una decision claramente transformadora.' }}</p>
+            <p><strong>Decision mas riesgosa:</strong> {{ state.worst_decision or 'No se detecto una decision critica.' }}</p>
+            <p><strong>Leccion:</strong> La libertad financiera no depende solo del ingreso, sino de construir flujo, controlar obligaciones y sostener liquidez.</p>
+        </div>
+    </article>
+    <article class="card">
+        <h3>Historial reciente</h3>
+        <div class="timeline">
+            {% for item in state.history[:6] %}
+            <div>
+                <span>Mes {{ item.month }}</span>
+                <strong>{{ item.title }}</strong>
+                <p>{{ item.action }}</p>
+            </div>
+            {% endfor %}
+        </div>
+    </article>
+</section>
+{% endblock %}

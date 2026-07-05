@@ -1,7 +1,118 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<h2>Game Page</h2>
-<p>This is where the game will be played.</p>
+<section class="game-header card">
+    <div>
+        <p class="eyebrow">Mes {{ state.month }} · {{ state.display_age }}</p>
+        <h2>{{ state.profession }}</h2>
+        <p>{{ state.profession_summary }}</p>
+    </div>
+    <div class="market-state">
+        <span>Economia</span>
+        <strong>{{ state.world.name }}</strong>
+        <small>{{ state.world.description }}</small>
+    </div>
+</section>
+
+<section class="dashboard-grid">
+    <article class="card metric-card accent">
+        <span>Libertad financiera</span>
+        <strong>{{ "{:.0f}".format(state.metrics.freedom_ratio * 100) }}%</strong>
+        <div class="progress"><i style="width: {{ [state.metrics.freedom_ratio * 100, 100]|min }}%"></i></div>
+        <small>Objetivo: 100% + 6 meses de reserva</small>
+    </article>
+    <article class="card metric-card">
+        <span>Efectivo</span>
+        <strong>${{ "{:,.0f}".format(state.cash) }}</strong>
+        <small>{{ state.metrics.runway }} meses de reserva</small>
+    </article>
+    <article class="card metric-card">
+        <span>Flujo mensual</span>
+        <strong class="{% if state.metrics.cashflow >= 0 %}positive{% else %}negative{% endif %}">${{ "{:,.0f}".format(state.metrics.cashflow) }}</strong>
+        <small>Ingreso total menos obligaciones</small>
+    </article>
+    <article class="card metric-card">
+        <span>Patrimonio neto</span>
+        <strong>${{ "{:,.0f}".format(state.metrics.net_worth) }}</strong>
+        <small>Activos + efectivo - deudas</small>
+    </article>
+</section>
+
+<section class="main-game-grid">
+    <aside class="card side-panel">
+        <h3>Estado</h3>
+        <dl class="stat-list">
+            <div><dt>Salario</dt><dd>${{ "{:,.0f}".format(state.salary) }}/mes</dd></div>
+            <div><dt>Ingreso pasivo</dt><dd>${{ "{:,.0f}".format(state.metrics.passive_income) }}/mes</dd></div>
+            <div><dt>Gastos</dt><dd>${{ "{:,.0f}".format(state.expenses) }}/mes</dd></div>
+            <div><dt>Pago de deudas</dt><dd>${{ "{:,.0f}".format(state.metrics.debt_payments) }}/mes</dd></div>
+            <div><dt>Educacion financiera</dt><dd>{{ state.education }}/10</dd></div>
+            <div><dt>Estres</dt><dd>{{ state.stress }}/100</dd></div>
+            <div><dt>Score crediticio</dt><dd>{{ state.credit_score }}</dd></div>
+        </dl>
+    </aside>
+
+    <article class="card event-card">
+        <div class="event-category">{{ state.current_event.category }}</div>
+        <h2>{{ state.current_event.title }}</h2>
+        <p>{{ state.current_event.description }}</p>
+        <div class="feedback-box">
+            <strong>Ultima leccion</strong>
+            <p>{{ state.last_feedback }}</p>
+        </div>
+        <div class="action-grid">
+            {% for action_id, action in state.current_event.actions.items() %}
+            <form action="{{ url_for('action', action_id=action_id) }}" method="post">
+                <button class="button action-button" type="submit">{{ action.label }}</button>
+            </form>
+            {% endfor %}
+        </div>
+    </article>
+
+    <aside class="card side-panel">
+        <h3>Portafolio</h3>
+        <div class="mini-section">
+            <h4>Activos</h4>
+            {% if state.assets %}
+            {% for asset in state.assets %}
+            <div class="holding">
+                <strong>{{ asset.name }}</strong>
+                <span>${{ "{:,.0f}".format(asset.value) }} · +${{ "{:,.0f}".format(asset.income) }}/mes</span>
+            </div>
+            {% endfor %}
+            {% else %}
+            <p class="muted">Todavia no tienes activos productivos.</p>
+            {% endif %}
+        </div>
+        <div class="mini-section">
+            <h4>Deudas</h4>
+            {% if state.debts %}
+            {% for debt in state.debts %}
+            <div class="holding debt">
+                <strong>{{ debt.name }}</strong>
+                <span>${{ "{:,.0f}".format(debt.balance) }} · ${{ "{:,.0f}".format(debt.payment) }}/mes</span>
+            </div>
+            {% endfor %}
+            {% else %}
+            <p class="muted">Sin deudas activas.</p>
+            {% endif %}
+        </div>
+    </aside>
+</section>
+
+<section class="card history-card">
+    <h3>Historial de decisiones</h3>
+    <div class="timeline horizontal">
+        {% for item in state.history[:5] %}
+        <div>
+            <span>Mes {{ item.month }}</span>
+            <strong>{{ item.title }}</strong>
+            <p>{{ item.action }}</p>
+        </div>
+        {% else %}
+        <p class="muted">Tu historial aparecera despues de la primera decision.</p>
+        {% endfor %}
+    </div>
+</section>
 {% endblock %}
 

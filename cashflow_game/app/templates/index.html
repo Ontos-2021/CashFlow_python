@@ -1,7 +1,50 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<h2>Welcome to Cashflow Game</h2>
-<p>This is the homepage of the Cashflow game.</p>
+<section class="hero">
+    <div class="hero-copy">
+        <p class="eyebrow">Modo solo · Prototipo jugable</p>
+        <h1>Entrena tu inteligencia financiera tomando decisiones reales.</h1>
+        <p>Gestiona salario, gastos, deudas, activos, liquidez y riesgo hasta construir libertad financiera sostenible.</p>
+        <div class="hero-stats">
+            <span>1 turno = 1 mes</span>
+            <span>Victoria = flujo pasivo + reserva</span>
+            <span>Dashboard profesional gamificado</span>
+        </div>
+    </div>
+    <div class="hero-panel card">
+        <h2>Nueva partida</h2>
+        <p>Elegir profesion define tu punto de partida, tus ventajas y tus tensiones financieras.</p>
+        <form action="{{ url_for('new_game_route') }}" method="post" class="profession-form">
+            <div class="profession-grid">
+                {% for profession in professions %}
+                <label class="profession-option">
+                    <input type="radio" name="profession" value="{{ profession.id }}" {% if loop.first %}checked{% endif %}>
+                    <span>
+                        <strong>{{ profession.name }}</strong>
+                        <small>{{ profession.summary }}</small>
+                    </span>
+                </label>
+                {% endfor %}
+            </div>
+            <button class="button primary" type="submit">Comenzar simulacion</button>
+        </form>
+    </div>
+</section>
+
+<section class="feature-grid">
+    <article class="card">
+        <h3>Aprendizaje por consecuencias</h3>
+        <p>Cada accion explica como cambia tu flujo, riesgo, liquidez y camino hacia la libertad financiera.</p>
+    </article>
+    <article class="card">
+        <h3>Simulacion financiera</h3>
+        <p>El modelo incluye activos, pasivos, intereses, inflacion, ciclos economicos y reservas de emergencia.</p>
+    </article>
+    <article class="card">
+        <h3>Historias compartibles</h3>
+        <p>Al final recibes perfil de inversor, edad financiera, mejores decisiones y lecciones clave.</p>
+    </article>
+</section>
 {% endblock %}
 
