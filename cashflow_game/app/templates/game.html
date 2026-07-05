@@ -140,6 +140,18 @@
                     {% endfor %}
                 </div>
                 {% endif %}
+
+                {% if state.schedule %}
+                <h4 class="section-title">Proximos shocks</h4>
+                <div class="schedule-list">
+                    {% for item in state.schedule[:6] %}
+                    <div class="schedule-item">
+                        <strong>{{ item.label }}</strong>
+                        <span>en {{ item.due_month - state.month }} meses · {{ item.source }}</span>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% endif %}
             </div>
         </aside>
 

@@ -44,8 +44,10 @@ Status: implemented as an expanded seed set, still below final target.
 Status: partially implemented.
 
 - Add market state effects to event consequences.
-- Track delayed effects and future risks.
-- Add quiet-month fast-forward later.
+- Track delayed effects and future risks: implemented as the `schedule` system with countdown in the Condicion panel.
+- Asset risk realized per month: vacancy, execution, high, very high; education reduces probability.
+- World state gating: `requires_world` on events (job_loss, debt_free_temptation); small business drift; debt rate adjusts by credit availability.
+- Add quiet-month fast-forward later (Tanda 2).
 - Make world state affect job risk, asset prices, credit availability, and inflation more strongly.
 
 ## Phase 4 - Viral Replayability

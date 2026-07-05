@@ -277,6 +277,44 @@ Better: The new car felt good for three months. The payment lasted five years.
 
 Multiplayer should only be added after solo mode is fun and replayable. Possible features: rooms, shared events, synchronized turns, negotiation, player loans, partnerships, auctions, limited opportunities, financial freedom races, and cooperative family/business mode.
 
+## Mechanics
+
+Beyond the core loop, the simulation implements three systemic mechanics that make decisions carry future weight.
+
+### Delayed Effects (Schedule)
+
+Not every consequence is immediate. Actions can schedule future effects via the `delayed` field. The engine stores them in `state.schedule` and processes due entries each month in `advance_time`.
+
+Supported operations:
+- Numeric deltas: `cash`, `salary`, `expenses`, `stress`, `credit_score`, `career_stability`, `lifestyle`.
+- `asset_fail`: writes an asset's value and income to zero (e.g. startup shutdown).
+- `asset_fail_chance`: probabilistic version with `prob` (e.g. 70% at 18 months).
+- `asset_drop`: reduces an asset's value by a percentage (e.g. business downturn).
+- `debt_rate_hike`: increases a debt's rate and payment (e.g. variable rate reset).
+- `salary_snap_pct`: applies a salary cut based on the salary at decision time.
+
+The player sees scheduled consequences in the Condicion panel under "Proximos shocks" with a countdown. Feedback after the decision lists each scheduled item as a change.
+
+### Asset Risk Realized
+
+Assets with a `risk` field produce income variability each month:
+
+- `market`: stable income, value already drifts with the world state.
+- `vacancy`: 8% chance per month of zero income (real estate).
+- `execution`: 6% chance per month of 50% income (small business).
+- `high`: 4% chance per month of 70% income.
+- `very high`: no normal income; shutdown risk is scheduled via the schedule system.
+
+Education reduces these probabilities by `education * 1%`. Events are tracked in `state.asset_events` and surface in `dangerous_moment` and the report.
+
+### World State Gating and Drift
+
+Events can declare `requires_world` to only appear in matching market states. Currently gated:
+- `job_loss`: only in Recesion or Recuperacion.
+- `debt_free_temptation`: only in Expansion or Estable.
+
+Market drift now applies to Paper assets, Real estate, and Small business (more volatile). New debts inherit a rate adjustment based on credit availability: cheaper in Expansion, expensive in Recesion. Salary shocks are tracked in `asset_events` for the report.
+
 ## Visual Design System
 
 The interface is closer to a fintech dashboard than an arcade game. The visual system is shared by the three screens (selection, cockpit, report) and is expressed in `static/style.css`.

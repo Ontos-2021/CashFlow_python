@@ -1,6 +1,7 @@
 import os
 import sys
 import unittest
+from unittest import mock
 
 
 ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
@@ -8,12 +9,15 @@ sys.path.insert(0, os.path.join(ROOT, "cashflow_game"))
 
 from app.game_engine import (  # noqa: E402
     apply_action,
+    apply_market_drift,
+    apply_monthly_cashflow,
     check_end_conditions,
     enrich_state,
     new_game,
     pay_down_debt,
     pick_event,
     prepare_event_for_state,
+    process_schedule,
 )
 
 
@@ -100,6 +104,110 @@ class GameEngineEdgeCaseTest(unittest.TestCase):
         }
         state = apply_action(state, "pay")
         self.assertIn("Debt Free", state["last_feedback"]["badges"])
+
+
+class MechanicsTandaOneTest(unittest.TestCase):
+    def test_scheduled_effect_applies_on_due_month(self):
+        state = new_game("docente")
+        state["schedule"].append({
+            "due_month": state["month"] + 4,
+            "label": "Tasa variable",
+            "source": "test",
+            "effect": {"cash": -500},
+        })
+        before = state["cash"]
+        state["month"] += 3
+        process_schedule(state)
+        self.assertEqual(state["cash"], before)
+        state["month"] += 1
+        process_schedule(state)
+        self.assertEqual(state["cash"], before - 500)
+        self.assertEqual(state["schedule"], [])
+
+    def test_vacancy_zeros_asset_income(self):
+        state = new_game("docente")
+        state["assets"] = [{"name": "Departamento", "type": "Real estate", "value": 50000, "income": 250, "risk": "vacancy"}]
+        state["debts"] = []
+        state["cash"] = 0
+        state["salary"] = 0
+        state["expenses"] = 0
+        with mock.patch("app.game_engine.random", return_value=0.0):
+            cash_before = state["cash"]
+            apply_monthly_cashflow(state)
+            self.assertEqual(state["cash"], cash_before)
+        self.assertTrue(any(e["kind"] == "vacancy" for e in state["asset_events"]))
+
+    def test_execution_reduces_income_half(self):
+        state = new_game("docente")
+        state["assets"] = [{"name": "Negocio", "type": "Small business", "value": 4000, "income": 400, "risk": "execution"}]
+        state["debts"] = []
+        state["cash"] = 0
+        state["salary"] = 0
+        state["expenses"] = 0
+        base = state["assets"][0]["income"]
+        with mock.patch("app.game_engine.random", return_value=0.0):
+            apply_monthly_cashflow(state)
+        self.assertEqual(state["cash"], round(base * 0.5, 2))
+
+    def test_education_reduces_asset_event_probability(self):
+        state = new_game("docente")
+        state["assets"] = [{"name": "Departamento", "type": "Real estate", "value": 50000, "income": 250, "risk": "vacancy"}]
+        state["education"] = 8
+        state["debts"] = []
+        state["cash"] = 0
+        state["salary"] = 0
+        state["expenses"] = 0
+        # Threshold at education 8 reduces vacancy probability from 0.08 to 0.08 * 0.92 = 0.0736
+        # random just below 0.0736 triggers vacancy; just above does not.
+        with mock.patch("app.game_engine.random", return_value=0.078):
+            apply_monthly_cashflow(state)
+        self.assertFalse(any(e["kind"] == "vacancy" for e in state["asset_events"]))
+
+    def test_job_loss_only_in_recession_or_recovery(self):
+        def make_freedom_state(world_name):
+            state = new_game("docente")
+            state["world"] = {"name": world_name, "inflation": 0.003, "asset_price": 1.0, "income_risk": 0.04, "credit": 1.0, "description": ""}
+            state["month"] = 200
+            state["assets"] = [{"name": "Cartera grande", "type": "Paper assets", "value": 200000, "income": 4000, "risk": "market"}]
+            state["salary"] = 0
+            state["expenses"] = 2000
+            state["debts"] = []
+            return state
+
+        for _ in range(50):
+            state = make_freedom_state("Expansion")
+            event = pick_event(state)
+            self.assertNotEqual(event["id"], "job_loss")
+
+        for world_name in ["Recesion", "Recuperacion"]:
+            seen = False
+            for _ in range(80):
+                state = make_freedom_state(world_name)
+                event = pick_event(state)
+                if event["id"] == "job_loss":
+                    seen = True
+                    break
+            self.assertTrue(seen, f"job_loss not seen in {world_name}")
+
+    def test_small_business_drift_follows_world(self):
+        state = new_game("docente")
+        state["assets"] = [{"name": "Tienda", "type": "Small business", "value": 4000, "income": 200, "risk": "execution"}]
+        original = state["assets"][0]["value"]
+        state["world"] = {"name": "Recesion", "inflation": 0.001, "asset_price": 0.86, "income_risk": 0.11, "credit": 0.72, "description": ""}
+        apply_market_drift(state)
+        self.assertLess(state["assets"][0]["value"], original)
+
+    def test_new_debt_rate_adjusted_by_world_credit(self):
+        state = new_game("docente")
+        state["world"] = {"name": "Recesion", "inflation": 0.001, "asset_price": 0.86, "income_risk": 0.11, "credit": 0.72, "description": ""}
+        state["current_event"] = {
+            "title": "Test",
+            "category": "Debt",
+            "actions": {"loan": {"label": "Pedir $1.000", "cash": 1000, "debt": {"name": "Prestamo test", "type": "Personal loan", "balance": 1000, "payment": 80, "rate": 0.2, "stress": 5}, "lesson": "Prueba", "interpretation": "test"}},
+        }
+        state = apply_action(state, "loan")
+        debt = next(d for d in state["debts"] if d["name"] == "Prestamo test")
+        self.assertGreater(debt["rate"], 0.2)
 
 
 if __name__ == "__main__":

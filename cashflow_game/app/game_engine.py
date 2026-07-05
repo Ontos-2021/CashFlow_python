@@ -133,7 +133,7 @@ BASE_EVENTS = [
         "title": "Pequeno negocio digital",
         "description": "Puedes lanzar un producto simple. Requiere capital, energia y tolerancia a que nadie compre al principio.",
         "actions": {
-            "launch": {"label": "Invertir $3.000 y lanzar", "cash": -3000, "asset": {"name": "Negocio digital", "type": "Small business", "value": 5000, "income": 380, "risk": "execution"}, "stress": 10, "lesson": "Activos construidos", "interpretation": "Los negocios pueden crear flujo, pero te cobran en incertidumbre y energia."},
+            "launch": {"label": "Invertir $3.000 y lanzar", "cash": -3000, "asset": {"name": "Negocio digital", "type": "Small business", "value": 5000, "income": 380, "risk": "execution"}, "stress": 10, "lesson": "Activos construidos", "interpretation": "Los negocios pueden crear flujo, pero te cobran en incertidumbre y energia.", "delayed": [{"delay": 12, "label": "Negocio en bache (-40%)", "source": "Pequeno negocio digital", "effect": {"asset_drop": "Negocio digital", "percent": 0.4}}]},
             "validate": {"label": "Validar con $600", "cash": -600, "education": 1, "stress": 2, "lesson": "Validacion", "interpretation": "Pagar por informacion pequena antes de apostar fuerte puede salvar capital."},
             "ignore": {"label": "No emprender ahora", "stress": -3, "lesson": "Foco", "interpretation": "No toda oportunidad merece atencion. El foco tambien es un activo."},
         },
@@ -230,7 +230,7 @@ BASE_EVENTS = [
         "title": "Oportunidad de refinanciar",
         "description": "El banco ofrece bajar cuotas extendiendo plazo. La caja mejora, el costo total puede subir.",
         "actions": {
-            "refi": {"label": "Refinanciar y bajar pagos", "reduce_debt_payments": 0.18, "credit_score": 5, "stress": -4, "lesson": "Flexibilidad vs costo", "interpretation": "Liberaste flujo mensual, pero el alivio no es riqueza si solo estira la deuda."},
+            "refi": {"label": "Refinanciar y bajar pagos", "reduce_debt_payments": 0.18, "credit_score": 5, "stress": -4, "lesson": "Flexibilidad vs costo", "interpretation": "Liberaste flujo mensual, pero el alivio no es riqueza si solo estira la deuda.", "delayed": [{"delay": 8, "label": "Tasa variable sube 4%", "source": "Refinanciacion", "effect": {"debt_rate_hike": "Hipoteca departamento", "delta": 0.04}}]},
             "reject": {"label": "Mantener plan actual", "lesson": "Costo total", "interpretation": "A veces pagar mas por mes te libera antes."},
             "extra": {"label": "Pagar $1.500 y no refinanciar", "cash": -1500, "pay_debt": 1500, "stress": -3, "lesson": "Desapalancamiento", "interpretation": "Bajar deuda reduce riesgo aunque no se vea tan emocionante como invertir."},
         },
@@ -239,11 +239,12 @@ BASE_EVENTS = [
         "id": "job_loss",
         "category": "Crisis",
         "phase": "freedom",
+        "requires_world": ["Recesion", "Recuperacion"],
         "title": "Riesgo de despido",
         "description": "Tu sector recorta personal. La estabilidad que parecia normal ahora tiene precio.",
         "actions": {
             "prepare": {"label": "Reducir gastos y preparar busqueda", "expenses": -250, "stress": 4, "career_stability": 5, "lesson": "Antifragilidad", "interpretation": "Prepararte antes del golpe convierte crisis en transicion."},
-            "ignore": {"label": "Ignorar senales", "stress": 5, "salary_risk": 0.18, "lesson": "Riesgo ignorado", "interpretation": "La estabilidad se siente gratis hasta que desaparece."},
+            "ignore": {"label": "Ignorar senales", "stress": 5, "salary_risk": 0.18, "lesson": "Riesgo ignorado", "interpretation": "La estabilidad se siente gratis hasta que desaparece.", "delayed": [{"delay": 3, "label": "Recorte llega (-20% salario)", "source": "Riesgo de despido", "effect": {"salary_snap_pct": 0.2}}]},
             "upskill": {"label": "Invertir $1.200 en habilidades", "cash": -1200, "education": 1, "career_stability": 8, "lesson": "Empleabilidad", "interpretation": "Mejorar habilidades es una forma de seguro contra el mercado laboral."},
         },
     },
@@ -279,8 +280,8 @@ BASE_EVENTS = [
         "title": "Startup de un amigo",
         "description": "La presentacion suena brillante. No hay flujo, solo promesa de multiplicar capital.",
         "actions": {
-            "angel": {"label": "Invertir $2.500", "cash": -2500, "asset": {"name": "Equity startup", "type": "Small business", "value": 1200, "income": 0, "risk": "very high"}, "stress": 7, "lesson": "Especulacion privada", "interpretation": "El upside es real, pero la iliquidez tambien. No confundas cercania con diligencia."},
-            "small": {"label": "Invertir simbolico $500", "cash": -500, "asset": {"name": "Ticket startup", "type": "Small business", "value": 300, "income": 0, "risk": "very high"}, "lesson": "Tamano de posicion", "interpretation": "Puedes participar en riesgo alto sin apostar tu supervivencia."},
+            "angel": {"label": "Invertir $2.500", "cash": -2500, "asset": {"name": "Equity startup", "type": "Small business", "value": 1200, "income": 0, "risk": "very high"}, "stress": 7, "lesson": "Especulacion privada", "interpretation": "El upside es real, pero la iliquidez tambien. No confundas cercania con diligencia.", "delayed": [{"delay": 18, "label": "Startup cierra (70%)", "source": "Startup de un amigo", "effect": {"asset_fail_chance": {"name": "Equity startup", "prob": 0.7}}}]},
+            "small": {"label": "Invertir simbolico $500", "cash": -500, "asset": {"name": "Ticket startup", "type": "Small business", "value": 300, "income": 0, "risk": "very high"}, "lesson": "Tamano de posicion", "interpretation": "Puedes participar en riesgo alto sin apostar tu supervivencia.", "delayed": [{"delay": 18, "label": "Startup cierra (70%)", "source": "Startup de un amigo", "effect": {"asset_fail_chance": {"name": "Ticket startup", "prob": 0.7}}}]},
             "pass": {"label": "Pasar aunque incomode", "stress": 2, "lesson": "Independencia", "interpretation": "Decir no a una mala estructura puede costar socialmente y ahorrar financieramente."},
         },
     },
@@ -301,6 +302,7 @@ BASE_EVENTS = [
         "category": "Debt",
         "phase": "growth",
         "requires_debt_free": True,
+        "requires_world": ["Expansion", "Estable"],
         "title": "Tentacion de credito preaprobado",
         "description": "El banco te ofrece credito facil justo cuando no tenes deudas. Puede darte velocidad o volver a ponerte una cadena.",
         "actions": {
@@ -348,6 +350,8 @@ def new_game(profession_id):
         "lifestyle_inflation": 0,
         "quiet_months": 0,
         "events_seen": [],
+        "schedule": [],
+        "asset_events": [],
     }
     start_month(state)
     return enrich_state(state)
@@ -373,6 +377,8 @@ def pick_event(state):
             continue
         required_type = event.get("requires_asset_type")
         if required_type and not any(asset.get("type") == required_type for asset in state["assets"]):
+            continue
+        if event.get("requires_world") and state["world"]["name"] not in event["requires_world"]:
             continue
         if event["id"] == "burnout" and state["stress"] >= 78:
             available.append(event)
@@ -435,7 +441,7 @@ def session_phase(state):
 
 
 def apply_monthly_cashflow(state):
-    income = state["salary"] + passive_income(state)
+    income = state["salary"] + risky_passive_income(state)
     outflow = state["expenses"] + debt_payments(state)
     state["cash"] += income - outflow
     state["expenses"] = round(state["expenses"] * (1 + state["world"]["inflation"]), 2)
@@ -448,6 +454,31 @@ def apply_monthly_cashflow(state):
         state["insolvent_months"] = 0
 
 
+def risky_passive_income(state):
+    total = 0
+    education = state.get("education", 0)
+    for asset in state.get("assets", []):
+        a_income = asset.get("income", 0)
+        risk = asset.get("risk", "")
+        norm = max(0.0, 1 - education * 0.01)
+        if risk == "vacancy" and random() < 0.08 * norm:
+            asset_events_append(state, "vacancy", asset["name"])
+            a_income = 0
+        elif risk == "execution" and random() < 0.06 * norm:
+            asset_events_append(state, "bad_month", asset["name"])
+            a_income = round(a_income * 0.5, 2)
+        elif risk == "high" and random() < 0.04 * norm:
+            asset_events_append(state, "soft_bad", asset["name"])
+            a_income = round(a_income * 0.7, 2)
+        total += a_income
+    return round(total, 2)
+
+
+def asset_events_append(state, kind, label):
+    state.setdefault("asset_events", []).append({"kind": kind, "label": label, "month": state.get("month", 0)})
+    state["asset_events"] = state["asset_events"][-10:]
+
+
 def apply_market_drift(state):
     world = state["world"]
     for asset in state["assets"]:
@@ -456,6 +487,9 @@ def apply_market_drift(state):
             asset["value"] = round(asset["value"] * drift, 2)
         elif asset.get("type") == "Real estate":
             drift = {"Expansion": 1.012, "Estable": 1.003, "Recesion": 0.985, "Recuperacion": 1.008}[world["name"]]
+            asset["value"] = round(asset["value"] * drift, 2)
+        elif asset.get("type") == "Small business":
+            drift = {"Expansion": 1.03, "Estable": 1.005, "Recesion": 0.88, "Recuperacion": 1.02}[world["name"]]
             asset["value"] = round(asset["value"] * drift, 2)
 
 
@@ -466,6 +500,7 @@ def maybe_salary_shock(state):
         state["salary"] -= loss
         state["stress"] += 12
         state["dangerous_moment"] = "Recorte de ingresos durante " + state["world"]["name"]
+        asset_events_append(state, "salary_shock", "Recorte de ingresos (-$" + str(int(loss)) + ")")
 
 
 def apply_action(state, action_id):
@@ -522,6 +557,8 @@ def apply_action_effects(state, action):
     if action.get("debt"):
         debt = deepcopy(action["debt"])
         debt["payment"] = round(debt["payment"] / state["world"].get("credit", 1), 2)
+        rate_adj = {"Expansion": -0.02, "Estable": 0, "Recesion": 0.04, "Recuperacion": 0.01}.get(state["world"]["name"], 0)
+        debt["rate"] = round(debt["rate"] + rate_adj, 4)
         state["debts"].append(debt)
     if action.get("pay_debt"):
         pay_down_debt(state, action["pay_debt"])
@@ -531,15 +568,102 @@ def apply_action_effects(state, action):
         for debt in state["debts"]:
             debt["payment"] = round(debt["payment"] * (1 - action["reduce_debt_payments"]), 2)
             debt["rate"] = round(debt.get("rate", 0) + 0.01, 4)
+    if action.get("delayed"):
+        salary_snap = state["salary"]
+        for entry in action["delayed"]:
+            effect = dict(entry.get("effect", {}))
+            if "salary_snap_pct" in effect:
+                effect["salary"] = -round(salary_snap * effect.pop("salary_snap_pct"), 2)
+            state.setdefault("schedule", []).append({
+                "due_month": state["month"] + entry.get("delay", 1),
+                "label": entry.get("label", "Consecuencia programada"),
+                "source": entry.get("source", "Decision previa"),
+                "effect": effect,
+            })
 
 
 def advance_time(state, months=1):
     months = max(1, int(months))
     for _ in range(months):
         state["month"] += 1
+        process_schedule(state)
         if state["month"] % 12 == 1 and state["month"] > 1:
             state["age"] += 1
             state["salary"] = round(state["salary"] * (1.02 + state["education"] * 0.002), 2)
+
+
+def process_schedule(state):
+    if not state.get("schedule"):
+        return
+    due = [item for item in state["schedule"] if item["due_month"] <= state["month"]]
+    if not due:
+        return
+    state["schedule"] = [item for item in state["schedule"] if item["due_month"] > state["month"]]
+    applied = []
+    for item in due:
+        note = apply_delayed_effect(state, item)
+        if note:
+            applied.append(note)
+    if applied:
+        asset_events_append(state, "schedule_hit", "; ".join(applied))
+
+
+def apply_delayed_effect(state, item):
+    effect = item.get("effect", {})
+    label = item.get("label", "Consecuencia programada")
+    if "asset_fail_chance" in effect:
+        spec = effect["asset_fail_chance"]
+        asset = find_asset_by_name(state, spec.get("name"))
+        if asset and random() < spec.get("prob", 1):
+            asset["value"] = 0
+            asset["income"] = 0
+            asset_events_append(state, "asset_fail", asset["name"])
+            return label
+        return None
+    if "asset_fail" in effect:
+        asset = find_asset_by_name(state, effect["asset_fail"])
+        if asset:
+            asset["value"] = 0
+            asset["income"] = 0
+            asset_events_append(state, "asset_fail", asset["name"])
+            return label
+        return None
+    if "asset_drop" in effect:
+        asset = find_asset_by_name(state, effect["asset_drop"])
+        if asset:
+            asset["value"] = round(asset["value"] * (1 - effect.get("percent", 0.5)), 2)
+            asset_events_append(state, "asset_drop", asset["name"])
+            return label
+        return None
+    if "debt_rate_hike" in effect:
+        debt = find_debt_by_name(state, effect["debt_rate_hike"])
+        if debt:
+            debt["rate"] = round(debt.get("rate", 0) + effect.get("delta", 0.02), 4)
+            debt["payment"] = round(debt.get("payment", 0) * 1.06, 2)
+            return label
+        return None
+    apply_action_effects(state, effect)
+    return label
+
+
+def find_asset_by_name(state, name):
+    if not name:
+        return None
+    for asset in state.get("assets", []):
+        if asset.get("name") == name:
+            return asset
+    return None
+
+
+def find_debt_by_name(state, name):
+    if not name:
+        return None
+    for debt in state.get("debts", []):
+        if debt.get("name") == name:
+            return debt
+    if state.get("debts"):
+        return max(state["debts"], key=lambda d: d.get("balance", 0))
+    return None
 
 
 def passive_income(state):
@@ -690,6 +814,9 @@ def build_feedback(action, before_snapshot, after_snapshot, before, after):
         changes.append(f"Freedom ratio: {ratio_delta:+.1f}%")
     alerts = next_risk_alerts(after_snapshot, after)
     badges = unlocked_badges(before, after)
+    scheduled = action.get("delayed", [])
+    for entry in scheduled:
+        changes.append(f"Programado · {entry.get('label', 'Consecuencia')} · en {entry.get('delay', 1)} meses")
     return feedback("Decision aplicada", action.get("interpretation", "Tu estado financiero cambio."), action.get("lesson", "Consecuencia financiera"), changes, alerts, badges)
 
 

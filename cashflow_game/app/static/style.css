@@ -873,6 +873,32 @@ p {
     text-transform: uppercase;
 }
 
+.schedule-list {
+    display: grid;
+    gap: 6px;
+}
+
+.schedule-item {
+    border: 1px solid var(--gold-line);
+    border-left: 3px solid var(--gold);
+    background: var(--gold-soft);
+    border-radius: var(--r-sm);
+    padding: 8px 10px;
+}
+
+.schedule-item strong {
+    display: block;
+    font-size: 0.82rem;
+    font-weight: 800;
+    margin-bottom: 2px;
+}
+
+.schedule-item span {
+    color: var(--muted);
+    display: block;
+    font-size: 0.72rem;
+}
+
 /* ---- Scenario panel (center, focal) ---- */
 
 .scenario {
