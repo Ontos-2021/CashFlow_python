@@ -781,14 +781,10 @@ p {
     min-height: 0;
     overflow-y: auto;
     padding-right: 4px;
-    scrollbar-width: thin;
+    scrollbar-width: none;
 }
 
-.panel .panel-body::-webkit-scrollbar { width: 6px; }
-.panel .panel-body::-webkit-scrollbar-thumb {
-    background: rgba(255, 255, 255, 0.18);
-    border-radius: 999px;
-}
+.panel .panel-body::-webkit-scrollbar { display: none; }
 
 /* ---- Condition panel (left) ---- */
 
@@ -903,14 +899,10 @@ p {
     overflow-y: auto;
     overflow-x: hidden;
     padding-right: 4px;
-    scrollbar-width: thin;
+    scrollbar-width: none;
 }
 
-.scenario .scenario-body::-webkit-scrollbar { width: 6px; }
-.scenario .scenario-body::-webkit-scrollbar-thumb {
-    background: rgba(255, 255, 255, 0.18);
-    border-radius: 999px;
-}
+.scenario .scenario-body::-webkit-scrollbar { display: none; }
 
 .scenario-title {
     font-size: var(--fs-h1);
@@ -1245,7 +1237,7 @@ p {
     gap: var(--space-3);
     min-width: 0;
     overflow-x: auto;
-    scrollbar-width: thin;
+    scrollbar-width: none;
 }
 
 .ticker .items::-webkit-scrollbar { height: 0; }
@@ -1310,9 +1302,6 @@ p {
 
     .kpi-strip {
         grid-template-columns: repeat(3, 1fr);
-        position: sticky;
-        top: 0;
-        z-index: 20;
     }
 
     .workspace,
