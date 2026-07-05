@@ -31,25 +31,25 @@ Status: implemented in prototype form.
 
 ## Phase 2 - Deepen Events
 
-Status: largely implemented.
+Status: implemented.
 
 - 67 decision events across all categories (target was 60-100).
+- Profession-specific events: 18 events (3 per profession) tagged with `requires_profession` and blended into the event pool.
 - Each event includes safe, tempting, and risky options.
 - Crisis, income, expense, debt, investment, and knowledge events covered.
-- Profession-relevant events still pending (Tanda 3).
 - Dynamic amount scaling: events scale costs/rewards by player salary with rng variation.
 - Education gating: premium actions unlock at education >= 3 and >= 5.
 - Discretionary actions: sell assets and cut expenses from the UI without advancing time.
 
 ## Phase 3 - Improve Monthly Simulation
 
-Status: partially implemented.
+Status: implemented.
 
 - Add market state effects to event consequences.
 - Track delayed effects and future risks: implemented as the `schedule` system with countdown in the Condicion panel.
 - Asset risk realized per month: vacancy, execution, high, very high; education reduces probability.
 - World state gating: `requires_world` on events (job_loss, debt_free_temptation); small business drift; debt rate adjusts by credit availability.
-- Add quiet-month fast-forward later (Tanda 2).
+- Quiet-month fast-forward: stable months show a "Mes tranquilo" card that advances 1-3 months while applying monthly cashflow, drift, shocks, and schedule checks.
 - Make world state affect job risk, asset prices, credit availability, and inflation more strongly.
 
 ## Phase 4 - Viral Replayability

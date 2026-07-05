@@ -928,6 +928,244 @@ BASE_EVENTS = [
 ]
 
 
+PROFESSION_EVENTS = [
+    {
+        "id": "admin_process_automation",
+        "category": "Income",
+        "phase": "survival",
+        "requires_profession": "administrativo",
+        "title": "Automatizar procesos de tu area",
+        "description": "Notas que parte de tu trabajo repetitivo se puede sistematizar. Podes invertir tiempo ahora para ganar eficiencia despues.",
+        "actions": {
+            "propose": {"label": "Proponer mejora (sin costo)", "salary": {"factor": 0.05, "min": 50, "max": 400}, "stress": 4, "career_stability": 5, "education": 1, "lesson": "Visibilidad", "interpretation": "Mejorar procesos te hace visible y protege tu valor dentro de la organizacion."},
+            "tool": {"label": "Comprar herramienta ${cash:,.0f}", "label_fmt": "Comprar herramienta ${cash:,.0f}", "cash": {"factor": -0.1, "min": -800, "max": -100}, "salary": {"factor": 0.08, "min": 80, "max": 700}, "stress": 2, "lesson": "Productividad", "interpretation": "Herramientas que ahorran tiempo se pagan solas si las usas para generar valor."},
+            "ignore": {"label": "Dejar todo igual", "stress": -2, "lesson": "Estancamiento", "interpretation": "No mejorar procesos es aceptar que tu tiempo valga lo mismo todos los años."},
+        },
+    },
+    {
+        "id": "admin_networking",
+        "category": "Knowledge",
+        "phase": "growth",
+        "requires_profession": "administrativo",
+        "title": "Evento de networking corporativo",
+        "description": "Una conferencia de tu industria cerca. Podes aprender, conectar o quedarte en la rutina.",
+        "actions": {
+            "attend": {"label": "Asistir ${cash:,.0f}", "label_fmt": "Asistir ${cash:,.0f}", "cash": {"factor": -0.08, "min": -1000, "max": -150}, "education": 1, "career_stability": 4, "stress": 3, "lesson": "Capital social", "interpretation": "Conocer gente de otras areas abre oportunidades que no aparecen en la intranet."},
+            "online": {"label": "Seguir online", "cash": {"factor": -0.02, "min": -300, "max": -50}, "education": 1, "stress": 1, "lesson": "Aprendizaje remoto", "interpretation": "Online pierdes networking, pero conservas el contenido. Es mejor que no ir."},
+            "skip": {"label": "No participar", "stress": -1, "lesson": "Aislamiento", "interpretation": "Quedarte en la rutina es comodo. Tambien es la forma mas lenta de crecer."},
+        },
+    },
+    {
+        "id": "admin_overtime_request",
+        "category": "Income",
+        "phase": "survival",
+        "requires_profession": "administrativo",
+        "title": "Horas extra permanentes",
+        "description": "Tu jefe te ofrece un paquete fijo de horas extra. Mas ingreso, menos vida.",
+        "actions": {
+            "accept": {"label": "Aceptar horas extra", "salary": {"factor": 0.1, "min": 100, "max": 800}, "stress": 10, "lesson": "Ingreso por tiempo", "interpretation": "Cambias horas por dinero. El problema es que las horas no escalan."},
+            "negotiate": {"label": "Negociar limite", "salary": {"factor": 0.06, "min": 80, "max": 500}, "stress": 4, "lesson": "Limites", "interpretation": "Ganar un poco menos y conservar energia suele ser buen negocio a largo plazo."},
+            "decline": {"label": "Rechazar", "stress": -4, "lesson": "Sostenibilidad", "interpretation": "No todo aumento de sueldo merece sacrificar tu capacidad de decidir."},
+        },
+    },
+    {
+        "id": "dev_side_project",
+        "category": "Investment",
+        "phase": "growth",
+        "requires_profession": "programador",
+        "title": "Side project con traccion",
+        "description": "Una herramienta que usas en tu trabajo podria convertirse en producto. Requiere tiempo y capital.",
+        "actions": {
+            "launch": {"label": "Invertir ${cash:,.0f} y lanzar", "label_fmt": "Invertir ${cash:,.0f} y lanzar", "cash": {"factor": -0.5, "min": -6000, "max": -500}, "asset": {"name": "SaaS personal", "type": "Small business", "value": {"factor": 0.8, "min": 1000, "max": 8000}, "income": 320, "risk": "execution"}, "stress": 12, "lesson": "Activos tecnicos", "interpretation": "Convertir codigo en producto es apalancar tu trabajo. Tambien te cobra en foco.", "delayed": [{"delay": 12, "label": "SaaS estanca (-30%)", "source": "Side project", "effect": {"asset_drop": "SaaS personal", "percent": 0.3}}]},
+            "mvp": {"label": "Validar con ${cash:,.0f}", "label_fmt": "Validar con ${cash:,.0f}", "cash": {"factor": -0.12, "min": -1500, "max": -150}, "education": 1, "asset": {"name": "SaaS personal", "type": "Small business", "value": {"factor": 0.2, "min": 200, "max": 2000}, "income": 80, "risk": "execution"}, "stress": 5, "lesson": "Validacion", "interpretation": "Antes de apostar fuerte, paga por evidencia de que alguien lo usaria."},
+            "focus": {"label": "No emprender ahora", "stress": -3, "lesson": "Foco", "interpretation": "No todo codigo util es un negocio. El foco en tu trabajo principal tambien compone."},
+        },
+    },
+    {
+        "id": "dev_cloud_cert",
+        "category": "Knowledge",
+        "phase": "survival",
+        "requires_profession": "programador",
+        "title": "Certificacion cloud en demanda",
+        "description": "Una certificacion tecnica puede subir tu salario y tu empleabilidad.",
+        "actions": {
+            "study": {"label": "Estudiar y certificar ${cash:,.0f}", "label_fmt": "Estudiar y certificar ${cash:,.0f}", "cash": {"factor": -0.08, "min": -1000, "max": -150}, "education": 2, "salary": {"factor": 0.08, "min": 150, "max": 1200}, "stress": 6, "career_stability": 5, "lesson": "Credenciales tecnicas", "interpretation": "En tecnologia, certificaciones validas son palancas de salario cortas y medibles."},
+            "self": {"label": "Aprender solo", "education": 1, "stress": 2, "salary": {"factor": 0.03, "min": 50, "max": 400}, "lesson": "Autodidacta", "interpretation": "Aprender solo funciona, pero tarda mas y no da el sello que abre puertas."},
+            "skip": {"label": "No certificar", "stress": -1, "lesson": "Estancamiento", "interpretation": "Sin certificacion, dependes de que alguien reconozca tu experiencia sin filtro."},
+        },
+    },
+    {
+        "id": "dev_remote_offer",
+        "category": "Income",
+        "phase": "growth",
+        "requires_profession": "programador",
+        "title": "Oferta remota del exterior",
+        "description": "Una empresa extranjera te contrata remoto. Mejor paga, pero implica inestabilidad cambiaria y horarios raros.",
+        "actions": {
+            "accept": {"label": "Aceptar remoto", "salary": {"factor": 0.25, "min": 500, "max": 4000}, "stress": 8, "career_stability": -6, "lesson": "Ingreso global", "interpretation": "El sueldo en dolares acelera todo. La dependencia de un solo cliente extranjero tambien."},
+            "hybrid": {"label": "Negociar hibrido", "salary": {"factor": 0.12, "min": 200, "max": 1500}, "stress": 3, "lesson": "Hibrido", "interpretation": "Una parte remota captura upside sin abandonar estabilidad local."},
+            "decline": {"label": "Rechazar", "career_stability": 4, "stress": -3, "lesson": "Estabilidad local", "interpretation": "No todo salto salarial vale la pena si rompe tu ritmo y red de soporte."},
+        },
+    },
+    {
+        "id": "teacher_online_course",
+        "category": "Investment",
+        "phase": "growth",
+        "requires_profession": "docente",
+        "title": "Grabar tu propio curso online",
+        "description": "Podes transformar tu materia en un curso grabado. Ingreso pasivo, pero requiere produccion inicial.",
+        "actions": {
+            "produce": {"label": "Producir curso ${cash:,.0f}", "label_fmt": "Producir curso ${cash:,.0f}", "cash": {"factor": -0.25, "min": -2500, "max": -300}, "asset": {"name": "Curso online propio", "type": "Small business", "value": {"factor": 0.4, "min": 500, "max": 5000}, "income": 180, "risk": "execution"}, "stress": 10, "education": 1, "lesson": "Escalabilidad del conocimiento", "interpretation": "Una vez grabado, tu conocimiento puede venderse mientras dormis. La produccion cuesta."},
+            "collab": {"label": "Colaborar ${cash:,.0f}", "label_fmt": "Colaborar ${cash:,.0f}", "cash": {"factor": -0.08, "min": -800, "max": -100}, "asset": {"name": "Curso colaborativo", "type": "Small business", "value": {"factor": 0.15, "min": 200, "max": 1500}, "income": 70, "risk": "execution"}, "stress": 5, "lesson": "Alianzas", "interpretation": "Dividir produccion reduce costo y riesgo. Tambien divides control e ingreso."},
+            "no": {"label": "No grabar ahora", "stress": -2, "lesson": "Foco academico", "interpretation": "No todo docente debe ser creador de contenido. Tu impacto ya existe en el aula."},
+        },
+    },
+    {
+        "id": "teacher_grant",
+        "category": "Knowledge",
+        "phase": "survival",
+        "requires_profession": "docente",
+        "title": "Beca de especializacion",
+        "description": "Te aceptan en una especializacion con beca parcial. Es tiempo y dinero, pero mejora salario a largo plazo.",
+        "actions": {
+            "accept": {"label": "Aceptar beca parcial ${cash:,.0f}", "label_fmt": "Aceptar beca parcial ${cash:,.0f}", "cash": {"factor": -0.15, "min": -1500, "max": -200}, "education": 2, "salary": {"factor": 0.05, "min": 50, "max": 600}, "stress": 5, "lesson": "Inversion academica", "interpretation": "La especializacion paga a largo plazo. Hoy duele en caja y tiempo."},
+            "full": {"label": "Pagar especializacion completa ${cash:,.0f}", "label_fmt": "Pagar especializacion completa ${cash:,.0f}", "cash": {"factor": -0.3, "min": -3000, "max": -500}, "education": 3, "salary": {"factor": 0.1, "min": 100, "max": 1000}, "stress": 8, "lesson": "Especializacion profunda", "interpretation": "Invertir mas en educacion acelera tu salario y abre puertas institucionales."},
+            "defer": {"label": "Posponer", "stress": 2, "lesson": "Posponer", "interpretation": "Posponer no es renunciar. A veces es esperar a que la caja acompañe."},
+        },
+    },
+    {
+        "id": "teacher_budget_cut",
+        "category": "Crisis",
+        "phase": "survival",
+        "requires_profession": "docente",
+        "title": "Recorte presupuestario en educacion",
+        "description": "El gobierno anuncia ajustes. Tu salario o estabilidad pueden verse afectados.",
+        "actions": {
+            "prep": {"label": "Preparar ajuste", "expenses": {"factor": -0.05, "min": -200, "max": -30}, "career_stability": 4, "stress": 3, "lesson": "Antifragilidad", "interpretation": "Anticipar recortes te da margen para adaptarte sin panico."},
+            "ignore": {"label": "Ignorar noticias", "stress": 5, "salary_risk": 0.2, "lesson": "Riesgo institucional", "interpretation": "Ignorar señales del sector no las anula. Solo las hace mas dolorosas cuando llegan."},
+            "union": {"label": "Participar en reclamo", "stress": 8, "salary": {"factor": -0.03, "min": -200, "max": -20}, "career_stability": 8, "lesson": "Accion colectiva", "interpretation": "Organizarse puede proteger ingresos, pero tiene costo politico y emocional."},
+        },
+    },
+    {
+        "id": "doctor_extra_shifts",
+        "category": "Income",
+        "phase": "survival",
+        "requires_profession": "medico",
+        "title": "Guardias extra todo el mes",
+        "description": "El hospital ofrece cubrir guardias adicionales. Dinero rapido, agotamiento rapido.",
+        "actions": {
+            "take": {"label": "Tomar guardias", "salary": {"factor": 0.2, "min": 300, "max": 2500}, "stress": 16, "lesson": "Ingreso activo extremo", "interpretation": "Las guardias aceleran caja pero te cobran en energia y salud. No es sostenible."},
+            "some": {"label": "Solo algunas", "salary": {"factor": 0.08, "min": 150, "max": 1000}, "stress": 6, "lesson": "Margen", "interpretation": "Algunas guardias suman sin romper tu capacidad de recuperacion."},
+            "decline": {"label": "Rechazar", "stress": -5, "salary": {"factor": -0.02, "min": -300, "max": -20}, "lesson": "Salud primero", "interpretation": "Preservar energia es inversion. Un medico quemado gana menos y decide peor."},
+        },
+    },
+    {
+        "id": "doctor_private_clinic",
+        "category": "Investment",
+        "phase": "growth",
+        "requires_profession": "medico",
+        "title": "Abrir consultorio privado",
+        "description": "Un espacio para atender particular. Alto costo inicial, potencial de flujo propio.",
+        "actions": {
+            "open": {"label": "Abrir consultorio ${cash:,.0f}", "label_fmt": "Abrir consultorio ${cash:,.0f}", "cash": {"factor": -1.0, "min": -15000, "max": -3000}, "asset": {"name": "Consultorio privado", "type": "Small business", "value": {"factor": 8, "min": 20000, "max": 120000}, "income": 500, "risk": "execution"}, "debt": {"name": "Credito consultorio", "type": "Personal loan", "balance": {"factor": 7, "min": 15000, "max": 100000}, "payment": {"factor": 0.07, "min": 250, "max": 2000}, "rate": 0.12, "stress": 10}, "stress": 10, "lesson": "Activo profesional", "interpretation": "Tu profesion se convierte en negocio. El upside es alto, la obligacion tambien."},
+            "share": {"label": "Consultorio compartido ${cash:,.0f}", "label_fmt": "Consultorio compartido ${cash:,.0f}", "cash": {"factor": -0.3, "min": -5000, "max": -800}, "asset": {"name": "Consultorio compartido", "type": "Small business", "value": {"factor": 2.5, "min": 5000, "max": 40000}, "income": 250, "risk": "execution"}, "stress": 6, "lesson": "Asociarse", "interpretation": "Compartir consultorio baja costo fijo y riesgo. Tambien divides horarios y pacientes."},
+            "wait": {"label": "Esperar", "stress": -2, "lesson": "Paciencia", "interpretation": "Abrir consultorio sin reserva es arriesgar tu estabilidad por un sueldo propio."},
+        },
+    },
+    {
+        "id": "doctor_malpractice_scare",
+        "category": "Crisis",
+        "phase": "growth",
+        "requires_profession": "medico",
+        "title": "Susto de demanda medica",
+        "description": "Un paciente amenaza con demanda. Tu cobertura y respuesta importan.",
+        "actions": {
+            "lawyer": {"label": "Contratar abogado ${cash:,.0f}", "label_fmt": "Contratar abogado ${cash:,.0f}", "cash": {"factor": -0.1, "min": -2000, "max": -300}, "stress": 6, "lesson": "Defensa legal", "interpretation": "Un buen abogado temprano puede evitar que un susto se convierta en carrera."},
+            "settle": {"label": "Transar ${cash:,.0f}", "label_fmt": "Transar ${cash:,.0f}", "cash": {"factor": -0.25, "min": -8000, "max": -1000}, "stress": 4, "lesson": "Cierre rapido", "interpretation": "Transar duele financieramente pero protege tu reputacion y energia."},
+            "ignore": {"label": "Ignorar amenaza", "stress": 18, "credit_score": -15, "lesson": "Riesgo ignorado", "interpretation": "Las demandas no desaparecen por desearlo. Ignorarlas las hace mas caras."},
+        },
+    },
+    {
+        "id": "sales_slow_season",
+        "category": "Crisis",
+        "phase": "survival",
+        "requires_profession": "vendedor",
+        "title": "Temporada baja de ventas",
+        "description": "Las ventas caen por un trimestre. Tu sueldo variable se resiente.",
+        "actions": {
+            "hustle": {"label": "Hustlear mas", "salary": {"factor": 0.05, "min": 100, "max": 800}, "stress": 12, "lesson": "Hustle", "interpretation": "En temporada baja, vender mas cuesta el doble de energia. Funciona, pero agota."},
+            "save": {"label": "Ajustar gastos", "expenses": {"factor": -0.08, "min": -300, "max": -50}, "stress": 4, "lesson": "Ajuste ciclico", "interpretation": "Bajar gastos en temporada baja es aceptar que los ingresos variables tienen ciclos."},
+            "credit": {"label": "Pedir prestamo", "debt": {"name": "Prestamo temporada baja", "type": "Personal loan", "balance": {"factor": 0.2, "min": 300, "max": 3000}, "payment": {"factor": 0.025, "min": 40, "max": 250}, "rate": 0.24, "stress": 8}, "stress": 8, "lesson": "Deuda ciclica", "interpretation": "Financiar una temporada baja puede ser puente. Si se repite, se convierte en trampa."},
+        },
+    },
+    {
+        "id": "sales_image_upgrade",
+        "category": "Expense",
+        "phase": "growth",
+        "requires_profession": "vendedor",
+        "title": "Upgrade de imagen para vender mas",
+        "description": "Una mejor imagen puede cerrar mas deals. Tambien puede ser gasto vano.",
+        "actions": {
+            "invest": {"label": "Invertir en imagen ${cash:,.0f}", "label_fmt": "Invertir en imagen ${cash:,.0f}", "cash": {"factor": -0.15, "min": -1500, "max": -200}, "salary": {"factor": 0.06, "min": 80, "max": 800}, "stress": 3, "lesson": "Imagen como inversion", "interpretation": "Vestir y verte mejor no vende solo, pero abre puertas que antes estaban cerradas."},
+            "moderate": {"label": "Mejora moderada ${cash:,.0f}", "label_fmt": "Mejora moderada ${cash:,.0f}", "cash": {"factor": -0.05, "min": -500, "max": -80}, "salary": {"factor": 0.02, "min": 30, "max": 300}, "lesson": "Mejora moderada", "interpretation": "Mejorar sin exagerar protege caja y sigue dando señales profesionales."},
+            "skip": {"label": "No invertir", "stress": -2, "lesson": "Substance over style", "interpretation": "La imagen ayuda, pero si no vendes bien, solo estas mejor vestido para perder."},
+        },
+    },
+    {
+        "id": "sales_network_event",
+        "category": "Knowledge",
+        "phase": "growth",
+        "requires_profession": "vendedor",
+        "title": "Evento de contactos de alto nivel",
+        "description": "Una cena exclusiva con clientes potenciales. Cara, pero puede abrir puertas.",
+        "actions": {
+            "attend": {"label": "Asistir ${cash:,.0f}", "label_fmt": "Asistir ${cash:,.0f}", "cash": {"factor": -0.12, "min": -1200, "max": -150}, "salary": {"factor": 0.08, "min": 100, "max": 1000}, "stress": 4, "education": 1, "lesson": "Network efectivo", "interpretation": "Una sola conversacion en el lugar correcto puede valer mas que meses de llamadas frias."},
+            "cheap": {"label": "Conectar online", "cash": {"factor": -0.03, "min": -300, "max": -50}, "salary": {"factor": 0.03, "min": 30, "max": 300}, "lesson": "Network barato", "interpretation": "No necesitas cenas caras para conectar. Podes perder el contexto premium."},
+            "skip": {"label": "No ir", "stress": -1, "lesson": "Costo de no ir", "interpretation": "Ahorraste la entrada. Tambien perdiste la oportunidad de que alguien te recuerde."},
+        },
+    },
+    {
+        "id": "freelance_portfolio_site",
+        "category": "Investment",
+        "phase": "survival",
+        "requires_profession": "freelancer",
+        "title": "Invertir en portafolio profesional",
+        "description": "Un buen sitio y reel pueden atraer mejores clientes. Es costo, no activo productivo directo.",
+        "actions": {
+            "pro": {"label": "Produccion profesional ${cash:,.0f}", "label_fmt": "Produccion profesional ${cash:,.0f}", "cash": {"factor": -0.12, "min": -1200, "max": -150}, "salary": {"factor": 0.1, "min": 100, "max": 1000}, "education": 1, "stress": 2, "lesson": "Imagen profesional", "interpretation": "Tu portafolio es tu carta de presentacion. Invertir en el filtra mejores clientes."},
+            "diy": {"label": "Hacerlo vos ${cash:,.0f}", "label_fmt": "Hacerlo vos ${cash:,.0f}", "cash": {"factor": -0.03, "min": -400, "max": -50}, "salary": {"factor": 0.04, "min": 40, "max": 400}, "stress": 4, "lesson": "DIY", "interpretation": "Hacerlo vos ahorra dinero, pero pagas con tiempo y calidad variable."},
+            "no": {"label": "No invertir", "stress": -1, "lesson": "Estancamiento", "interpretation": "Sin buen portafolio, competis por precio. Los mejores clientes no te encuentran."},
+        },
+    },
+    {
+        "id": "freelance_own_product",
+        "category": "Investment",
+        "phase": "growth",
+        "requires_profession": "freelancer",
+        "title": "Producto propio vs clientes",
+        "description": "Podes destinar tiempo a construir un producto propio. Menos ingreso hoy, activo manana.",
+        "actions": {
+            "build": {"label": "Construir producto propio ${cash:,.0f}", "label_fmt": "Construir producto propio ${cash:,.0f}", "cash": {"factor": -0.3, "min": -3000, "max": -400}, "salary": {"factor": -0.1, "min": -1000, "max": -100}, "asset": {"name": "Producto propio", "type": "Small business", "value": {"factor": 0.6, "min": 800, "max": 8000}, "income": 240, "risk": "execution"}, "stress": 10, "lesson": "Activos propios", "interpretation": "Dejar dinero de clientes para construir activo propio es el salto del freelancer al empresario."},
+            "balance": {"label": "Balance parcial ${cash:,.0f}", "label_fmt": "Balance parcial ${cash:,.0f}", "cash": {"factor": -0.1, "min": -1000, "max": -150}, "salary": {"factor": -0.04, "min": -400, "max": -40}, "asset": {"name": "Producto propio", "type": "Small business", "value": {"factor": 0.2, "min": 200, "max": 2000}, "income": 80, "risk": "execution"}, "stress": 5, "lesson": "Balance", "interpretation": "Avanzar lento es mejor que no avanzar. Conservas caja mientras construis."},
+            "clients": {"label": "Seguir con clientes", "salary": {"factor": 0.08, "min": 100, "max": 800}, "stress": -2, "lesson": "Caja hoy", "interpretation": "Los clientes pagan las cuentas hoy. Sin activo propio, seguis dependiendo de tu tiempo."},
+        },
+    },
+    {
+        "id": "freelance_unpaid_invoice",
+        "category": "Crisis",
+        "phase": "survival",
+        "requires_profession": "freelancer",
+        "title": "Cliente no paga una factura grande",
+        "description": "Un cliente demora un pago importante. Tu flujo depende de cobrar.",
+        "actions": {
+            "chase": {"label": "Cobrar agresivamente", "cash": {"factor": 0.2, "min": 200, "max": 2500}, "stress": 8, "lesson": "Cobranza", "interpretation": "Cobrar es parte del trabajo. El que no cobra, financia a otros."},
+            "factoring": {"label": "Usar factoring", "cash": {"factor": 0.15, "min": 150, "max": 2000}, "debt": {"name": "Factoring", "type": "Personal loan", "balance": {"factor": 0.05, "min": 50, "max": 500}, "payment": {"factor": 0.01, "min": 10, "max": 60}, "rate": 0.28, "stress": 4}, "lesson": "Liquidez costo", "interpretation": "El factoring te da caja hoy a cambio de una parte. Es caro, pero a veces necesario."},
+            "wait": {"label": "Esperar", "stress": 12, "cash": {"factor": -0.05, "min": -500, "max": -50}, "lesson": "Incertidumbre", "interpretation": "Esperar puede funcionar una vez. Si se repite, tu flujo depende de la buena voluntad de otros."},
+        },
+    },
+]
+
+
 def profession_choices():
     return [{"id": key, **value} for key, value in PROFESSIONS.items()]
 
@@ -978,29 +1216,40 @@ def start_month(state):
     apply_monthly_cashflow(state)
     apply_market_drift(state)
     maybe_salary_shock(state)
-    event = pick_event(state)
+    if is_quiet_month(state):
+        event = quiet_month_event(state)
+    else:
+        event = pick_event(state)
     state["current_event"] = event
     return state
 
 
+def event_fits_state(event, state, phase):
+    if event.get("requires_debt") and not state["debts"]:
+        return False
+    if event.get("requires_debt_free") and state["debts"]:
+        return False
+    required_type = event.get("requires_asset_type")
+    if required_type and not any(asset.get("type") == required_type for asset in state["assets"]):
+        return False
+    if event.get("requires_world") and state["world"]["name"] not in event["requires_world"]:
+        return False
+    required_profession = event.get("requires_profession")
+    if required_profession and required_profession != state.get("profession_id"):
+        return False
+    if event["id"] == "burnout" and state["stress"] >= 78:
+        return True
+    if event.get("phase") in {phase, "survival"} or phase == "freedom":
+        return True
+    return False
+
+
 def pick_event(state):
     phase = session_phase(state)
-    available = []
-    for event in BASE_EVENTS:
-        if event.get("requires_debt") and not state["debts"]:
-            continue
-        if event.get("requires_debt_free") and state["debts"]:
-            continue
-        required_type = event.get("requires_asset_type")
-        if required_type and not any(asset.get("type") == required_type for asset in state["assets"]):
-            continue
-        if event.get("requires_world") and state["world"]["name"] not in event["requires_world"]:
-            continue
-        if event["id"] == "burnout" and state["stress"] >= 78:
-            available.append(event)
-            continue
-        if event.get("phase") in {phase, "survival"} or phase == "freedom":
-            available.append(event)
+    available = [event for event in BASE_EVENTS if event_fits_state(event, state, phase)]
+    profession_events = [event for event in PROFESSION_EVENTS if event_fits_state(event, state, phase)]
+    if profession_events:
+        available.extend(profession_events)
     if len(available) >= 3:
         recent = set(state.get("events_seen", [])[-4:])
         fresh = [event for event in available if event["id"] not in recent]
@@ -1010,6 +1259,58 @@ def pick_event(state):
     state.setdefault("events_seen", []).append(event["id"])
     state["events_seen"] = state["events_seen"][-12:]
     return event
+
+
+def is_quiet_month(state):
+    if state["month"] <= 6:
+        return False
+    data = metrics(state)
+    if data["cashflow"] < 0 or data["runway"] < 3 or state["stress"] > 70 or data["insolvency_risk"] >= 40:
+        return False
+    if state.get("current_event", {}).get("id") == "quiet_month":
+        return False
+    for item in state.get("schedule", []):
+        if item["due_month"] <= state["month"] + 1:
+            return False
+    return True
+
+
+def quiet_month_event(state):
+    data = metrics(state)
+    months = 1
+    if data["runway"] >= 6 and data["cashflow"] >= 500 and state["stress"] <= 50:
+        months = 3
+    elif data["runway"] >= 4 and data["cashflow"] >= 200:
+        months = 2
+    return {
+        "id": "quiet_month",
+        "category": "Quiet",
+        "phase": "survival",
+        "title": "Mes tranquilo",
+        "description": "Tu flujo es positivo, tenes reserva y no hay decisiones urgentes. Avanzar meses te acerca a la siguiente oportunidad.",
+        "actions": {
+            "advance": {
+                "label": f"Avanzar {months} {'mes' if months == 1 else 'meses'}",
+                "quiet": True,
+                "skip_months": months,
+                "lesson": "Tiempo compuesto",
+                "interpretation": f"Avanzaste {months} {'mes' if months == 1 else 'meses'}. El tiempo tambien compone cuando tu estructura financiera esta sana.",
+            },
+        },
+    }
+
+
+def simulate_quiet_months(state, months):
+    for _ in range(months):
+        if state["status"] != "playing":
+            break
+        advance_time(state, 1)
+        state["world"] = choice(WORLD_STATES)
+        apply_monthly_cashflow(state)
+        apply_market_drift(state)
+        maybe_salary_shock(state)
+        state["quiet_months"] = state.get("quiet_months", 0) + 1
+        check_end_conditions(state)
 
 
 def prepare_event_for_state(event, state):
@@ -1137,9 +1438,12 @@ def apply_action(state, action_id):
     before_snapshot = simple_snapshot(state)
     apply_action_effects(state, action)
     normalize_state(state)
+    if action.get("quiet"):
+        simulate_quiet_months(state, action.get("skip_months", 1))
     after = metrics(state)
+    after_snapshot = simple_snapshot(state)
     impact = after["freedom_ratio"] - before["freedom_ratio"]
-    state["last_feedback"] = build_feedback(action, before_snapshot, simple_snapshot(state), before, after)
+    state["last_feedback"] = build_feedback(action, before_snapshot, after_snapshot, before, after)
     update_decision_records(state, event, action, impact, before, after)
     state["history"].insert(0, {
         "month": state["month"],
@@ -1151,10 +1455,15 @@ def apply_action(state, action_id):
     })
     state["history"] = state["history"][:18]
     state["current_event"] = None
-    advance_time(state, action.get("skip_months", 1))
     check_end_conditions(state)
     if state["status"] == "playing":
-        start_month(state)
+        if action.get("quiet"):
+            state["current_event"] = pick_event(state)
+        else:
+            advance_time(state, action.get("skip_months", 1))
+            check_end_conditions(state)
+            if state["status"] == "playing":
+                start_month(state)
     return enrich_state(state)
 
 

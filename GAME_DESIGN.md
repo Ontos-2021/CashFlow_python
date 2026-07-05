@@ -347,15 +347,19 @@ Both actions generate a discretionary feedback notification and do not consume t
 
 ### Event Variety
 
-The game includes 67 decision events across all categories:
-- Crisis: 13 (robbery, divorce, country crisis, audit, accident, inheritance, lawsuit, disaster, identity theft, health scare, etc.)
-- Income: 10 (competitor offer, freelance gig, bonus, commission, royalties, renegotiation, second job, equity grant, etc.)
-- Expense: 11 (moving, wedding, baby, trip, pet, subscriptions, therapy, celebration, etc.)
-- Investment: 16 (bonds, ETF, land, franchise, private fund, startup diligence, art, green, REIT, peer lending, crypto, impact, etc.)
-- Debt: 8 (consolidation, balance transfer, family loan, line of credit, mortgage refi, etc.)
-- Knowledge: 8 (mentor, book, masterclass, tax analysis, research paper, community, certification, etc.)
+The game includes 85 decision events across all categories, plus 18 profession-specific events (3 per profession):
+- Crisis: 13 general + 3 profession-specific.
+- Income: 10 general + 3 profession-specific.
+- Expense: 11 general + 2 profession-specific.
+- Investment: 16 general + 4 profession-specific.
+- Debt: 8 general.
+- Knowledge: 8 general + 3 profession-specific.
 
-Each event has 2-4 options following the safe-slow / tempting-bad / risky-higher pattern. Some options are gated by education level.
+Each event has 2-4 options following the safe-slow / tempting-bad / risky-higher pattern. Some options are gated by education level. Profession-specific events use `requires_profession` so each run feels anchored to the chosen career.
+
+### Quiet Months
+
+When the player is financially stable (positive cashflow, runway >= 3 months, stress <= 70, no imminent scheduled shocks, and after the first 6 months), the simulation surfaces a "Mes tranquilo" card. The player can advance 1-3 months in one click. Skipped months apply monthly cashflow, market drift, salary shocks, scheduled effects, and end-condition checks, so time still matters.
 
 ## Visual Design System
 

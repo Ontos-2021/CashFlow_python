@@ -8,6 +8,7 @@ ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 sys.path.insert(0, os.path.join(ROOT, "cashflow_game"))
 
 from app.game_engine import (  # noqa: E402
+    PROFESSION_EVENTS,
     amount,
     apply_action,
     apply_market_drift,
@@ -16,13 +17,17 @@ from app.game_engine import (  # noqa: E402
     check_end_conditions,
     cut_expenses,
     enrich_state,
+    event_fits_state,
+    is_quiet_month,
     new_game,
     pay_down_debt,
     pick_event,
     prepare_event_for_state,
     process_schedule,
+    quiet_month_event,
     resolve_action_amounts,
     sell_one_asset,
+    simulate_quiet_months,
 )
 from app import create_app  # noqa: E402
 
@@ -366,6 +371,80 @@ class RouteStorageRegressionTest(unittest.TestCase):
         response = client.get("/game")
         self.assertEqual(response.status_code, 200)
         self.assertIn(b"game-app", response.data)
+
+
+class ProfessionEventsTest(unittest.TestCase):
+    def test_profession_events_exist_for_each_profession(self):
+        for profession_id in {"administrativo", "programador", "docente", "medico", "vendedor", "freelancer"}:
+            count = sum(1 for event in PROFESSION_EVENTS if event.get("requires_profession") == profession_id)
+            self.assertGreaterEqual(count, 3, f"profession {profession_id} has only {count} events")
+
+    def test_profession_event_fits_only_matching_profession(self):
+        state = new_game("programador")
+        event = next(event for event in PROFESSION_EVENTS if event.get("requires_profession") == "programador")
+        self.assertTrue(event_fits_state(event, state, "growth"))
+        state["profession_id"] = "docente"
+        self.assertFalse(event_fits_state(event, state, "growth"))
+
+    def test_pick_event_can_return_profession_event(self):
+        state = new_game("vendedor")
+        state["month"] = 60
+        state["assets"] = [{"name": "Fondo", "type": "Paper assets", "value": 50000, "income": 300, "risk": "market"}]
+        seen = set()
+        for _ in range(200):
+            event = pick_event(state)
+            seen.add(event["id"])
+        profession_ids = {event["id"] for event in PROFESSION_EVENTS if event.get("requires_profession") == "vendedor"}
+        self.assertTrue(seen & profession_ids, "no profession event seen after 200 picks")
+
+
+class QuietMonthTest(unittest.TestCase):
+    def test_quiet_month_triggered_when_stable(self):
+        state = new_game("docente")
+        state["month"] = 12
+        state["cash"] = 20000
+        state["salary"] = 3000
+        state["expenses"] = 1500
+        state["stress"] = 30
+        state["debts"] = []
+        self.assertTrue(is_quiet_month(state))
+
+    def test_quiet_month_blocked_when_risky(self):
+        state = new_game("docente")
+        state["month"] = 12
+        state["cash"] = 200
+        state["salary"] = 2500
+        state["expenses"] = 2000
+        state["stress"] = 80
+        state["debts"] = []
+        self.assertFalse(is_quiet_month(state))
+
+    def test_quiet_event_includes_advance_action(self):
+        state = new_game("docente")
+        state["month"] = 12
+        state["cash"] = 20000
+        state["salary"] = 3000
+        state["expenses"] = 1500
+        state["stress"] = 30
+        event = quiet_month_event(state)
+        self.assertEqual(event["id"], "quiet_month")
+        self.assertIn("advance", event["actions"])
+        self.assertTrue(event["actions"]["advance"].get("quiet"))
+
+    def test_simulate_quiet_months_applies_cashflow(self):
+        state = new_game("docente")
+        state["month"] = 12
+        state["cash"] = 20000
+        state["salary"] = 3000
+        state["expenses"] = 1500
+        state["stress"] = 30
+        state["debts"] = []
+        before_month = state["month"]
+        before_cash = state["cash"]
+        simulate_quiet_months(state, 3)
+        self.assertEqual(state["month"], before_month + 3)
+        self.assertGreater(state["cash"], before_cash)
+        self.assertEqual(state["status"], "playing")
 
 
 if __name__ == "__main__":

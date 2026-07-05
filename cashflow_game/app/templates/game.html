@@ -166,7 +166,7 @@
         {# ---- Scenario (center, focal) ---- #}
         <section class="panel scenario">
             <div class="scenario-head">
-                <span class="chip {{ {'Inversion': 'neutral', 'Investment': 'neutral', 'Deuda': 'danger', 'Debt': 'danger', 'Crisis': 'danger', 'Conocimiento': 'good', 'Knowledge': 'good', 'Gasto': 'warning', 'Expense': 'warning', 'Ingreso': 'good', 'Income': 'good'}.get(state.current_event.category, 'neutral') }}">{{ state.current_event.category }}</span>
+                <span class="chip {{ {'Inversion': 'neutral', 'Investment': 'neutral', 'Deuda': 'danger', 'Debt': 'danger', 'Crisis': 'danger', 'Conocimiento': 'good', 'Knowledge': 'good', 'Gasto': 'warning', 'Expense': 'warning', 'Ingreso': 'good', 'Income': 'good', 'Quiet': 'good'}.get(state.current_event.category, 'neutral') }}">{{ state.current_event.category }}</span>
                 <div class="right">
                     <span class="chip muted">Mes {{ state.month }}</span>
                 </div>
