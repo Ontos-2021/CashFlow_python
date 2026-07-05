@@ -1,5 +1,5 @@
 from copy import deepcopy
-from random import choice, randint, random, sample
+from random import choice, random
 
 
 PROFESSIONS = {
@@ -142,6 +142,7 @@ BASE_EVENTS = [
         "id": "credit_card_attack",
         "category": "Debt",
         "phase": "survival",
+        "requires_debt": True,
         "title": "Plan para destruir deuda cara",
         "description": "La tarjeta consume flujo de caja. Podes atacar capital o seguir respirando con pago minimo.",
         "actions": {
@@ -225,6 +226,7 @@ BASE_EVENTS = [
         "id": "refinance",
         "category": "Debt",
         "phase": "growth",
+        "requires_debt": True,
         "title": "Oportunidad de refinanciar",
         "description": "El banco ofrece bajar cuotas extendiendo plazo. La caja mejora, el costo total puede subir.",
         "actions": {
@@ -294,6 +296,19 @@ BASE_EVENTS = [
             "delegate": {"label": "Pagar ayuda por $600", "expenses": 600, "stress": -10, "lesson": "Comprar tiempo", "interpretation": "Gastar para recuperar energia puede ser inversion si protege decisiones futuras."},
         },
     },
+    {
+        "id": "debt_free_temptation",
+        "category": "Debt",
+        "phase": "growth",
+        "requires_debt_free": True,
+        "title": "Tentacion de credito preaprobado",
+        "description": "El banco te ofrece credito facil justo cuando no tenes deudas. Puede darte velocidad o volver a ponerte una cadena.",
+        "actions": {
+            "reject": {"label": "Rechazar y mantenerte libre", "stress": -2, "credit_score": 3, "lesson": "Libertad de obligacion", "interpretation": "No usar credito disponible tambien es poder. Tu flujo queda sin nuevos duenos."},
+            "strategic": {"label": "Usar $1.200 para invertir", "cash": -1200, "asset": {"name": "Posicion financiada", "type": "Paper assets", "value": 1400, "income": 8, "risk": "market"}, "debt": {"name": "Linea de inversion", "type": "Investment loan", "balance": 1200, "payment": 85, "rate": 0.16, "stress": 5}, "stress": 4, "lesson": "Deuda estrategica", "interpretation": "La deuda no es mala por definicion. Es peligrosa cuando no sabes exactamente que compra."},
+            "consume": {"label": "Usarlo para mejorar estilo de vida", "cash": 600, "debt": {"name": "Credito consumo", "type": "Credit card", "balance": 1400, "payment": 95, "rate": 0.34, "stress": 8}, "expenses": 80, "stress": 8, "lifestyle": 1, "lesson": "Regreso a la rueda", "interpretation": "La libertad de deuda puede perderse en una tarde. La cuota se queda anos."},
+        },
+    },
 ]
 
 
@@ -352,8 +367,15 @@ def pick_event(state):
     phase = session_phase(state)
     available = []
     for event in BASE_EVENTS:
+        if event.get("requires_debt") and not state["debts"]:
+            continue
+        if event.get("requires_debt_free") and state["debts"]:
+            continue
         required_type = event.get("requires_asset_type")
         if required_type and not any(asset.get("type") == required_type for asset in state["assets"]):
+            continue
+        if event["id"] == "burnout" and state["stress"] >= 78:
+            available.append(event)
             continue
         if event.get("phase") in {phase, "survival"} or phase == "freedom":
             available.append(event)
@@ -362,10 +384,45 @@ def pick_event(state):
         fresh = [event for event in available if event["id"] not in recent]
         if fresh:
             available = fresh
-    event = deepcopy(choice(available or BASE_EVENTS))
+    event = prepare_event_for_state(deepcopy(choice(available or BASE_EVENTS)), state)
     state.setdefault("events_seen", []).append(event["id"])
     state["events_seen"] = state["events_seen"][-12:]
     return event
+
+
+def prepare_event_for_state(event, state):
+    actions = {}
+    for key, action in event["actions"].items():
+        if action.get("pay_debt") and not state["debts"]:
+            continue
+        if action.get("reduce_debt_payments") and not state["debts"]:
+            continue
+        if action.get("sell_asset_percent") and not state["assets"]:
+            continue
+        actions[key] = action
+    event["actions"] = actions or {"skip": {"label": "Pasar", "lesson": "Contexto", "interpretation": "Esta oportunidad no encaja con tu situacion actual."}}
+    for action in event["actions"].values():
+        action["risk_tags"] = action_risk_tags(state, action)
+    return event
+
+
+def action_risk_tags(state, action):
+    simulated = deepcopy(state)
+    apply_action_effects(simulated, action)
+    normalize_state(simulated)
+    data = metrics(simulated)
+    tags = []
+    if data["runway"] < 1:
+        tags.append("Supervivencia critica")
+    elif data["runway"] < 3:
+        tags.append("Reserva baja")
+    if data["debt_to_income"] > 0.4:
+        tags.append("Sobreapalancamiento")
+    if simulated["stress"] >= 85:
+        tags.append("Riesgo de burnout")
+    if simulated["cash"] < 0:
+        tags.append("Caja negativa")
+    return tags
 
 
 def session_phase(state):
@@ -536,7 +593,24 @@ def metrics(state):
         "lifestyle_inflation": round(lifestyle, 3),
         "insolvency_risk": insolvency_risk,
         "opportunity_readiness": readiness,
+        "financial_state": financial_state_label(state, runway, cashflow, debt_to_income),
     }
+
+
+def financial_state_label(state, runway, cashflow, debt_to_income):
+    if state["stress"] >= 85:
+        return "Burnout Risk"
+    if state["cash"] < 0 or runway < 1:
+        return "Critical"
+    if debt_to_income > 0.42:
+        return "Overleveraged"
+    if runway < 3:
+        return "Tense"
+    if runway >= 6 and cashflow > 0 and not state["debts"]:
+        return "Debt Free Builder"
+    if runway >= 6 and cashflow > 0:
+        return "Safe"
+    return "Stable"
 
 
 def calculate_insolvency_risk(state, runway, cashflow, debt_to_income):
@@ -570,6 +644,8 @@ def enrich_state(state):
     state["investor_profile"] = investor_profile(state)
     state["phase"] = session_phase(state)
     state["report"] = final_report(state)
+    state["status_badges"] = status_badges(state)
+    state["alerts"] = contextual_alerts(state)
     return state
 
 
@@ -586,8 +662,8 @@ def simple_snapshot(state):
     }
 
 
-def feedback(title, interpretation, lesson, changes=None):
-    return {"title": title, "changes": changes or [], "interpretation": interpretation, "lesson": lesson}
+def feedback(title, interpretation, lesson, changes=None, alerts=None, badges=None):
+    return {"title": title, "changes": changes or [], "interpretation": interpretation, "lesson": lesson, "alerts": alerts or [], "badges": badges or []}
 
 
 def build_feedback(action, before_snapshot, after_snapshot, before, after):
@@ -612,7 +688,81 @@ def build_feedback(action, before_snapshot, after_snapshot, before, after):
     ratio_delta = round((after["freedom_ratio"] - before["freedom_ratio"]) * 100, 1)
     if abs(ratio_delta) >= 0.1:
         changes.append(f"Freedom ratio: {ratio_delta:+.1f}%")
-    return feedback("Decision aplicada", action.get("interpretation", "Tu estado financiero cambio."), action.get("lesson", "Consecuencia financiera"), changes)
+    alerts = next_risk_alerts(after_snapshot, after)
+    badges = unlocked_badges(before, after)
+    return feedback("Decision aplicada", action.get("interpretation", "Tu estado financiero cambio."), action.get("lesson", "Consecuencia financiera"), changes, alerts, badges)
+
+
+def next_risk_alerts(snapshot, data):
+    alerts = []
+    if snapshot["stress"] >= 85:
+        alerts.append("Tu estres esta en zona roja. Una decision mas exigente puede terminar la partida por burnout.")
+    if data["runway"] < 1:
+        alerts.append("Tu reserva no cubre un mes completo. Cualquier shock puede forzar deuda o insolvencia.")
+    if data["debt_to_income"] > 0.42:
+        alerts.append("Tus pagos de deuda consumen demasiado ingreso. Perdiste flexibilidad.")
+    if data["opportunity_readiness"] >= 80:
+        alerts.append("Estas preparado para oportunidades grandes: buena caja, baja presion y margen de decision.")
+    return alerts
+
+
+def unlocked_badges(before, after):
+    badges = []
+    if before["debt_balance"] > 0 and after["debt_balance"] == 0:
+        badges.append("Debt Free")
+    if before["runway"] < 6 <= after["runway"]:
+        badges.append("Emergency Fund")
+    if before["freedom_ratio"] < 0.5 <= after["freedom_ratio"]:
+        badges.append("Halfway to Freedom")
+    if before["freedom_ratio"] < 1 <= after["freedom_ratio"]:
+        badges.append("Financially Independent")
+    return badges
+
+
+def status_badges(state):
+    data = metrics(state)
+    badges = [{"label": data["financial_state"], "kind": state_badge_kind(data["financial_state"])}]
+    if not state["debts"]:
+        badges.append({"label": "Debt Free", "kind": "good"})
+    if not state["assets"]:
+        badges.append({"label": "100% Active Income", "kind": "warning"})
+    if data["runway"] >= 6:
+        badges.append({"label": "Emergency Fund", "kind": "good"})
+    if data["opportunity_readiness"] >= 80:
+        badges.append({"label": "Opportunity Ready", "kind": "good"})
+    if data["debt_to_income"] > 0.42:
+        badges.append({"label": "Overleveraged", "kind": "danger"})
+    return badges
+
+
+def state_badge_kind(label):
+    if label in {"Safe", "Debt Free Builder"}:
+        return "good"
+    if label in {"Critical", "Burnout Risk", "Overleveraged"}:
+        return "danger"
+    if label == "Tense":
+        return "warning"
+    return "neutral"
+
+
+def contextual_alerts(state):
+    data = metrics(state)
+    alerts = []
+    if state["stress"] >= 85:
+        alerts.append({"title": "Riesgo de burnout", "message": "Tu energia esta en zona roja. Descansar, delegar o bajar obligaciones puede ser una jugada ganadora.", "kind": "danger"})
+    elif state["stress"] >= 70:
+        alerts.append({"title": "Tension alta", "message": "Todavia podes avanzar, pero cada decision exigente reduce tu margen humano.", "kind": "warning"})
+    if state["cash"] < 0:
+        alerts.append({"title": "Caja negativa", "message": "Estas financiando la vida diaria. Si esto dura, la partida puede terminar en insolvencia.", "kind": "danger"})
+    elif data["runway"] < 1:
+        alerts.append({"title": "Supervivencia critica", "message": "Tu reserva no cubre un mes. Liquidez primero, crecimiento despues.", "kind": "danger"})
+    elif data["runway"] < 3:
+        alerts.append({"title": "Reserva baja", "message": "Podes jugar oportunidades, pero un shock te deja sin defensa.", "kind": "warning"})
+    if not state["debts"]:
+        alerts.append({"title": "Libre de deuda", "message": "Tu flujo no tiene acreedores. El nuevo desafio es construir activos sin perder esa libertad.", "kind": "good"})
+    if not state["assets"]:
+        alerts.append({"title": "Dependes del salario", "message": "Si tu ingreso activo falla, no hay activos trabajando por vos todavia.", "kind": "warning"})
+    return alerts[:3]
 
 
 def display_age(state):

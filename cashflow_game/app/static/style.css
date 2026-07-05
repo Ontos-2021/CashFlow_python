@@ -151,6 +151,51 @@ p {
     padding: 8px 12px;
 }
 
+.badge-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 16px;
+}
+
+.badge-row.compact {
+    margin-top: 12px;
+}
+
+.status-badge {
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    color: #d8e5f6;
+    font-size: 0.78rem;
+    font-weight: 900;
+    letter-spacing: 0.04em;
+    padding: 7px 10px;
+    text-transform: uppercase;
+}
+
+.status-badge.good {
+    background: rgba(57, 217, 138, 0.12);
+    border-color: rgba(57, 217, 138, 0.35);
+    color: #8ff0bd;
+}
+
+.status-badge.warning {
+    background: rgba(245, 196, 81, 0.13);
+    border-color: rgba(245, 196, 81, 0.34);
+    color: #f8d981;
+}
+
+.status-badge.danger {
+    background: rgba(255, 107, 107, 0.13);
+    border-color: rgba(255, 107, 107, 0.34);
+    color: #ffaaa8;
+}
+
+.status-badge.neutral {
+    background: rgba(108, 168, 255, 0.12);
+    border-color: rgba(108, 168, 255, 0.28);
+}
+
 .card {
     background: linear-gradient(180deg, rgba(255, 255, 255, 0.055), rgba(255, 255, 255, 0.025));
     border: 1px solid var(--line);
@@ -230,12 +275,65 @@ p {
     width: 100%;
 }
 
+.button.action-button strong,
+.action-risks,
+.action-risks em {
+    display: block;
+}
+
+.action-risks {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 9px;
+}
+
+.action-risks em {
+    background: rgba(255, 107, 107, 0.15);
+    border: 1px solid rgba(255, 107, 107, 0.28);
+    border-radius: 999px;
+    color: #ffb4b4;
+    font-size: 0.72rem;
+    font-style: normal;
+    padding: 4px 7px;
+}
+
 .feature-grid,
 .dashboard-grid,
+.alert-grid,
 .two-column {
     display: grid;
     gap: 18px;
     margin-top: 24px;
+}
+
+.alert-grid {
+    grid-template-columns: repeat(3, 1fr);
+}
+
+.alert-card {
+    border: 1px solid var(--line);
+    border-radius: 20px;
+    padding: 16px;
+}
+
+.alert-card p {
+    margin-bottom: 0;
+}
+
+.alert-card.good {
+    background: rgba(57, 217, 138, 0.1);
+    border-color: rgba(57, 217, 138, 0.26);
+}
+
+.alert-card.warning {
+    background: rgba(245, 196, 81, 0.1);
+    border-color: rgba(245, 196, 81, 0.28);
+}
+
+.alert-card.danger {
+    background: rgba(255, 107, 107, 0.1);
+    border-color: rgba(255, 107, 107, 0.28);
 }
 
 .feature-grid {
@@ -391,6 +489,17 @@ p {
     padding: 8px 10px;
 }
 
+.risk-list {
+    display: grid;
+    gap: 8px;
+    margin: 14px 0 0;
+    padding-left: 18px;
+}
+
+.risk-list li {
+    color: #ffd2d2;
+}
+
 .share-box {
     background: rgba(245, 196, 81, 0.1);
     border: 1px solid rgba(245, 196, 81, 0.24);
@@ -478,6 +587,7 @@ p {
     .hero,
     .main-game-grid,
     .dashboard-grid,
+    .alert-grid,
     .feature-grid,
     .two-column,
     .report-grid {
@@ -506,6 +616,7 @@ p {
     .hero,
     .main-game-grid,
     .dashboard-grid,
+    .alert-grid,
     .feature-grid,
     .two-column,
     .report-grid,

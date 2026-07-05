@@ -6,6 +6,11 @@
         <p class="eyebrow">Mes {{ state.month }} · {{ state.display_age }} · {{ state.phase|title }}</p>
         <h2>{{ state.profession }}</h2>
         <p>{{ state.profession_summary }} Perfil inicial: {{ state.risk_profile }}.</p>
+        <div class="badge-row">
+            {% for badge in state.status_badges %}
+            <span class="status-badge {{ badge.kind }}">{{ badge.label }}</span>
+            {% endfor %}
+        </div>
     </div>
     <div class="market-state">
         <span>Economia</span>
@@ -13,6 +18,17 @@
         <small>{{ state.world.description }}</small>
     </div>
 </section>
+
+{% if state.alerts %}
+<section class="alert-grid">
+    {% for alert in state.alerts %}
+    <article class="alert-card {{ alert.kind }}">
+        <strong>{{ alert.title }}</strong>
+        <p>{{ alert.message }}</p>
+    </article>
+    {% endfor %}
+</section>
+{% endif %}
 
 <section class="dashboard-grid">
     <article class="card metric-card accent">
@@ -62,6 +78,7 @@
             <div><dt>Estabilidad laboral</dt><dd>{{ state.career_stability }}/100</dd></div>
             <div><dt>Deuda / ingreso</dt><dd>{{ "{:.0f}".format(state.metrics.debt_to_income * 100) }}%</dd></div>
             <div><dt>Ingreso por activos</dt><dd>{{ "{:.0f}".format(state.metrics.asset_income_ratio * 100) }}%</dd></div>
+            <div><dt>Estado financiero</dt><dd>{{ state.metrics.financial_state }}</dd></div>
         </dl>
     </aside>
 
@@ -80,11 +97,34 @@
             {% endif %}
             <p>{{ state.last_feedback.interpretation }}</p>
             <small>Principio: {{ state.last_feedback.lesson }}</small>
+            {% if state.last_feedback.badges %}
+            <div class="badge-row compact">
+                {% for badge in state.last_feedback.badges %}
+                <span class="status-badge good">Desbloqueado: {{ badge }}</span>
+                {% endfor %}
+            </div>
+            {% endif %}
+            {% if state.last_feedback.alerts %}
+            <ul class="risk-list">
+                {% for alert in state.last_feedback.alerts %}
+                <li>{{ alert }}</li>
+                {% endfor %}
+            </ul>
+            {% endif %}
         </div>
         <div class="action-grid">
             {% for action_id, action in state.current_event.actions.items() %}
             <form action="{{ url_for('action', action_id=action_id) }}" method="post">
-                <button class="button action-button" type="submit">{{ action.label }}</button>
+                <button class="button action-button" type="submit">
+                    <strong>{{ action.label }}</strong>
+                    {% if action.risk_tags %}
+                    <span class="action-risks">
+                        {% for tag in action.risk_tags %}
+                        <em>{{ tag }}</em>
+                        {% endfor %}
+                    </span>
+                    {% endif %}
+                </button>
             </form>
             {% endfor %}
         </div>

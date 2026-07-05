@@ -6,6 +6,11 @@
         <p class="eyebrow">Reporte final</p>
         <h2>{{ state.report.outcome }}</h2>
         <p>{{ state.last_feedback.interpretation }}</p>
+        <div class="badge-row">
+            {% for badge in state.status_badges %}
+            <span class="status-badge {{ badge.kind }}">{{ badge.label }}</span>
+            {% endfor %}
+        </div>
     </div>
     <form action="{{ url_for('reset') }}" method="post">
         <button class="button primary" type="submit">Nueva partida</button>
