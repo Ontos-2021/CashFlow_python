@@ -11,7 +11,7 @@ PROFESSIONS = {
         "age": 26,
         "cash": 1800,
         "salary": 2200,
-        "expenses": 1700,
+        "expenses": 1900,
         "education": 1,
         "stress": 28,
         "credit_score": 660,
@@ -39,7 +39,7 @@ PROFESSIONS = {
         "age": 28,
         "cash": 2600,
         "salary": 2500,
-        "expenses": 1900,
+        "expenses": 2100,
         "education": 2,
         "stress": 24,
         "credit_score": 690,
@@ -53,12 +53,12 @@ PROFESSIONS = {
         "age": 30,
         "cash": 6000,
         "salary": 7200,
-        "expenses": 4200,
+        "expenses": 3800,
         "education": 2,
         "stress": 32,
         "credit_score": 700,
         "debts": [
-            {"name": "Prestamo estudiantil", "type": "Student loan", "balance": 50000, "payment": 650, "rate": 0.08, "stress": 8},
+            {"name": "Prestamo estudiantil", "type": "Student loan", "balance": 35000, "payment": 450, "rate": 0.08, "stress": 8},
             {"name": "Auto financiado", "type": "Auto loan", "balance": 12000, "payment": 300, "rate": 0.12, "stress": 6},
         ],
     },
@@ -84,7 +84,7 @@ PROFESSIONS = {
         "age": 24,
         "cash": 1400,
         "salary": 2800,
-        "expenses": 2000,
+        "expenses": 2200,
         "education": 1,
         "stress": 30,
         "credit_score": 620,
@@ -1633,7 +1633,7 @@ def advance_time(state, months=1):
             state["age"] += 1
             state["salary"] = round(state["salary"] * (1.025 + state["education"] * 0.007), 2)
             data = metrics(state)
-            if data["freedom_ratio"] > 0.3:
+            if data["freedom_ratio"] > 0.5:
                 for asset in state.get("assets", []):
                     if asset.get("type") == "Paper assets" and asset.get("income", 0) > 0:
                         asset["income"] = round(asset["income"] * 1.05, 2)

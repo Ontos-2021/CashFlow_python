@@ -606,14 +606,14 @@ class BalanceV5Test(unittest.TestCase):
         from app.game_engine import PROFESSIONS
         debts = PROFESSIONS["medico"]["debts"]
         student = next(d for d in debts if d["type"] == "Student loan")
-        self.assertEqual(student["balance"], 50000)
-        self.assertEqual(PROFESSIONS["medico"]["expenses"], 4200)
+        self.assertEqual(student["balance"], 35000)
+        self.assertEqual(PROFESSIONS["medico"]["expenses"], 3800)
 
     def test_professions_expenses_raised(self):
         from app.game_engine import PROFESSIONS
-        self.assertEqual(PROFESSIONS["docente"]["expenses"], 1900)
-        self.assertEqual(PROFESSIONS["administrativo"]["expenses"], 1700)
-        self.assertEqual(PROFESSIONS["freelancer"]["expenses"], 2000)
+        self.assertEqual(PROFESSIONS["docente"]["expenses"], 2100)
+        self.assertEqual(PROFESSIONS["administrativo"]["expenses"], 1900)
+        self.assertEqual(PROFESSIONS["freelancer"]["expenses"], 2200)
 
     def test_pay_down_debt_action_works(self):
         from app.game_engine import pay_down_debt_action, monthly_obligations
@@ -640,7 +640,7 @@ class BalanceV5Test(unittest.TestCase):
 
     def test_snowball_increases_paper_income(self):
         state = new_game("docente")
-        state["assets"] = [{"name": "Fondo", "type": "Paper assets", "value": 5000, "income": 50, "risk": "market"}]
+        state["assets"] = [{"name": "Fondo", "type": "Paper assets", "value": 5000, "income": 120, "risk": "market"}]
         state["expenses"] = 50
         state["debts"] = []
         state["cash"] = 100000
