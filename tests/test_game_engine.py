@@ -344,10 +344,11 @@ class MechanicsTandaTwoTest(unittest.TestCase):
 
     def test_advance_time_resets_action_used(self):
         state = new_game("medico")
-        state["action_used_this_month"] = {"sell": True, "cut_expenses": True}
+        state["action_used_this_month"] = {"sell": True, "cut_expenses": True, "pay_debt": True}
         advance_time(state, 1)
         self.assertFalse(state["action_used_this_month"]["sell"])
         self.assertFalse(state["action_used_this_month"]["cut_expenses"])
+        self.assertFalse(state["action_used_this_month"]["pay_debt"])
 
     def test_event_count_meets_target(self):
         from app.game_engine import BASE_EVENTS
@@ -598,6 +599,73 @@ class BalanceV4Test(unittest.TestCase):
         state["history"] = []
         advance_time(state, 2)
         self.assertTrue(any("Resumen" in h["title"] for h in state["history"]))
+
+
+class BalanceV5Test(unittest.TestCase):
+    def test_medico_debt_reduced(self):
+        from app.game_engine import PROFESSIONS
+        debts = PROFESSIONS["medico"]["debts"]
+        student = next(d for d in debts if d["type"] == "Student loan")
+        self.assertEqual(student["balance"], 50000)
+        self.assertEqual(PROFESSIONS["medico"]["expenses"], 4200)
+
+    def test_professions_expenses_raised(self):
+        from app.game_engine import PROFESSIONS
+        self.assertEqual(PROFESSIONS["docente"]["expenses"], 1900)
+        self.assertEqual(PROFESSIONS["administrativo"]["expenses"], 1700)
+        self.assertEqual(PROFESSIONS["freelancer"]["expenses"], 2000)
+
+    def test_pay_down_debt_action_works(self):
+        from app.game_engine import pay_down_debt_action, monthly_obligations
+        state = new_game("medico")
+        state["cash"] = 50000
+        result = pay_down_debt_action(state)
+        self.assertIsNotNone(result)
+        self.assertGreater(state["credit_score"], 700)
+
+    def test_pay_down_debt_blocked_without_cash(self):
+        from app.game_engine import pay_down_debt_action
+        state = new_game("medico")
+        state["cash"] = 100
+        result = pay_down_debt_action(state)
+        self.assertIsNone(result)
+
+    def test_pay_down_debt_blocked_without_debts(self):
+        from app.game_engine import pay_down_debt_action
+        state = new_game("docente")
+        state["debts"] = []
+        state["cash"] = 50000
+        result = pay_down_debt_action(state)
+        self.assertIsNone(result)
+
+    def test_snowball_increases_paper_income(self):
+        state = new_game("docente")
+        state["assets"] = [{"name": "Fondo", "type": "Paper assets", "value": 5000, "income": 50, "risk": "market"}]
+        state["expenses"] = 50
+        state["debts"] = []
+        state["cash"] = 100000
+        state["month"] = 11
+        before_income = state["assets"][0]["income"]
+        advance_time(state, 2)
+        self.assertGreater(state["assets"][0]["income"], before_income)
+
+    def test_snowball_no_effect_below_threshold(self):
+        state = new_game("docente")
+        state["assets"] = [{"name": "Fondo", "type": "Paper assets", "value": 5000, "income": 24, "risk": "market"}]
+        state["expenses"] = 5000
+        state["debts"] = []
+        state["cash"] = 100
+        state["month"] = 11
+        before_income = state["assets"][0]["income"]
+        advance_time(state, 2)
+        self.assertEqual(state["assets"][0]["income"], before_income)
+
+    def test_stress_floor_is_ten(self):
+        from app.game_engine import normalize_state
+        state = new_game("docente")
+        state["stress"] = 0
+        normalize_state(state)
+        self.assertEqual(state["stress"], 10)
 
 
 if __name__ == "__main__":

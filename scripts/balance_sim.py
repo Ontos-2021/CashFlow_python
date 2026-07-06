@@ -26,8 +26,10 @@ from app.game_engine import (  # noqa: E402
     apply_action_effects,
     enrich_state,
     metrics,
+    monthly_obligations,
     new_game,
     normalize_state,
+    pay_down_debt_action,
 )
 
 CRITICAL_TAGS = {"Caja negativa", "Supervivencia critica", "Riesgo de burnout"}
@@ -44,6 +46,11 @@ def run_game(profession_id, policy, seed):
         event = state.get("current_event")
         if not event:
             break
+        if policy == "safe" and not state.get("action_used_this_month", {}).get("pay_debt"):
+            if state.get("debts") and state.get("cash", 0) > monthly_obligations(state) * 2:
+                result = pay_down_debt_action(state)
+                if result:
+                    state.setdefault("action_used_this_month", {})["pay_debt"] = True
         action_id = choose_action(state, event, policy)
         state = apply_action(state, action_id)
         state = enrich_state(state)

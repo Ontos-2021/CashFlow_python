@@ -2,7 +2,7 @@ from uuid import uuid4
 
 from flask import current_app, redirect, render_template, request, session, url_for
 
-from .game_engine import apply_action, cut_expenses, enrich_state, new_game, profession_choices, sell_one_asset, start_month
+from .game_engine import apply_action, cut_expenses, enrich_state, new_game, pay_down_debt_action, profession_choices, sell_one_asset, start_month
 
 
 GAME_STORE = {}
@@ -106,6 +106,24 @@ def cut_expenses_route():
         state['last_discretionary_feedback'] = {
             'title': 'Gastos recortados',
             'message': f'Recortaste ${result["reduction"]:,.0f} de gastos mensuales. Stress +12.',
+        }
+        save_game_state(enrich_state(state))
+    return redirect(url_for('game'))
+
+
+@current_app.route('/pay-debt', methods=['POST'])
+def pay_debt_route():
+    state = get_game_state()
+    if not state or state.get('status') != 'playing':
+        return redirect(url_for('index'))
+    if state.get('action_used_this_month', {}).get('pay_debt'):
+        return redirect(url_for('game'))
+    result = pay_down_debt_action(state)
+    if result:
+        state.setdefault('action_used_this_month', {})['pay_debt'] = True
+        state['last_discretionary_feedback'] = {
+            'title': 'Deuda reducida',
+            'message': f'Pagaste ${result["payment"]:,.0f} de {result["name"]}. Credito +3.',
         }
         save_game_state(enrich_state(state))
     return redirect(url_for('game'))

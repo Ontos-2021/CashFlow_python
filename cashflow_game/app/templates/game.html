@@ -315,6 +315,13 @@
                 <span class="ratio-chip chip {% if state.metrics.debt_to_income > 0.42 %}danger{% elif state.metrics.debt_to_income > 0.35 %}warning{% else %}good{% endif %}">
                     Deuda/ingreso · {{ "{:.0f}".format(state.metrics.debt_to_income * 100) }}%
                 </span>
+                {% if state.debts and state.cash > state.metrics.monthly_obligations * 2 and not state.action_used_this_month.pay_debt %}
+                <form action="{{ url_for('pay_debt_route') }}" method="post" style="margin-top:8px;">
+                    <button class="cut-button" type="submit">Pagar deuda · -20% balance · Credito +3</button>
+                </form>
+                {% elif state.action_used_this_month.pay_debt %}
+                <p class="muted" style="font-size:0.72rem; margin-top:6px;">Ya pagaste deuda este mes.</p>
+                {% endif %}
                 {% else %}
                 <p class="empty-note">Sin deudas activas. Tu flujo no tiene acreedores.</p>
                 {% endif %}

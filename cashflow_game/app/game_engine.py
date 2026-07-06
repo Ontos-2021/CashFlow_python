@@ -11,7 +11,7 @@ PROFESSIONS = {
         "age": 26,
         "cash": 1800,
         "salary": 2200,
-        "expenses": 1550,
+        "expenses": 1700,
         "education": 1,
         "stress": 28,
         "credit_score": 660,
@@ -39,7 +39,7 @@ PROFESSIONS = {
         "age": 28,
         "cash": 2600,
         "salary": 2500,
-        "expenses": 1700,
+        "expenses": 1900,
         "education": 2,
         "stress": 24,
         "credit_score": 690,
@@ -53,13 +53,13 @@ PROFESSIONS = {
         "age": 30,
         "cash": 6000,
         "salary": 7200,
-        "expenses": 4700,
+        "expenses": 4200,
         "education": 2,
         "stress": 32,
         "credit_score": 700,
         "debts": [
-            {"name": "Prestamo estudiantil", "type": "Student loan", "balance": 85000, "payment": 980, "rate": 0.08, "stress": 8},
-            {"name": "Auto financiado", "type": "Auto loan", "balance": 18000, "payment": 420, "rate": 0.12, "stress": 6},
+            {"name": "Prestamo estudiantil", "type": "Student loan", "balance": 50000, "payment": 650, "rate": 0.08, "stress": 8},
+            {"name": "Auto financiado", "type": "Auto loan", "balance": 12000, "payment": 300, "rate": 0.12, "stress": 6},
         ],
     },
     "vendedor": {
@@ -84,7 +84,7 @@ PROFESSIONS = {
         "age": 24,
         "cash": 1400,
         "salary": 2800,
-        "expenses": 1850,
+        "expenses": 2000,
         "education": 1,
         "stress": 30,
         "credit_score": 620,
@@ -1224,7 +1224,7 @@ def new_game(profession_id):
         "events_seen": [],
         "schedule": [],
         "asset_events": [],
-        "action_used_this_month": {"sell": False, "cut_expenses": False},
+        "action_used_this_month": {"sell": False, "cut_expenses": False, "pay_debt": False},
         "expense_creep_log": [],
     }
     start_month(state)
@@ -1291,7 +1291,7 @@ def is_quiet_month(state):
     if state.get("consecutive_quiet", 0) >= 2:
         return False
     data = metrics(state)
-    if data["cashflow"] < 200 or data["runway"] < 5 or state["stress"] > 65 or data["insolvency_risk"] >= 30:
+    if data["cashflow"] < 300 or data["runway"] < 6 or state["stress"] > 65 or data["insolvency_risk"] >= 30:
         return False
     current = state.get("current_event") or {}
     if current.get("id") == "quiet_month":
@@ -1358,7 +1358,7 @@ def simulate_quiet_months(state, months):
         apply_monthly_cashflow(state)
         apply_market_drift(state)
         maybe_salary_shock(state)
-        state["stress"] = max(5, state["stress"] - 2)
+        state["stress"] = max(10, state["stress"] - 2)
         state["quiet_months"] = state.get("quiet_months", 0) + 1
         state["consecutive_quiet"] = state.get("consecutive_quiet", 0) + 1
         check_end_conditions(state)
@@ -1627,12 +1627,16 @@ def advance_time(state, months=1):
     months = max(1, int(months))
     for _ in range(months):
         state["month"] += 1
-        state["action_used_this_month"] = {"sell": False, "cut_expenses": False}
+        state["action_used_this_month"] = {"sell": False, "cut_expenses": False, "pay_debt": False}
         process_schedule(state)
         if state["month"] % 12 == 1 and state["month"] > 1:
             state["age"] += 1
             state["salary"] = round(state["salary"] * (1.025 + state["education"] * 0.007), 2)
             data = metrics(state)
+            if data["freedom_ratio"] > 0.3:
+                for asset in state.get("assets", []):
+                    if asset.get("type") == "Paper assets" and asset.get("income", 0) > 0:
+                        asset["income"] = round(asset["income"] * 1.05, 2)
             state.setdefault("history", []).insert(0, {
                 "month": state["month"] - 1,
                 "age": display_age(state),
@@ -1951,7 +1955,7 @@ def display_age(state):
 
 
 def normalize_state(state):
-    state["stress"] = max(5, min(100, round(state["stress"])))
+    state["stress"] = max(10, min(100, round(state["stress"])))
     state["education"] = max(0, min(10, state["education"]))
     state["credit_score"] = max(300, min(850, round(state["credit_score"])))
     state["career_stability"] = max(0, min(100, round(state["career_stability"])))
@@ -2026,6 +2030,26 @@ def cut_expenses(state):
     state["stress"] = min(100, state["stress"] + 12)
     state.setdefault("expense_creep_log", []).append({"kind": "cut", "amount": -reduction, "month": state["month"]})
     return {"reduction": reduction}
+
+
+def pay_down_debt_action(state):
+    if not state.get("debts"):
+        return None
+    obligations = monthly_obligations(state)
+    if state["cash"] < obligations * 2:
+        return None
+    state["debts"].sort(key=lambda d: d.get("rate", 0), reverse=True)
+    debt = state["debts"][0]
+    payment = round(min(debt["balance"] * 0.2, state["cash"] * 0.25), 2)
+    if payment < 50:
+        return None
+    debt["balance"] = round(debt["balance"] - payment, 2)
+    state["cash"] = round(state["cash"] - payment, 2)
+    if debt["balance"] <= 1:
+        debt["payment"] = 0
+    state["debts"] = [d for d in state["debts"] if d["balance"] > 1]
+    state["credit_score"] = min(850, state["credit_score"] + 3)
+    return {"name": debt["name"], "payment": payment}
 
 
 def update_decision_records(state, event, action, impact, before, after):
