@@ -1,6 +1,7 @@
 import os
 import sys
 import unittest
+from copy import deepcopy
 from unittest import mock
 
 
@@ -85,15 +86,32 @@ class GameEngineEdgeCaseTest(unittest.TestCase):
 
     def test_risky_action_receives_warning_tag(self):
         state = new_game("freelancer")
+        state["cash"] = 500
+        state["expenses"] = 0
+        state["salary"] = 0
+        state["debts"] = []
+        event = {
+            "id": "test_risk",
+            "actions": {
+                "burn_high": {"label": "Empujar", "stress": 90, "lesson": "Riesgo", "interpretation": "Te estresa."},
+            },
+        }
+        prepared = prepare_event_for_state(event, state)
+        self.assertIn("Riesgo de burnout", prepared["actions"]["burn_high"]["risk_tags"])
+
+    def test_risky_action_filtered_when_cash_too_low(self):
+        state = new_game("freelancer")
         state["cash"] = 400
         event = {
             "id": "test_risk",
             "actions": {
                 "buy": {"label": "Comprar", "cash": -1000, "lesson": "Riesgo", "interpretation": "Compraste sin caja."},
+                "skip": {"label": "Pasar", "lesson": "C", "interpretation": "I"},
             },
         }
         prepared = prepare_event_for_state(event, state)
-        self.assertIn("Caja negativa", prepared["actions"]["buy"]["risk_tags"])
+        self.assertNotIn("buy", prepared["actions"])
+        self.assertIn("skip", prepared["actions"])
 
     def test_victory_requires_passive_income_and_runway(self):
         state = new_game("docente")
@@ -806,6 +824,90 @@ class PostmortemTest(unittest.TestCase):
         self.assertIn("benchmarks", report)
         self.assertIn("max_stress", report)
         self.assertIn("asset_allocation", report)
+
+    def test_action_with_insufficient_cash_is_filtered(self):
+        from app.game_engine import prepare_event_for_state
+        state = new_game("docente")
+        state["cash"] = 100
+        event = {
+            "id": "small_apartment",
+            "category": "Investment",
+            "phase": "survival",
+            "title": "Departamento pequeno con renta",
+            "description": "Test event",
+            "actions": {
+                "buy": {
+                    "label": "Comprar con ${cash:,.0f} de entrada",
+                    "label_fmt": "Comprar con ${cash:,.0f} de entrada",
+                    "cash": {"factor": -1.2, "min": -18000, "max": -2500},
+                    "asset": {"name": "Departamento pequeno", "type": "Real estate",
+                              "value": {"factor": 10.5, "min": 35000, "max": 160000},
+                              "income": 338, "risk": "vacancy"},
+                    "debt": {"name": "Hipoteca departamento", "type": "Mortgage",
+                             "balance": {"factor": 9.5, "min": 30000, "max": 150000},
+                             "payment": {"factor": 0.09, "min": 250, "max": 1800},
+                             "rate": 0.07, "stress": 8},
+                    "stress": 6,
+                },
+                "skip": {"label": "Pasar"},
+            },
+        }
+        prepared = prepare_event_for_state(deepcopy(event), state)
+        self.assertNotIn("buy", prepared["actions"])
+        self.assertIn("skip", prepared["actions"])
+
+    def test_action_with_sufficient_cash_remains(self):
+        from app.game_engine import prepare_event_for_state
+        state = new_game("docente")
+        state["cash"] = 50000
+        event = {
+            "id": "index_fund",
+            "category": "Investment",
+            "phase": "survival",
+            "title": "Fondo indexado diversificado",
+            "description": "Test event",
+            "actions": {
+                "invest": {
+                    "label": "Invertir ${cash:,.0f}",
+                    "label_fmt": "Invertir ${cash:,.0f}",
+                    "cash": {"factor": -0.35, "min": -4500, "max": -500},
+                    "asset": {"name": "Fondo indexado", "type": "Paper assets",
+                              "value": {"factor": 0.35, "min": 500, "max": 4500},
+                              "income": 24, "risk": "market"},
+                },
+                "wait": {"label": "Esperar"},
+            },
+        }
+        prepared = prepare_event_for_state(deepcopy(event), state)
+        self.assertIn("invest", prepared["actions"])
+        self.assertIn("wait", prepared["actions"])
+
+    def test_debt_only_action_unaffected_by_cash(self):
+        from app.game_engine import prepare_event_for_state
+        state = new_game("docente")
+        state["cash"] = 0
+        event = {
+            "id": "lifestyle_car",
+            "category": "Expense",
+            "phase": "growth",
+            "title": "Auto nuevo financiado",
+            "description": "Test event",
+            "actions": {
+                "buy": {
+                    "label": "Financiar el auto",
+                    "debt": {"name": "Auto nuevo", "type": "Auto loan",
+                             "balance": {"factor": 3.2, "min": 6000, "max": 40000},
+                             "payment": {"factor": 0.08, "min": 180, "max": 900},
+                             "rate": 0.14, "stress": 8},
+                    "expenses": {"factor": 0.025, "min": 60, "max": 350},
+                    "stress": 7,
+                },
+                "skip": {"label": "Conservar tu auto actual"},
+            },
+        }
+        prepared = prepare_event_for_state(deepcopy(event), state)
+        self.assertIn("buy", prepared["actions"])
+        self.assertIn("skip", prepared["actions"])
 
 
 if __name__ == "__main__":

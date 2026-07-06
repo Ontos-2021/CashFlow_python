@@ -199,7 +199,11 @@ def prepare_event_for_state(event, state):
         req_ed = action.get("requires_education", 0)
         if req_ed and state.get("education", 0) < req_ed:
             continue
-        actions[key] = resolve_action_amounts(deepcopy(action), state)
+        resolved = resolve_action_amounts(deepcopy(action), state)
+        cash_cost = resolved.get("cash", 0)
+        if isinstance(cash_cost, (int, float)) and cash_cost < 0 and abs(cash_cost) > state["cash"]:
+            continue
+        actions[key] = resolved
     event["actions"] = actions or {"skip": {"label": "Pasar", "lesson": "Contexto", "interpretation": "Esta oportunidad no encaja con tu situacion actual."}}
     for action in event["actions"].values():
         action["risk_tags"] = action_risk_tags(state, action)
