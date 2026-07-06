@@ -2,7 +2,7 @@ from uuid import uuid4
 
 from flask import current_app, redirect, render_template, request, session, url_for
 
-from .game_engine import apply_action, cut_expenses, enrich_state, new_game, pay_down_debt_action, profession_choices, sell_one_asset, start_month
+from .game_engine import apply_action, cut_expenses, enrich_state, final_report, new_game, pay_down_debt_action, profession_choices, sell_one_asset, start_month
 
 
 GAME_STORE = {}
@@ -134,6 +134,8 @@ def report():
     state = get_game_state()
     if not state:
         return redirect(url_for('index'))
+    state = enrich_state(state)
+    state["report"] = final_report(state)
     return render_template('report.html', state=state)
 
 

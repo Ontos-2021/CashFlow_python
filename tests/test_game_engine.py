@@ -142,7 +142,7 @@ class MechanicsTandaOneTest(unittest.TestCase):
         state["cash"] = 0
         state["salary"] = 0
         state["expenses"] = 0
-        with mock.patch("app.game_engine.random", return_value=0.0):
+        with mock.patch("app.game_engine.simulation.random", return_value=0.0):
             cash_before = state["cash"]
             apply_monthly_cashflow(state)
             self.assertEqual(state["cash"], cash_before)
@@ -156,7 +156,7 @@ class MechanicsTandaOneTest(unittest.TestCase):
         state["salary"] = 0
         state["expenses"] = 0
         base = state["assets"][0]["income"]
-        with mock.patch("app.game_engine.random", return_value=0.0):
+        with mock.patch("app.game_engine.simulation.random", return_value=0.0):
             apply_monthly_cashflow(state)
         self.assertEqual(state["cash"], round(base * 0.5, 2))
 
@@ -170,7 +170,7 @@ class MechanicsTandaOneTest(unittest.TestCase):
         state["expenses"] = 0
         # Threshold at education 8 reduces vacancy probability from 0.08 to 0.08 * 0.92 = 0.0736
         # random just below 0.0736 triggers vacancy; just above does not.
-        with mock.patch("app.game_engine.random", return_value=0.078):
+        with mock.patch("app.game_engine.simulation.random", return_value=0.078):
             apply_monthly_cashflow(state)
         self.assertFalse(any(e["kind"] == "vacancy" for e in state["asset_events"]))
 

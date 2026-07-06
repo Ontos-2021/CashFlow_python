@@ -51,7 +51,15 @@ cashflow_game/
     __init__.py        # Fabrica de la app Flask.
     config.py          # Configuracion.
     routes.py          # Rutas: / /new-game /game /action /report /reset.
-    game_engine.py     # Motor: profesiones, eventos, metricas, feedback, finales.
+    game_engine/       # Motor dividido en 8 modulos de responsabilidad unica.
+      __init__.py      # Re-exports: mantiene compatibilidad con imports existentes.
+      constants.py     # 6 profesiones, 4 estados del mundo, liquidacion por tipo.
+      events.py        # 67 eventos base + 18 de profesion + 15 menores (datos puros).
+      metrics.py       # Calculos derivados, fase de sesion, edad mostrada, snapshots.
+      actions.py       # Efectos de acciones, venta, corte de gastos, pagar deuda, normalize.
+      simulation.py    # Loop de juego: new_game, apply_action, quiet months, finales.
+      ui.py            # enrich_state, badges, alertas, feedback, perfil de inversor.
+      report.py        # Postmortem: patrones, consejos, key_moments, benchmarks, final_report.
     templates/         # base, index, game, report.
     static/style.css   # Design system.
   run.py               # Punto de entrada.

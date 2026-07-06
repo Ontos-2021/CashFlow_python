@@ -60,6 +60,7 @@ Status: partially implemented.
 - Add biggest win, biggest mistake, most dangerous moment, best asset, and worst liability.
 - Add compact shareable summary.
 - Improve postmortem language for loss and partial outcomes.
+- Refactor: `game_engine.py` monolítico (~2400 líneas) dividido en paquete `game_engine/` con 8 módulos de responsabilidad única (constants, events, metrics, actions, simulation, ui, report, __init__). Sin imports circulares. `final_report()` movido de `enrich_state` a la ruta `/report` para romper el ciclo ui<->report.
 
 ## Phase 5 - Future Multiplayer
 
