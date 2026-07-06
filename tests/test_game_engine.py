@@ -606,12 +606,12 @@ class BalanceV5Test(unittest.TestCase):
         from app.game_engine import PROFESSIONS
         debts = PROFESSIONS["medico"]["debts"]
         student = next(d for d in debts if d["type"] == "Student loan")
-        self.assertEqual(student["balance"], 35000)
-        self.assertEqual(PROFESSIONS["medico"]["expenses"], 3800)
+        self.assertEqual(student["balance"], 25000)
+        self.assertEqual(PROFESSIONS["medico"]["expenses"], 3500)
 
     def test_professions_expenses_raised(self):
         from app.game_engine import PROFESSIONS
-        self.assertEqual(PROFESSIONS["docente"]["expenses"], 2100)
+        self.assertEqual(PROFESSIONS["docente"]["expenses"], 2300)
         self.assertEqual(PROFESSIONS["administrativo"]["expenses"], 1900)
         self.assertEqual(PROFESSIONS["freelancer"]["expenses"], 2200)
 
