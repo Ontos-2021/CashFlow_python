@@ -4,6 +4,18 @@
 {% set fs = state.metrics.financial_state %}
 {% set fs_kind = {'Safe': 'good', 'Debt Free Builder': 'good', 'Critical': 'danger', 'Burnout Risk': 'danger', 'Overleveraged': 'danger', 'Tense': 'warning'}.get(fs, 'neutral') %}
 
+{# --- Asset allocation donut math --- #}
+{% set alloc = state.report.asset_allocation %}
+{% set total_alloc = alloc['Paper assets'] + alloc['Real estate'] + alloc['Small business'] + alloc['Education'] %}
+{% set pct_paper = (alloc['Paper assets'] / total_alloc * 100) if total_alloc > 0 else 0 %}
+{% set pct_re = (alloc['Real estate'] / total_alloc * 100) if total_alloc > 0 else 0 %}
+{% set pct_sb = (alloc['Small business'] / total_alloc * 100) if total_alloc > 0 else 0 %}
+{% set pct_edu = (alloc['Education'] / total_alloc * 100) if total_alloc > 0 else 0 %}
+
+{# --- Stress bar segments --- #}
+{% set stress_pct = state.stress / 100 * 100 %}
+{% set max_stress_pct = (state.report.max_stress / 100 * 100) if state.report.max_stress > state.stress else stress_pct %}
+
 <section class="hero compact">
     <div>
         <p class="eyebrow">Reporte final</p>
@@ -39,6 +51,69 @@
     </article>
 </section>
 
+{# --- Diagnostico automatico --- #}
+{% if state.report.patterns %}
+<section class="card" style="margin-top: 28px; padding: 24px;">
+    <h3 style="margin-top: 0;">Diagnostico automatico</h3>
+    <div class="patterns-grid">
+        {% for p in state.report.patterns %}
+        <div class="pattern-card {{ p.id }}">
+            <span class="pattern-icon">{{ p.icon }}</span>
+            <div>
+                <strong class="pattern-title">{{ p.title }}</strong>
+                <p class="pattern-msg">{{ p.message }}</p>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    <div class="advice-box">
+        <strong class="advice-label">Consejo para tu proxima run</strong>
+        <p class="advice-msg">{{ state.report.advice }}</p>
+    </div>
+</section>
+{% endif %}
+
+{# --- Benchmarks vs tu profesion --- #}
+{% if state.report.benchmarks %}
+{% set bm = state.report.benchmarks %}
+<section class="card" style="margin-top: 24px; padding: 24px;">
+    <h3 style="margin-top: 0;">Tu run vs promedio de {{ state.profession }}</h3>
+    <p class="muted" style="font-size:0.78rem; margin-top:-8px;">Basado en {{ bm.runs }} simulaciones con bot safe.</p>
+    <div class="benchmark-grid">
+        <div class="bench-row">
+            <span class="bench-label">Win rate promedio</span>
+            <span class="bench-val">{{ "{:.0%}".format(bm.win_rate) }}</span>
+            <span class="bench-vs">Tu run: <strong>{{ "GANASTE" if state.report.outcome == "Financially free" else "No ganaste" }}</strong></span>
+        </div>
+        <div class="bench-row">
+            <span class="bench-label">Freedom ratio mediana</span>
+            <span class="bench-val">{{ "{:.2f}".format(bm.median_freedom_ratio) }}</span>
+            <span class="bench-vs">Tu run: <strong>{{ "{:.2f}".format(state.metrics.freedom_ratio) }}</strong></span>
+        </div>
+        <div class="bench-row">
+            <span class="bench-label">Patrimonio neto mediano</span>
+            <span class="bench-val">${{ "{:,.0f}".format(bm.median_net_worth) }}</span>
+            <span class="bench-vs">Tu run: <strong>${{ "{:,.0f}".format(state.metrics.net_worth) }}</strong></span>
+        </div>
+        <div class="bench-row">
+            <span class="bench-label">Activos mediana</span>
+            <span class="bench-val">{{ "{:.1f}".format(bm.median_assets) }}</span>
+            <span class="bench-vs">Tu run: <strong>{{ state.assets | length }}</strong></span>
+        </div>
+        <div class="bench-row">
+            <span class="bench-label">Reserva mediana</span>
+            <span class="bench-val">{{ "{:.1f}m".format(bm.median_runway) }}</span>
+            <span class="bench-vs">Tu run: <strong>{{ state.metrics.runway }}m</strong></span>
+        </div>
+        <div class="bench-row">
+            <span class="bench-label">Max stress mediana</span>
+            <span class="bench-val">{{ bm.median_max_stress }}</span>
+            <span class="bench-vs">Tu run: <strong>{{ state.report.max_stress }}</strong></span>
+        </div>
+    </div>
+</section>
+{% endif %}
+
 <section class="dashboard-grid report-grid" style="margin-top: 24px;">
     <article class="card metric-card accent">
         <span>Patrimonio neto</span>
@@ -58,11 +133,75 @@
     <article class="card metric-card">
         <span>Estres</span>
         <strong>{{ state.stress }}/100</strong>
-        <small>Score crediticio: {{ state.credit_score }}</small>
+        <small>Max en run: {{ state.report.max_stress }}/100</small>
     </article>
 </section>
 
-<section class="two-column">
+{# --- Asset allocation donut + stress bar --- #}
+{% if total_alloc > 0 %}
+<section class="two-column" style="margin-top: 24px;">
+    <article class="card">
+        <h3>Composicion de activos</h3>
+        <div class="alloc-layout">
+            <div class="donut" style="background: conic-gradient(
+                #3b82f6 0% {{ pct_paper }}%,
+                #10b981 {{ pct_paper }}% {{ pct_paper + pct_re }}%,
+                #f59e0b {{ pct_paper + pct_re }}% {{ pct_paper + pct_re + pct_sb }}%,
+                #a78bfa {{ pct_paper + pct_re + pct_sb }}% 100%
+            );">
+                <div class="donut-center">
+                    <span class="donut-total">${{ "{:,.0f}".format(total_alloc) }}</span>
+                    <span class="donut-label">total</span>
+                </div>
+            </div>
+            <div class="alloc-legend">
+                <div class="alloc-item"><span class="alloc-dot paper"></span>Paper assets <strong>${{ "{:,.0f}".format(alloc['Paper assets']) }}</strong> ({{ "{:.0f}".format(pct_paper) }}%)</div>
+                <div class="alloc-item"><span class="alloc-dot re"></span>Real estate <strong>${{ "{:,.0f}".format(alloc['Real estate']) }}</strong> ({{ "{:.0f}".format(pct_re) }}%)</div>
+                <div class="alloc-item"><span class="alloc-dot sb"></span>Small business <strong>${{ "{:,.0f}".format(alloc['Small business']) }}</strong> ({{ "{:.0f}".format(pct_sb) }}%)</div>
+                <div class="alloc-item"><span class="alloc-dot edu"></span>Education <strong>${{ "{:,.0f}".format(alloc['Education']) }}</strong> ({{ "{:.0f}".format(pct_edu) }}%)</div>
+            </div>
+        </div>
+    </article>
+    <article class="card">
+        <h3>Recorrido de stress</h3>
+        <div class="stress-bar-wrap">
+            <div class="stress-bar">
+                <div class="stress-final" style="width: {{ stress_pct }}%;" title="Final: {{ state.stress }}/100"></div>
+                <div class="stress-max" style="width: {{ max_stress_pct }}%; left: 0;" title="Max: {{ state.report.max_stress }}/100"></div>
+            </div>
+            <div class="stress-labels">
+                <span>0</span><span>50</span><span>100</span>
+            </div>
+        </div>
+        <p class="muted" style="font-size:0.78rem; margin-top:12px;">Final: <strong>{{ state.stress }}/100</strong> · Max en la run: <strong>{{ state.report.max_stress }}/100</strong></p>
+        <p class="muted" style="font-size:0.78rem; margin-top:4px;">El stress final esta debajo del maximo si tuviste meses tranquilos o acciones de recuperacion.</p>
+    </article>
+</section>
+{% endif %}
+
+{# --- Decisiones clave mejoradas: por impacto --- #}
+{% if state.report.key_moments %}
+<section class="card" style="margin-top: 24px; padding: 24px;">
+    <h3 style="margin-top: 0;">Decisiones mas impactantes</h3>
+    <p class="muted" style="font-size:0.78rem; margin-top:-8px;">Ordenadas por cambio en caja, no por orden cronologico.</p>
+    <div class="moments-list">
+        {% for m in state.report.key_moments %}
+        <div class="moment-row">
+            <span class="moment-month">M{{ m.month }}</span>
+            <div class="moment-content">
+                <strong>{{ m.title }}</strong>
+                <span class="muted">{{ m.action }}</span>
+            </div>
+            <span class="moment-impact {% if m.impact >= 0 %}positive{% else %}negative{% endif %}">
+                {{ "{:+,.0f}".format(m.impact) }}
+            </span>
+        </div>
+        {% endfor %}
+    </div>
+</section>
+{% endif %}
+
+<section class="two-column" style="margin-top: 24px;">
     <article class="card">
         <h3>Decisiones clave</h3>
         <div class="insight-list">

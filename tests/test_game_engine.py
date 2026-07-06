@@ -668,5 +668,145 @@ class BalanceV5Test(unittest.TestCase):
         self.assertEqual(state["stress"], 10)
 
 
+class PostmortemTest(unittest.TestCase):
+    def test_cash_hoarder_detected(self):
+        from app.game_engine import diagnose_patterns
+        state = new_game("docente")
+        state["cash"] = 60000
+        state["expenses"] = 2300
+        state["assets"] = []
+        state["debts"] = []
+        patterns = diagnose_patterns(state)
+        ids = {p["id"] for p in patterns}
+        self.assertIn("cash_hoarder", ids)
+
+    def test_near_miss_detected(self):
+        from app.game_engine import diagnose_patterns
+        state = new_game("docente")
+        state["status"] = "ended"
+        state["assets"] = [{"name": "Fondo", "type": "Paper assets", "value": 5000, "income": 200, "risk": "market"}]
+        state["expenses"] = 200
+        state["debts"] = []
+        patterns = diagnose_patterns(state)
+        ids = {p["id"] for p in patterns}
+        self.assertIn("near_miss", ids)
+
+    def test_diversifier_detected(self):
+        from app.game_engine import diagnose_patterns
+        state = new_game("docente")
+        state["assets"] = [
+            {"name": "Fondo", "type": "Paper assets", "value": 5000, "income": 50, "risk": "market"},
+            {"name": "Depto", "type": "Real estate", "value": 50000, "income": 200, "risk": "vacancy"},
+            {"name": "SaaS", "type": "Small business", "value": 10000, "income": 300, "risk": "execution"},
+        ]
+        state["debts"] = []
+        patterns = diagnose_patterns(state)
+        ids = {p["id"] for p in patterns}
+        self.assertIn("diversifier", ids)
+
+    def test_educator_detected(self):
+        from app.game_engine import diagnose_patterns
+        state = new_game("docente")
+        state["education"] = 6
+        state["debts"] = []
+        patterns = diagnose_patterns(state)
+        ids = {p["id"] for p in patterns}
+        self.assertIn("educator", ids)
+
+    def test_overleveraged_detected(self):
+        from app.game_engine import diagnose_patterns
+        state = new_game("medico")
+        state["debts"] = [
+            {"name": "Prestamo", "type": "Personal loan", "balance": 30000, "payment": 3500, "rate": 0.2, "stress": 5},
+        ]
+        state["salary"] = 7200
+        state["expenses"] = 3500
+        patterns = diagnose_patterns(state)
+        ids = {p["id"] for p in patterns}
+        self.assertIn("overleveraged", ids)
+
+    def test_quick_win_detected(self):
+        from app.game_engine import diagnose_patterns
+        state = new_game("docente")
+        state["status"] = "won"
+        state["month"] = 40
+        state["debts"] = []
+        patterns = diagnose_patterns(state)
+        ids = {p["id"] for p in patterns}
+        self.assertIn("quick_win", ids)
+
+    def test_actionable_advice_for_winner(self):
+        from app.game_engine import actionable_advice
+        state = new_game("docente")
+        state["status"] = "won"
+        state["outcome"] = "Financially free"
+        advice = actionable_advice(state, [])
+        self.assertIsInstance(advice, str)
+        self.assertGreater(len(advice), 10)
+
+    def test_actionable_advice_for_loser(self):
+        from app.game_engine import actionable_advice
+        state = new_game("medico")
+        state["status"] = "lost"
+        state["outcome"] = "Debt trapped"
+        advice = actionable_advice(state, [])
+        self.assertIsInstance(advice, str)
+        self.assertGreater(len(advice), 10)
+
+    def test_key_moments_orders_by_impact(self):
+        from app.game_engine import key_moments
+        state = new_game("docente")
+        state["history"] = [
+            {"month": 5, "title": "A", "action": "x", "cash_after": 1000},
+            {"month": 3, "title": "B", "action": "y", "cash_after": 5000},
+            {"month": 1, "title": "C", "action": "z", "cash_after": 100},
+        ]
+        moments = key_moments(state, n=2)
+        self.assertEqual(len(moments), 2)
+        self.assertIn("impact", moments[0])
+
+    def test_max_stress_tracked(self):
+        from app.game_engine import apply_action, normalize_state
+        state = new_game("docente")
+        state["salary"] = 0
+        state["expenses"] = 0
+        state["debts"] = []
+        state["current_event"] = {
+            "title": "Test",
+            "category": "Crisis",
+            "actions": {"hit": {"label": "Hit", "stress": 50, "lesson": "L", "interpretation": "I"}},
+        }
+        state = apply_action(state, "hit")
+        self.assertGreaterEqual(state.get("max_stress", 0), 50)
+
+    def test_history_includes_snapshots(self):
+        from app.game_engine import apply_action
+        state = new_game("docente")
+        state["salary"] = 0
+        state["expenses"] = 0
+        state["debts"] = []
+        state["current_event"] = {
+            "title": "Test event",
+            "category": "Income",
+            "actions": {"act": {"label": "Action", "cash": 1000, "lesson": "L", "interpretation": "I"}},
+        }
+        state = apply_action(state, "act")
+        entry = state["history"][0]
+        self.assertIn("cash_after", entry)
+        self.assertIn("stress_after", entry)
+        self.assertIn("freedom_ratio_after", entry)
+
+    def test_final_report_includes_new_fields(self):
+        from app.game_engine import final_report
+        state = new_game("docente")
+        report = final_report(state)
+        self.assertIn("patterns", report)
+        self.assertIn("advice", report)
+        self.assertIn("key_moments", report)
+        self.assertIn("benchmarks", report)
+        self.assertIn("max_stress", report)
+        self.assertIn("asset_allocation", report)
+
+
 if __name__ == "__main__":
     unittest.main()

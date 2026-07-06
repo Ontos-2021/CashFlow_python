@@ -1461,3 +1461,286 @@ p {
 
     .scenario-title { font-size: 1.8rem; }
 }
+
+/* =========================================================
+   Phase 4 — Postmortem: patterns, donut, stress bar, moments
+   ========================================================= */
+
+.patterns-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 12px;
+    margin-bottom: 16px;
+}
+
+.pattern-card {
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+    padding: 12px 14px;
+    background: var(--surface-2, rgba(255, 255, 255, 0.04));
+    border-radius: 8px;
+    border-left: 3px solid var(--accent, #3b82f6);
+}
+
+.pattern-card.cash_hoarder { border-left-color: #3b82f6; }
+.pattern-card.compulsive_investor { border-left-color: #f59e0b; }
+.pattern-card.educator { border-left-color: #8b5cf6; }
+.pattern-card.burnout_chaser { border-left-color: #ef4444; }
+.pattern-card.overleveraged { border-left-color: #ef4444; }
+.pattern-card.diversifier { border-left-color: #10b981; }
+.pattern-card.concentrator { border-left-color: #f59e0b; }
+.pattern-card.quick_win { border-left-color: #10b981; }
+.pattern-card.late_bloomer { border-left-color: #3b82f6; }
+.pattern-card.near_miss { border-left-color: #f59e0b; }
+
+.pattern-icon {
+    font-size: 1.5rem;
+    line-height: 1;
+    flex-shrink: 0;
+}
+
+.pattern-title {
+    display: block;
+    font-size: 0.92rem;
+    margin-bottom: 4px;
+    color: var(--text, #e4e4e7);
+}
+
+.pattern-msg {
+    font-size: 0.82rem;
+    color: var(--text-dim, #a1a1aa);
+    margin: 0;
+    line-height: 1.4;
+}
+
+.advice-box {
+    padding: 16px 20px;
+    background: linear-gradient(135deg, rgba(245, 158, 11, 0.08), rgba(245, 158, 11, 0.02));
+    border-left: 4px solid #f59e0b;
+    border-radius: 6px;
+    margin-top: 8px;
+}
+
+.advice-label {
+    display: block;
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: #f59e0b;
+    margin-bottom: 6px;
+}
+
+.advice-msg {
+    font-size: 0.95rem;
+    margin: 0;
+    line-height: 1.5;
+    color: var(--text, #e4e4e7);
+}
+
+.benchmark-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 12px;
+}
+
+.bench-row {
+    display: flex;
+    flex-direction: column;
+    padding: 12px 14px;
+    background: var(--surface-2, rgba(255, 255, 255, 0.03));
+    border-radius: 6px;
+    border: 1px solid var(--border, rgba(255, 255, 255, 0.08));
+}
+
+.bench-label {
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--text-dim, #a1a1aa);
+    margin-bottom: 4px;
+}
+
+.bench-val {
+    font-size: 1.15rem;
+    font-weight: 600;
+    color: var(--text-dim, #a1a1aa);
+    margin-bottom: 4px;
+}
+
+.bench-vs {
+    font-size: 0.82rem;
+    color: var(--text, #e4e4e7);
+}
+
+.bench-vs strong {
+    color: var(--accent, #3b82f6);
+}
+
+.alloc-layout {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    flex-wrap: wrap;
+}
+
+.donut {
+    width: 140px;
+    height: 140px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    position: relative;
+}
+
+.donut-center {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 84px;
+    height: 84px;
+    border-radius: 50%;
+    background: var(--bg, #0f1115);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+.donut-total {
+    font-size: 0.92rem;
+    font-weight: 600;
+    line-height: 1.1;
+}
+
+.donut-label {
+    font-size: 0.62rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--text-dim, #a1a1aa);
+    margin-top: 2px;
+}
+
+.alloc-legend {
+    flex: 1;
+    min-width: 200px;
+}
+
+.alloc-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.82rem;
+    padding: 4px 0;
+}
+
+.alloc-item strong {
+    margin-left: auto;
+    color: var(--text, #e4e4e7);
+}
+
+.alloc-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 2px;
+    flex-shrink: 0;
+}
+
+.alloc-dot.paper { background: #3b82f6; }
+.alloc-dot.re { background: #10b981; }
+.alloc-dot.sb { background: #f59e0b; }
+.alloc-dot.edu { background: #a78bfa; }
+
+.stress-bar-wrap {
+    margin: 16px 0 8px;
+}
+
+.stress-bar {
+    position: relative;
+    width: 100%;
+    height: 36px;
+    background: linear-gradient(90deg, #10b981 0%, #f59e0b 50%, #ef4444 100%);
+    border-radius: 4px;
+    overflow: hidden;
+    opacity: 0.18;
+}
+
+.stress-final {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    background: var(--bg, #0f1115);
+    border-right: 3px solid var(--text, #e4e4e7);
+    transition: width 0.3s ease;
+}
+
+.stress-max {
+    position: absolute;
+    top: 0;
+    height: 100%;
+    background: transparent;
+    border-left: 2px dashed var(--text, #e4e4e7);
+    z-index: 2;
+}
+
+.stress-labels {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.7rem;
+    color: var(--text-dim, #a1a1aa);
+    margin-top: 6px;
+}
+
+.moments-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.moment-row {
+    display: grid;
+    grid-template-columns: 60px 1fr auto;
+    gap: 14px;
+    align-items: center;
+    padding: 10px 14px;
+    background: var(--surface-2, rgba(255, 255, 255, 0.03));
+    border-radius: 6px;
+    border: 1px solid var(--border, rgba(255, 255, 255, 0.06));
+}
+
+.moment-month {
+    font-weight: 600;
+    color: var(--text-dim, #a1a1aa);
+    font-size: 0.85rem;
+}
+
+.moment-content {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.moment-content strong {
+    font-size: 0.9rem;
+}
+
+.moment-content .muted {
+    font-size: 0.75rem;
+}
+
+.moment-impact {
+    font-weight: 600;
+    font-size: 0.95rem;
+    font-variant-numeric: tabular-nums;
+}
+
+.moment-impact.positive { color: #10b981; }
+.moment-impact.negative { color: #ef4444; }
+
+@media (max-width: 768px) {
+    .alloc-layout { flex-direction: column; align-items: flex-start; }
+    .donut { align-self: center; }
+    .moment-row { grid-template-columns: 50px 1fr auto; gap: 8px; }
+}

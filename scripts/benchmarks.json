@@ -1,0 +1,114 @@
+{
+  "administrativo": {
+    "win_rate": 0.567,
+    "runs": 30,
+    "median_month": 199.0,
+    "median_cash_final": 538518.0,
+    "median_net_worth": 693988.0,
+    "median_freedom_ratio": 1.006,
+    "median_runway": 196.9,
+    "median_assets": 20.5,
+    "median_debts": 2.0,
+    "median_max_stress": 50.0,
+    "outcomes": {
+      "Financially free": 17,
+      "Stable but not free": 4,
+      "Debt trapped": 2,
+      "Slow conservative success": 5,
+      "Business success": 2
+    }
+  },
+  "programador": {
+    "win_rate": 0.5,
+    "runs": 30,
+    "median_month": 190.0,
+    "median_cash_final": 761560.0,
+    "median_net_worth": 953045.0,
+    "median_freedom_ratio": 0.972,
+    "median_runway": 253.6,
+    "median_assets": 22.5,
+    "median_debts": 1.0,
+    "median_max_stress": 47.0,
+    "outcomes": {
+      "Business success": 6,
+      "Financially free": 15,
+      "Slow conservative success": 8,
+      "Burnout retirement": 1
+    }
+  },
+  "docente": {
+    "win_rate": 0.6,
+    "runs": 30,
+    "median_month": 174.0,
+    "median_cash_final": 524477.0,
+    "median_net_worth": 592044.0,
+    "median_freedom_ratio": 1.012,
+    "median_runway": 219.8,
+    "median_assets": 19.0,
+    "median_debts": 1.5,
+    "median_max_stress": 48.0,
+    "outcomes": {
+      "Financially free": 18,
+      "Business success": 2,
+      "Slow conservative success": 5,
+      "Debt trapped": 3,
+      "Stable but not free": 2
+    }
+  },
+  "medico": {
+    "win_rate": 0.233,
+    "runs": 30,
+    "median_month": 241.0,
+    "median_cash_final": 2815156.0,
+    "median_net_worth": 3180962.0,
+    "median_freedom_ratio": 0.7,
+    "median_runway": 629.1,
+    "median_assets": 23.0,
+    "median_debts": 2.0,
+    "median_max_stress": 47.0,
+    "outcomes": {
+      "Financially free": 7,
+      "Business success": 9,
+      "Stable but not free": 3,
+      "Slow conservative success": 10,
+      "Burnout retirement": 1
+    }
+  },
+  "vendedor": {
+    "win_rate": 0.733,
+    "runs": 30,
+    "median_month": 166.0,
+    "median_cash_final": 378977.0,
+    "median_net_worth": 500673.0,
+    "median_freedom_ratio": 1.014,
+    "median_runway": 180.9,
+    "median_assets": 18.5,
+    "median_debts": 2.0,
+    "median_max_stress": 49.0,
+    "outcomes": {
+      "Business success": 1,
+      "Financially free": 22,
+      "Slow conservative success": 6,
+      "Stable but not free": 1
+    }
+  },
+  "freelancer": {
+    "win_rate": 0.767,
+    "runs": 30,
+    "median_month": 121.0,
+    "median_cash_final": 156763.0,
+    "median_net_worth": 245497.0,
+    "median_freedom_ratio": 1.014,
+    "median_runway": 66.2,
+    "median_assets": 18.0,
+    "median_debts": 2.0,
+    "median_max_stress": 68.0,
+    "outcomes": {
+      "Slow conservative success": 2,
+      "Business success": 1,
+      "Financially free": 23,
+      "Burnout retirement": 2,
+      "Debt trapped": 2
+    }
+  }
+}
